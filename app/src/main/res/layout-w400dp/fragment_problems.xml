@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/problems_coordinator"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layout_button"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/layout_width"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/id"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="@dimen/text_size" />
+
+            <LinearLayout
+                android:id="@+id/topic_fav_layout"
+                android:layout_width="@dimen/layout_fav_button"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/title"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="@dimen/text_size" />
+
+            <TextView
+                android:layout_width="@dimen/layout_width"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="@dimen/padding_half"
+                android:paddingRight="@dimen/padding_half"
+                android:text="@string/sub"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="@dimen/text_size" />
+
+            <TextView
+                android:layout_width="@dimen/layout_width"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="@dimen/padding_half"
+                android:paddingRight="@dimen/padding_half"
+                android:text="@string/ac"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="@dimen/text_size" />
+
+            <TextView
+                android:layout_width="@dimen/layout_width"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="@dimen/padding_half"
+                android:paddingRight="@dimen/padding_half"
+                android:text="@string/ac_percent"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="@dimen/text_size" />
+
+            <TextView
+                android:layout_width="@dimen/layout_width"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="@dimen/padding_half"
+                android:paddingRight="@dimen/padding_half"
+                android:text="@string/score"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="@dimen/text_size" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorPrimaryLight" />
+
+    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/problem_item_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/problem_list_item" />
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/problems_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:tint="@color/white"
+        android:src="@drawable/filter"
+        app:layout_behavior="cu.uci.coj.Behaviors.FloatingActionButtonBehavior" />
+
+</android.support.design.widget.CoordinatorLayout>

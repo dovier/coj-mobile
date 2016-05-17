@@ -1,0 +1,96 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".Mail.ComposeMessage">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/button_action_bar_size"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/to_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/send_to_large"
+                android:inputType="text|textNoSuggestions"
+                android:maxLines="1"
+                android:selectAllOnFocus="true" />
+
+            <EditText
+                android:id="@+id/subject_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/subject"
+                android:inputType="text"
+                android:maxLines="1"
+                android:selectAllOnFocus="true" />
+
+            <EditText
+                android:id="@+id/message_editText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autoLink="phone|email|web"
+                android:ems="10"
+                android:gravity="top"
+                android:hint="@string/mail_example"
+                android:inputType="textMultiLine" />
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_action_bar_size"
+        android:layout_gravity="bottom"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/send_mail"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="100"
+            android:tint="@color/white"
+            android:padding="@dimen/padding"
+            android:contentDescription="@string/send_mail"
+            android:src="@drawable/send_mail" />
+
+        <ImageView
+            android:id="@+id/save_mail"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="100"
+            android:padding="@dimen/padding"
+            android:contentDescription="@string/save_draft"
+            android:tint="@color/white"
+            android:src="@drawable/save" />
+
+        <ImageView
+            android:id="@+id/discard_mail"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="100"
+            android:padding="@dimen/padding"
+            android:tint="@color/white"
+            android:contentDescription="@string/cancel"
+            android:src="@drawable/close" />
+
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@drawable/layout_button"
+        android:layout_marginTop="@dimen/padding_half"
+        android:layout_marginBottom="@dimen/padding_half"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/to"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="30"
+            android:gravity="center"
+            android:maxLines="1"
+            android:padding="@dimen/padding_half"
+            android:text="@string/send_to" />
+
+        <TextView
+            android:id="@+id/from"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="30"
+            android:gravity="center"
+            android:maxLines="1"
+            android:padding="@dimen/padding_half"
+            android:text="@string/from" />
+
+        <TextView
+            android:id="@+id/subject"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="70"
+            android:width="0dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:padding="@dimen/padding_half"
+            android:text="@string/subject" />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="@dimen/date_layout_width"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/padding_half"
+            android:maxLines="1"
+            android:text="Jaco" />
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimaryLight" />
+</LinearLayout>

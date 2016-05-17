@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#4372df</color>
+    <color name="colorPrimaryDark">#16499a</color>
+    <!--<color name="colorAccent">#428bca</color>-->
+    <!--<color name="colorAccent">#004d40</color>-->
+    <!--<color name="colorAccent">#00715e</color>-->
+    <!--<color name="colorAccent">#007180</color>-->
+
+    <color name="colorAccent">#fa684b</color>
+    <color name="colorPrimaryLight">#4ca4ff</color>
+
+    //color for compare users
+    <color name="tried">#8a6d3b</color>
+    <color name="tried_background">#fff4bd</color>
+
+    <color name="no_accept">#9a1616</color>
+    <color name="no_accept_background">#f2dede</color>
+
+    <color name="accept_both">#31708f</color>
+    <color name="accept_both_background">#d9edf7</color>
+
+    <color name="accept">#60a917</color>
+    <color name="accept_background">#895cb85c</color>
+    //color for compare users
+
+    <color name="grey">#484848</color>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="input_output_sample">#cb2a4e</color>
+    <color name="background_input_output_sample">#f9f2f4</color>
+
+</resources>

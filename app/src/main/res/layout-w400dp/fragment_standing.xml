@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/standing_coordinator"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layout_button"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                android:layout_width="@dimen/layout_width"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/rank"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="@dimen/text_size" />
+
+            <LinearLayout
+                android:layout_width="@dimen/layout_flag_country"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/rank_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/user"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="@dimen/text_size" />
+
+            <TextView
+                android:id="@+id/cant_1"
+                android:layout_width="@dimen/layout_width"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="@dimen/padding_half"
+                android:paddingRight="@dimen/padding_half"
+                android:text="@string/sub"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="@dimen/text_size" />
+
+            <TextView
+                android:id="@+id/cant_2"
+                android:layout_width="@dimen/layout_width"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="@dimen/padding_half"
+                android:paddingRight="@dimen/padding_half"
+                android:text="@string/ac"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="@dimen/text_size" />
+
+            <TextView
+                android:id="@+id/cant_3"
+                android:layout_width="@dimen/layout_width"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="@dimen/padding_half"
+                android:paddingRight="@dimen/padding_half"
+                android:text="@string/ac_percent"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="@dimen/text_size" />
+
+            <TextView
+                android:id="@+id/cant_4"
+                android:layout_width="@dimen/layout_width"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="@dimen/padding_half"
+                android:paddingRight="@dimen/padding_half"
+                android:text="@string/score"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="@dimen/text_size" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorPrimaryLight" />
+
+        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/standing_item_list"
+            android:name="cu.uci.test.ItemListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            app:layoutManager="LinearLayoutManager"
+            tools:context="cu.uci.test.ItemListActivity"
+            tools:listitem="@layout/problem_list_item" />
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_mini_margin"
+        android:layout_marginRight="@dimen/fab_mini_margin"
+        android:layout_margin="@dimen/fab_mini_margin"
+        android:clickable="false"
+        android:src="@drawable/users"
+        android:visibility="gone"
+        android:tint="@color/white"
+        app:fabSize="mini"
+        app:layout_behavior="cu.uci.coj.Behaviors.FloatingActionButtonBehavior"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_mini_margin"
+        android:layout_marginRight="@dimen/fab_mini_margin"
+        android:layout_margin="@dimen/fab_mini_margin"
+        android:clickable="false"
+        android:src="@drawable/countries"
+        android:visibility="gone"
+        android:tint="@color/white"
+        app:fabSize="mini"
+        app:layout_behavior="cu.uci.coj.Behaviors.FloatingActionButtonBehavior"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_mini_margin"
+        android:layout_marginRight="@dimen/fab_mini_margin"
+        android:layout_margin="@dimen/fab_mini_margin"
+        android:clickable="false"
+        android:src="@drawable/institutions"
+        android:visibility="gone"
+        android:tint="@color/white"
+        app:fabSize="mini"
+        app:layout_behavior="cu.uci.coj.Behaviors.FloatingActionButtonBehavior"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/standing_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:src="@drawable/standing"
+        android:tint="@color/white"
+        app:layout_behavior="cu.uci.coj.Behaviors.FloatingActionButtonBehavior"/>
+
+</android.support.design.widget.CoordinatorLayout>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shareInterpolator="false">
+
+    <translate
+        android:fromXDelta="0%"
+        android:fromYDelta="120%"
+        android:toXDelta="0%"
+        android:toYDelta="0%"
+        android:duration="300"/>
+
+    <rotate android:fromDegrees="360"
+        android:toDegrees="0"
+        android:pivotX="50%"
+        android:pivotY="-70%"
+        android:duration="600"
+        android:startOffset="250"/>
+
+</set>

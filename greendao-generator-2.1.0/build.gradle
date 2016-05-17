@@ -1,0 +1,2 @@
+configurations.create("default")
+artifacts.add("default", file('greendao-generator-2.1.0.jar'))

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/judgment_coordinator"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/connection_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <include layout="@layout/connection_error"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/judgments_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_half"
+            android:layout_marginTop="@dimen/padding_half"
+            android:background="@drawable/layout_button"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_half"
+                android:layout_marginRight="@dimen/padding_half"
+                android:layout_weight="60"
+                android:gravity="center"
+                android:text="@string/user"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="@dimen/text_size" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_half"
+                android:layout_marginRight="@dimen/padding_half"
+                android:layout_weight="55"
+                android:gravity="center"
+                android:text="@string/prob"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="@dimen/text_size" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="100"
+                android:gravity="center"
+                android:text="@string/judgment"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="@dimen/text_size" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_half"
+                android:layout_marginRight="@dimen/padding_half"
+                android:layout_weight="55"
+                android:gravity="center"
+                android:text="@string/time"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="@dimen/text_size" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_half"
+                android:layout_marginRight="@dimen/padding_half"
+                android:layout_weight="55"
+                android:gravity="center"
+                android:text="@string/mem"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="@dimen/text_size" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_half"
+                android:layout_marginRight="@dimen/padding_half"
+                android:layout_weight="55"
+                android:gravity="center"
+                android:text="@string/size"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="@dimen/text_size" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_half"
+                android:layout_marginRight="@dimen/padding_half"
+                android:layout_weight="55"
+                android:gravity="center"
+                android:text="@string/lang"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="@dimen/text_size" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorPrimaryLight" />
+
+        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/judgments_items_list"
+            android:name="cu.uci.test.ItemListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            app:layoutManager="LinearLayoutManager"
+            tools:context="cu.uci.test.ItemListActivity"
+            tools:listitem="@layout/judgment_list_item" />
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/judgments_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:tint="@color/white"
+        android:src="@drawable/filter"
+        app:layout_behavior="cu.uci.coj.Behaviors.FloatingActionButtonBehavior" />
+
+</android.support.design.widget.CoordinatorLayout>

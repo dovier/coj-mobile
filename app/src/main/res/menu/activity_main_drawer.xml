@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/menu_profile" android:title="@string/profile">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/view_profile"
+                    android:icon="@drawable/profile"
+                    android:title="@string/view_profile" />
+                <item
+                    android:id="@+id/edit_account"
+                    android:icon="@drawable/edit"
+                    android:title="@string/edit_account" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:id="@+id/menu_mail" android:title="@string/mail">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/inbox"
+                    android:icon="@drawable/inbox"
+                    android:title="@string/inbox" />
+                <item
+                    android:id="@+id/outbox"
+                    android:icon="@drawable/send"
+                    android:title="@string/sent" />
+                <item
+                    android:id="@+id/draft"
+                    android:icon="@drawable/borrador"
+                    android:title="@string/drafts" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="@string/archive">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/problems"
+                    android:icon="@drawable/problems"
+                    android:title="@string/problemItems" />
+                <item
+                    android:id="@+id/judgments"
+                    android:icon="@drawable/judgments"
+                    android:title="@string/judgments" />
+                <item
+                    android:id="@+id/standings"
+                    android:icon="@drawable/standing"
+                    android:title="@string/standings" />
+                <item
+                    android:id="@+id/compare"
+                    android:icon="@drawable/sync"
+                    android:title="@string/compare_users" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="@string/contests">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/coming"
+                    android:icon="@drawable/coming"
+                    android:title="@string/coming" />
+                <item
+                    android:id="@+id/running"
+                    android:icon="@drawable/running"
+                    android:title="@string/running" />
+                <item
+                    android:id="@+id/previous"
+                    android:icon="@drawable/previus"
+                    android:title="@string/previous" />
+            </group>
+        </menu>
+    </item>
+
+</menu>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_half"
+        android:layout_marginTop="@dimen/padding_half"
+        android:background="@drawable/layout_button"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/id"
+            android:layout_weight="55"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/padding_half"
+            android:layout_marginLeft="@dimen/padding_half"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="@dimen/text_size"
+            android:visibility="gone"
+            android:text="918156"/>
+
+        <TextView
+            android:id="@+id/submit_date"
+            android:layout_weight="70"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/padding_half"
+            android:layout_marginLeft="@dimen/padding_half"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="@dimen/text_size"
+            android:visibility="gone"
+            android:text="2016-03-08 21:54:12"/>
+
+        <TextView
+            android:id="@+id/from"
+            android:layout_weight="60"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/padding_half"
+            android:layout_marginLeft="@dimen/padding_half"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="@dimen/text_size"
+            android:textColor="@color/colorPrimaryLight"
+            android:text="angelmh" />
+
+        <TextView
+            android:id="@+id/problem_id"
+            android:layout_weight="55"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/padding_half"
+            android:layout_marginLeft="@dimen/padding_half"
+            android:text="1111"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="@dimen/text_size" />
+
+        <LinearLayout
+            android:layout_weight="100"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/padding_half"
+            android:layout_marginLeft="@dimen/padding_half" >
+
+            <TextView
+                android:id="@+id/judgment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="@dimen/text_size"
+                android:text="Wrong answer" />
+
+            <TextView
+                android:id="@+id/test_case"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceListItemSmall"
+                android:textSize="@dimen/text_size"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:text="Test 4"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_weight="55"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/padding_half"
+            android:layout_marginLeft="@dimen/padding_half"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="@dimen/text_size"
+            android:text="11053" />
+
+        <TextView
+            android:id="@+id/memory"
+            android:layout_weight="55"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/padding_half"
+            android:layout_marginLeft="@dimen/padding_half"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="@dimen/text_size"
+            android:text="122 MB" />
+
+        <TextView
+            android:id="@+id/size"
+            android:layout_weight="55"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/padding_half"
+            android:layout_marginLeft="@dimen/padding_half"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="@dimen/text_size"
+            android:text="427 bytes" />
+
+        <TextView
+            android:id="@+id/language"
+            android:layout_weight="55"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/padding_half"
+            android:layout_marginLeft="@dimen/padding_half"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="@dimen/text_size"
+            android:text="C++11" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimaryLight"/>
+
+</LinearLayout>
