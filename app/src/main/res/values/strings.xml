@@ -74,6 +74,9 @@
     <string name="recommendation">Recommendation</string>
     <string name="error_institutions">Error getting institutions</string>
     <string name="update_error">Error updating profile</string>
+    <string name="entry_error">Error sending entry</string>
+    <string name="entry_successful">Entry added successful</string>
+    <string name="entry_empty">Empty entry</string>
     <string name="update_successful">Profile update successful</string>
     <string name="user_invalid">User invalid. Please check again!</string>
     <string name="solved_only">"Problems solved only by "</string>

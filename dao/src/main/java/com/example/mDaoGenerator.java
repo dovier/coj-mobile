@@ -30,6 +30,9 @@ public class mDaoGenerator {
         addPreviousContest(schema);
         addRunningContest(schema);
         addProfile(schema);
+        addInboxMessage(schema);
+        addOutboxMessage(schema);
+        addDraftMessage(schema);
 
     }
 
@@ -146,6 +149,38 @@ public class mDaoGenerator {
         return profile;
 
     }
+
+    private static Entity addInboxMessage(Schema schema){
+
+        Entity profile = schema.addEntity("DBInboxMessage");
+        profile.addIdProperty().primaryKey();
+        profile.addStringProperty("message").notNull();
+
+        return profile;
+
+    }
+
+    private static Entity addOutboxMessage(Schema schema){
+
+        Entity profile = schema.addEntity("DBOutboxMessage");
+        profile.addIdProperty().primaryKey();
+        profile.addStringProperty("message").notNull();
+
+        return profile;
+
+    }
+
+    private static Entity addDraftMessage(Schema schema){
+
+        Entity profile = schema.addEntity("DBDraftMessage");
+        profile.addIdProperty().primaryKey();
+        profile.addStringProperty("message").notNull();
+
+        return profile;
+
+    }
+
+
 
 
 

@@ -19,17 +19,34 @@
         android:gravity="center_vertical"
         app:layout_behavior="cu.uci.coj.Behaviors.LinearLayoutBehavior">
 
-        <EditText
-            android:id="@+id/input_message"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="100"
-            android:ems="10"
-            android:gravity="top"
-            android:hint="@string/we_should_know"
-            android:inputType="textMultiLine" />
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/input_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="top"
+                android:maxLength="255"
+                android:hint="@string/we_should_know"
+                android:inputType="textMultiLine" />
+
+            <TextView
+                android:id="@+id/char_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="0/255"/>
+
+        </LinearLayout>
+
 
         <Button
+            android:id="@+id/create_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/layout_button_rounded"

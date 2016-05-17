@@ -86,6 +86,7 @@ public class Conexion {
     public final static String URL_JUDGMENT_FILTER = COJ_URL + API_URL + "/judgment?";
 
     public final static String URL_WELCOME_PAGE = COJ_URL + API_URL + "/extras/entry/";
+    public final static String URL_ADD_ENTRY = COJ_URL + API_URL + "/extras/entry";
     public final static String URL_FAQ = COJ_URL + API_URL + "/extras/faq";
 
     public static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
@@ -1139,7 +1140,7 @@ public class Conexion {
                 .delete()
                 .header("apikey", API_KEY)
                 .header("token", token)
-                .url(URL_MAIL_DELETE+"/"+emailFolder+"/"+emailID)
+                .url(URL_MAIL_DELETE + "/" + emailFolder + "/" + emailID)
                 .build();
         Response response = client.newCall(request).execute();
 
@@ -1260,6 +1261,14 @@ public class Conexion {
         }
     }
 
+    /**
+     * Request for new password and send email to User
+     *
+     * @param email Email address
+     * @return Null if was successful or a String with error in ether case
+     * @throws IOException
+     * @throws JSONException
+     */
     public static String forgotPassword( String email) throws IOException, JSONException {
 
         RequestBody requestBody = new FormBody.Builder()
@@ -1286,6 +1295,63 @@ public class Conexion {
         }
 
 
+    }
+
+    /**
+     * Send new entry to COJ Board
+     * @param context Application context
+     * @param entry Text for new entry
+     * @return Null if was successful or error message in other case
+     *
+     * @throws NoLoginFileException
+     * @throws JSONException
+     * @throws IOException
+     * @throws UnauthorizedException
+     */
+    public static String addEntry(Context context, String entry) throws NoLoginFileException, JSONException, IOException, UnauthorizedException {
+
+        JSONObject json = new JSONObject();
+
+        String token = LoginData.read(context).getToken();
+
+        json.put("apikey", API_KEY);
+        json.put("token", token);
+        json.put("entryText", entry);
+
+        RequestBody body = RequestBody.create(JSON, json.toString());
+        Request request = new Request.Builder()
+                .url(URL_ADD_ENTRY)
+                .post(body)
+                .build();
+        Response response = new OkHttpClient().newCall(request).execute();
+
+        String resp = response.body().string();
+
+        switch (response.code()){
+            case 200: {
+                return null;
+            }
+            case 401: {
+                JSONObject jsonObject = new JSONObject(resp);
+                String error = jsonObject.getString("error");
+
+                switch (error){
+
+                    case "token expirated": {
+                        getNewToken(context);
+                        return addEntry(context, entry);
+                    }
+                    case "token or apikey incorrect": {
+                        getNewToken(context);
+                        return addEntry(context, entry);
+                    }
+                }
+            }
+            default: {
+                JSONObject jsonObject = new JSONObject(response.body().string());
+                return jsonObject.getString("error");
+            }
+        }
     }
 
 }

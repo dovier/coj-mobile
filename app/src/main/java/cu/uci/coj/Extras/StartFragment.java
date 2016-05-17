@@ -1,5 +1,6 @@
 package cu.uci.coj.Extras;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,10 +9,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -23,6 +29,8 @@ import java.util.List;
 
 import cu.uci.coj.Conexion;
 import cu.uci.coj.DataBaseManager;
+import cu.uci.coj.Exceptions.NoLoginFileException;
+import cu.uci.coj.Exceptions.UnauthorizedException;
 import cu.uci.coj.R;
 import cu.uci.coj.ScreenOrientationLocker;
 
@@ -114,8 +122,41 @@ public class StartFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_start, container, false);
 
         LinearLayout input_layout = (LinearLayout) rootView.findViewById(R.id.input_layout);
-        if (login)
+        if (login){
             input_layout.setVisibility(View.VISIBLE);
+            final EditText input_message = (EditText) rootView.findViewById(R.id.input_message);
+
+            Button create = (Button) rootView.findViewById(R.id.create_button);
+            create.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String entry = input_message.getText().toString();
+                    if (entry.length() != 0)
+                        new Entry(getActivity()).execute(entry);
+                    else
+                        Toast.makeText(getActivity(), R.string.entry_empty, Toast.LENGTH_LONG).show();
+                }
+            });
+
+            final TextView char_count = (TextView) rootView.findViewById(R.id.char_count);
+            TextWatcher watcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    char_count.setText(charSequence.length()+"/255");
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            };
+            input_message.addTextChangedListener(watcher);
+        }
         else
             input_layout.setVisibility(View.GONE);
 
@@ -142,6 +183,66 @@ public class StartFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    public static class Entry extends AsyncTask<String, Void, String>{
+
+        protected WeakReference<FragmentActivity> fragment_reference;
+        protected ProgressDialog progressDialog;
+
+        public Entry(FragmentActivity fragment_reference) {
+            this.fragment_reference = new WeakReference<>(fragment_reference);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            final FragmentActivity activity = fragment_reference.get();
+
+            new ScreenOrientationLocker(activity).lock();
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog = ProgressDialog.show(activity, "",
+                            activity.getString(R.string.loading), true);
+                }
+            });
+        }
+
+        @Override
+        protected String doInBackground(String... entries) {
+
+            String message = null;
+
+            try {
+                message = Conexion.addEntry(fragment_reference.get(), entries[0]);
+            } catch (NoLoginFileException | JSONException | UnauthorizedException | IOException e) {
+                e.printStackTrace();
+            }
+
+            return message;
+        }
+
+        @Override
+        protected void onCancelled(String s) {
+            super.onCancelled(s);
+        }
+
+        @Override
+        protected void onPostExecute(String message) {
+
+            Activity activity = fragment_reference.get();
+            if (message != null){
+                Toast.makeText(activity, activity.getResources().getString(R.string.entry_error)+": "+message, Toast.LENGTH_LONG).show();
+            }
+            else{
+                Toast.makeText(activity, activity.getResources().getString(R.string.entry_successful), Toast.LENGTH_LONG).show();
+                EditText entry = (EditText) fragment_reference.get().findViewById(R.id.input_message);
+                entry.setText("");
+            }
+
+            progressDialog.dismiss();
+            new ScreenOrientationLocker(fragment_reference.get()).unlock();
+        }
     }
 
     public static class mAsyncTask extends AsyncTask<String, Void, List<EntriesItem>> {
