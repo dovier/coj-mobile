@@ -22,6 +22,7 @@ import java.util.List;
 
 import cu.uci.coj.Behaviors.FloatingActionButtonBehavior;
 import cu.uci.coj.Conexion;
+import cu.uci.coj.DataBaseManager;
 import cu.uci.coj.Exceptions.NoLoginFileException;
 import cu.uci.coj.Exceptions.UnauthorizedException;
 import cu.uci.coj.R;
@@ -140,9 +141,19 @@ public class MailListFragment extends Fragment {
 
             try {
                 emails = Conexion.getEmails(fragment_reference.get(), folder);
-            } catch (NoLoginFileException | IOException | UnauthorizedException | JSONException e) {
-                System.out.println("lol "+e.getMessage());
+                connectionError = false;
+            } catch (NoLoginFileException | UnauthorizedException e) {
                 e.printStackTrace();
+            } catch (IOException | JSONException e){
+
+                connectionError = true;
+                DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get());
+                try {
+                    emails = dataBaseManager.getEmails(folder);
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+
             }
 
             if (emails == null)
@@ -154,7 +165,6 @@ public class MailListFragment extends Fragment {
         @Override
         protected void onCancelled() {
             progressDialog.dismiss();
-            connectionError = true;
             final LinearLayout errorView = (LinearLayout) fragment_reference.get().findViewById(R.id.connection_error);
             final LinearLayout mail_list = (LinearLayout) fragment_reference.get().findViewById(R.id.email_list);
             fragment_reference.get().runOnUiThread(new Runnable() {
@@ -170,7 +180,17 @@ public class MailListFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Email> emails) {
 
-            connectionError = false;
+            if (!connectionError){
+                DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get());
+                dataBaseManager.deleteAllEmails(folder);
+                for (int i = 0; i < emails.size(); i++) {
+                    dataBaseManager.insertMessage(emails.get(i), folder);
+                }
+                dataBaseManager.closeDbConnections();
+            }
+            else {
+                connectionError = false;
+            }
 
             adapter = new EmailList(emails);
             RecyclerView recyclerView = (RecyclerView) fragment_reference.get().findViewById(R.id.recycler_email_list);

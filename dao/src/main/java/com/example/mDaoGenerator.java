@@ -33,6 +33,7 @@ public class mDaoGenerator {
         addInboxMessage(schema);
         addOutboxMessage(schema);
         addDraftMessage(schema);
+        addFAQs(schema);
 
     }
 
@@ -180,8 +181,13 @@ public class mDaoGenerator {
 
     }
 
+    private static Entity addFAQs(Schema schema){
 
+        Entity profile = schema.addEntity("DBFaq");
+        profile.addIdProperty().primaryKey().autoincrement();
+        profile.addStringProperty("faqs").notNull();
 
+        return profile;
 
-
+    }
 }

@@ -3,7 +3,6 @@ package cu.uci.coj;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -14,7 +13,10 @@ import java.util.List;
 
 import cu.uci.coj.Contests.Contest;
 import cu.uci.coj.Extras.EntriesItem;
+import cu.uci.coj.Extras.FaqItem;
 import cu.uci.coj.Judgments.Judgment;
+import cu.uci.coj.Mail.Email;
+import cu.uci.coj.Mail.MailFolder;
 import cu.uci.coj.Problems.Problem;
 import cu.uci.coj.Problems.ProblemItem;
 import cu.uci.coj.Profiles.UserProfile;
@@ -25,12 +27,20 @@ import cu.uci.coj.dao.DBComingContest;
 import cu.uci.coj.dao.DBComingContestDao;
 import cu.uci.coj.dao.DBCountryStanding;
 import cu.uci.coj.dao.DBCountryStandingDao;
+import cu.uci.coj.dao.DBDraftMessage;
+import cu.uci.coj.dao.DBDraftMessageDao;
 import cu.uci.coj.dao.DBEntries;
 import cu.uci.coj.dao.DBEntriesDao;
+import cu.uci.coj.dao.DBFaq;
+import cu.uci.coj.dao.DBFaqDao;
+import cu.uci.coj.dao.DBInboxMessage;
+import cu.uci.coj.dao.DBInboxMessageDao;
 import cu.uci.coj.dao.DBInstitutionStanding;
 import cu.uci.coj.dao.DBInstitutionStandingDao;
 import cu.uci.coj.dao.DBJudgments;
 import cu.uci.coj.dao.DBJudgmentsDao;
+import cu.uci.coj.dao.DBOutboxMessage;
+import cu.uci.coj.dao.DBOutboxMessageDao;
 import cu.uci.coj.dao.DBPreviousContest;
 import cu.uci.coj.dao.DBPreviousContestDao;
 import cu.uci.coj.dao.DBProblem;
@@ -71,13 +81,10 @@ public class DataBaseManager implements AsyncOperationListener {
 
     public DataBaseManager(final Context context) {
         this.context = context;
-//        completedOperations = new CopyOnWriteArrayList<>();
     }
 
     @Override
-    public void onAsyncOperationCompleted(AsyncOperation operation) {
-//        completedOperations.add(operation);
-    }
+    public void onAsyncOperationCompleted(AsyncOperation operation) {}
 
     public static DataBaseManager getInstance(Context context) {
 
@@ -301,6 +308,96 @@ public class DataBaseManager implements AsyncOperationListener {
 
     }
 
+    public synchronized void insertFAQ(FaqItem faq){
+
+        try {
+            openWritableDb();
+
+            DBFaq dbFaq = new DBFaq(null, faq.getJsonString());
+            DBFaqDao dbFaqDao = daoSession.getDBFaqDao();
+            dbFaqDao.insert(dbFaq);
+            Log.d(TAG, "insertFaqh");
+
+            daoSession.clear();
+
+        } catch (SQLiteException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public synchronized void insertInboxMessage(Email email){
+
+        try {
+            openWritableDb();
+
+            DBInboxMessage dbInboxMessage = new DBInboxMessage((long) email.getIdEmail(), email.getJSONString());
+            DBInboxMessageDao dbInboxMessageDao = daoSession.getDBInboxMessageDao();
+            dbInboxMessageDao.insert(dbInboxMessage);
+            Log.d(TAG, "insertInboxMessage");
+
+            daoSession.clear();
+
+        } catch (SQLiteException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public synchronized void insertOutboxMessage(Email email){
+
+        try {
+            openWritableDb();
+
+            DBOutboxMessage dbOutboxMessage = new DBOutboxMessage((long) email.getIdEmail(), email.getJSONString());
+            DBOutboxMessageDao dbOutboxMessageDao = daoSession.getDBOutboxMessageDao();
+            dbOutboxMessageDao.insert(dbOutboxMessage);
+            Log.d(TAG, "insertOutboxMessage");
+
+            daoSession.clear();
+
+        } catch (SQLiteException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public synchronized void insertDraftMessage(Email email){
+
+        try {
+            openWritableDb();
+
+            DBDraftMessage dbDraftMessage = new DBDraftMessage((long) email.getIdEmail(), email.getJSONString());
+            DBDraftMessageDao dbDraftMessageDao = daoSession.getDBDraftMessageDao();
+            dbDraftMessageDao.insert(dbDraftMessage);
+            Log.d(TAG, "insertDraftMessage");
+
+            daoSession.clear();
+
+        } catch (SQLiteException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public synchronized void insertMessage(Email email, MailFolder folder){
+
+        switch (folder){
+            case INBOX: {
+                insertInboxMessage(email);
+                break;
+            }
+            case OUTBOX: {
+                insertOutboxMessage(email);
+                break;
+            }
+            case DRAFT: {
+                insertDraftMessage(email);
+                break;
+            }
+        }
+    }
+
     public synchronized UserProfile getUserProfile() throws JSONException {
 
         try {
@@ -420,6 +517,123 @@ public class DataBaseManager implements AsyncOperationListener {
         }
 
         return null;
+
+    }
+
+  public synchronized List<FaqItem> getFAQs() throws JSONException {
+
+        try {
+            openReadableDb();
+            DBFaqDao dbFaqDao = daoSession.getDBFaqDao();
+            QueryBuilder qb = dbFaqDao.queryBuilder();
+            List<DBFaq> faqsQuery = qb.list();
+            daoSession.clear();
+
+            List<FaqItem> emails = new ArrayList<>();
+            for (int i = 0; i < faqsQuery.size(); i++) {
+                emails.add(new FaqItem(faqsQuery.get(i).getFaqs()));
+            }
+
+            return emails;
+        }
+        catch (SQLiteException e){
+            e.printStackTrace();
+        }
+
+        return null;
+
+    }
+
+  public synchronized List<Email> getInboxMessages() throws JSONException {
+
+        try {
+            openReadableDb();
+            DBInboxMessageDao dbInboxMessageDao = daoSession.getDBInboxMessageDao();
+            QueryBuilder qb = dbInboxMessageDao.queryBuilder();
+//            qb.orderAsc(DBEntriesDao.Properties.Id);
+            List<DBInboxMessage> emailsQuery = qb.list();
+            daoSession.clear();
+
+            List<Email> emails = new ArrayList<>();
+            for (int i = 0; i < emailsQuery.size(); i++) {
+                emails.add(new Email(emailsQuery.get(i).getMessage(), MailFolder.INBOX));
+            }
+
+            return emails;
+        }
+        catch (SQLiteException e){
+            e.printStackTrace();
+        }
+
+        return null;
+
+    }
+
+  public synchronized List<Email> getOutboxMessages() throws JSONException {
+
+        try {
+            openReadableDb();
+            DBOutboxMessageDao dbOutboxMessageDao = daoSession.getDBOutboxMessageDao();
+            QueryBuilder qb = dbOutboxMessageDao.queryBuilder();
+//            qb.orderAsc(DBEntriesDao.Properties.Id);
+            List<DBOutboxMessage> emailsQuery = qb.list();
+            daoSession.clear();
+
+            List<Email> emails = new ArrayList<>();
+            for (int i = 0; i < emailsQuery.size(); i++) {
+                emails.add(new Email(emailsQuery.get(i).getMessage(), MailFolder.OUTBOX));
+            }
+
+            return emails;
+        }
+        catch (SQLiteException e){
+            e.printStackTrace();
+        }
+
+        return null;
+
+    }
+
+  public synchronized List<Email> getDraftMessages() throws JSONException {
+
+        try {
+            openReadableDb();
+            DBDraftMessageDao dbDraftMessageDao = daoSession.getDBDraftMessageDao();
+            QueryBuilder qb = dbDraftMessageDao.queryBuilder();
+//            qb.orderAsc(DBEntriesDao.Properties.Id);
+            List<DBOutboxMessage> emailsQuery = qb.list();
+            daoSession.clear();
+
+            List<Email> emails = new ArrayList<>();
+            for (int i = 0; i < emailsQuery.size(); i++) {
+                emails.add(new Email(emailsQuery.get(i).getMessage(), MailFolder.DRAFT));
+            }
+
+            return emails;
+        }
+        catch (SQLiteException e){
+            e.printStackTrace();
+        }
+
+        return null;
+
+    }
+
+    public synchronized List<Email> getEmails(MailFolder folder) throws JSONException {
+
+        switch (folder){
+            case INBOX: {
+                return getInboxMessages();
+            }
+            case OUTBOX: {
+                return getOutboxMessages();
+            }
+            case DRAFT: {
+                return getDraftMessages();
+            }
+            default:
+                return null;
+        }
 
     }
 
@@ -558,6 +772,21 @@ public class DataBaseManager implements AsyncOperationListener {
         return null;
     }
 
+    public synchronized void deleteAllFAQs(){
+
+        try {
+            openWritableDb();
+
+            DBFaqDao dbFaqDao = daoSession.getDBFaqDao();
+            dbFaqDao.deleteAll();
+
+            daoSession.clear();
+        } catch (SQLiteException e){
+            e.printStackTrace();
+        }
+
+    }
+
     public synchronized void deleteAllProfiles(){
 
         try {
@@ -569,6 +798,70 @@ public class DataBaseManager implements AsyncOperationListener {
             daoSession.clear();
         } catch (SQLiteException e){
             e.printStackTrace();
+        }
+
+    }
+
+    public synchronized void deleteAllInboxMessages(){
+
+        try {
+            openWritableDb();
+
+            DBInboxMessageDao dbInboxMessageDao = daoSession.getDBInboxMessageDao();
+            dbInboxMessageDao.deleteAll();
+
+            daoSession.clear();
+        } catch (SQLiteException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public synchronized void deleteAllOutboxMessages(){
+
+        try {
+            openWritableDb();
+
+            DBOutboxMessageDao dbOutboxMessageDao = daoSession.getDBOutboxMessageDao();
+            dbOutboxMessageDao.deleteAll();
+
+            daoSession.clear();
+        } catch (SQLiteException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public synchronized void deleteAllDraftsMessages(){
+
+        try {
+            openWritableDb();
+
+            DBDraftMessageDao dbDraftMessageDao = daoSession.getDBDraftMessageDao();
+            dbDraftMessageDao.deleteAll();
+
+            daoSession.clear();
+        } catch (SQLiteException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public synchronized void deleteAllEmails(MailFolder folder){
+
+        switch (folder){
+            case INBOX: {
+                deleteAllInboxMessages();
+                break;
+            }
+            case OUTBOX: {
+                deleteAllOutboxMessages();
+                break;
+            }
+            case DRAFT: {
+                deleteAllDraftsMessages();
+                break;
+            }
         }
 
     }

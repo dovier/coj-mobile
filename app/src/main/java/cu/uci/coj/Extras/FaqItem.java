@@ -1,5 +1,8 @@
 package cu.uci.coj.Extras;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 
 /**
@@ -9,10 +12,13 @@ public class FaqItem implements Serializable{
 
     private String question;
     private String answer;
+    private String jsonString;
 
-    public FaqItem(String question, String answer) {
-        this.question = question;
-        this.answer = answer;
+    public FaqItem(String jsonString) throws JSONException {
+        this.jsonString = jsonString;
+        JSONObject jsonObject = new JSONObject(jsonString);
+        question = jsonObject.getString("question");
+        answer = jsonObject.getString("answer");
     }
 
     public String getQuestion() {
@@ -21,5 +27,9 @@ public class FaqItem implements Serializable{
 
     public String getAnswer() {
         return answer;
+    }
+
+    public String getJsonString() {
+        return jsonString;
     }
 }

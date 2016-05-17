@@ -673,13 +673,7 @@ public class Conexion {
         JSONArray JsonFaqList = new JSONArray(resp);
 
         for (int i = 0; i < JsonFaqList.length(); i++) {
-
-            JSONObject faqItem = JsonFaqList.getJSONObject(i);
-
-            faqItemList.add(new FaqItem(
-                    faqItem.getString("question"),
-                    faqItem.getString("answer")
-            ));
+            faqItemList.add(new FaqItem(JsonFaqList.getJSONObject(i).toString()));
         }
 
         return faqItemList;
