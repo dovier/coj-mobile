@@ -36,6 +36,7 @@
     <string name="date">Date</string>
     <string name="prob">Prob</string>
     <string name="problem_id">Problem ID</string>
+    <string name="source_code">Source code</string>
     <string name="judgment">Judgment</string>
     <string name="time">Time</string>
     <string name="mem">Mem</string>
@@ -162,6 +163,7 @@
     <string name="filter">Filter</string>
     <string name="we_should_know">Is there something we should know?</string>
     <string name="create">Create</string>
+    <string name="upload">Upload file</string>
     <string name="edit">Edit</string>
     <string name="reset">Reset</string>
     <string name="all">All</string>
@@ -212,8 +214,9 @@
     <string name="notifications_new_problems">Notifications of new problems</string>
     <string name="notifications_new_private_messages">Notifications of new private messages</string>
     <string name="notifications_coj_board">Notifications COJboard</string>
-    <string name="default_gui_language" translatable="false">Default GUI language</string>
-    <string name="default_programming_language" translatable="false">Default PROG language</string>
+    <string name="default_gui_language">Default GUI language</string>
+    <string name="default_programming_language">Default PROG language</string>
+    <string name="select_programming_language">Select programming language</string>
     <string name="status">Status</string>
     <string name="registration_date">Registration date</string>
     <string name="submission_date">Last SubmissionJudge date</string>
@@ -224,6 +227,8 @@
     <string name="followers">Followers</string>
     <string name="following">Following</string>
     <string name="last_entry">Last Entry</string>
+    <string name="file_long">File to long</string>
+    <string name="file_load_error">Error loading file</string>
     <string name="error_occurred">Error occurred</string>
     <string name="wait_few_seconds">Please, wait a few minutes and check your e-mail</string>
 </resources>

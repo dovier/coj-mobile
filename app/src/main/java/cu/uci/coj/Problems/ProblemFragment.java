@@ -145,7 +145,11 @@ public class ProblemFragment extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("lol submit");
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right)
+                        .replace(R.id.container, SubmitFragment.newInstance((int)problemItem.getLongId()))
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 

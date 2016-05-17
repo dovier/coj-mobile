@@ -51,6 +51,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/layout_button_rounded"
             android:text="@string/create"
+            android:padding="@dimen/padding"
             android:textColor="@color/white" />
 
     </LinearLayout>

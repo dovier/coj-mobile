@@ -62,14 +62,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("*/*");
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                //forgott password
 
-                Intent intent1 = Intent.createChooser(intent, "file choser");
-//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//                intent.setType("file/*");
-                startActivityForResult(intent1, 1);
             }
         });
 
@@ -89,52 +83,6 @@ public class LoginActivity extends AppCompatActivity {
                 attemptLogin();
             }
         });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch (requestCode){
-            case 1: {
-                if (resultCode == -1){
-
-                    String url = data.getData().getPath();
-                    File file = new File(url);
-
-                    if (file.length()/1024 > 100){
-                        //file to long
-                    }
-                    //Read text from file
-                    StringBuilder text = new StringBuilder();
-
-                    try {
-                        BufferedReader br = new BufferedReader(new FileReader(file));
-                        String line;
-
-                        while ((line = br.readLine()) != null) {
-                            text.append(line);
-                            text.append('\n');
-                        }
-                        br.close();
-                    }
-                    catch (Exception e) {
-                        System.out.println("lol "+ e.getMessage());
-                        //You'll need to add proper error handling here
-                    }
-
-                    if (text.length() != 0)
-                        System.out.println("lol "+text);
-                    else
-                        System.out.println("lol sin texto");
-                }
-                System.out.println("lol "+resultCode);
-                break;
-            }
-            default: {
-                System.out.println("lol code no se que mierda "+requestCode);
-            }
-        }
     }
 
     @Override
