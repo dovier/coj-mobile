@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cu.uci.coj.Conexion;
+import cu.uci.coj.DataBaseManager;
 import cu.uci.coj.R;
 import cu.uci.coj.ScreenOrientationLocker;
 
@@ -28,7 +30,9 @@ import cu.uci.coj.ScreenOrientationLocker;
 public class FaqFragment extends Fragment {
 
     private final String ARG_ADAPTER = "adapter";
+    private final String ARG_CONNECTION_ERROR = "connection_error";
 
+    private static boolean connectionError;
     private static FaqList adapter;
 
     public FaqFragment() {}
@@ -42,6 +46,7 @@ public class FaqFragment extends Fragment {
         super.onSaveInstanceState(outState);
 
         outState.putSerializable(ARG_ADAPTER, adapter);
+        outState.putBoolean(ARG_CONNECTION_ERROR, connectionError);
     }
 
     @Override
@@ -62,8 +67,16 @@ public class FaqFragment extends Fragment {
         if (savedInstanceState != null){
 
             adapter = (FaqList) savedInstanceState.getSerializable(ARG_ADAPTER);
-            RecyclerView recyclerView = (RecyclerView) getActivity().findViewById(R.id.faq_item_list);
-            recyclerView.setAdapter(adapter);
+            connectionError = savedInstanceState.getBoolean(ARG_CONNECTION_ERROR);
+            if (!connectionError){
+                RecyclerView recyclerView = (RecyclerView) getActivity().findViewById(R.id.faq_item_list);
+                recyclerView.setAdapter(adapter);
+            }
+            else {
+                getActivity().findViewById(R.id.faq_item_list).setVisibility(View.GONE);
+                getActivity().findViewById(R.id.faq_title).setVisibility(View.GONE);
+                getActivity().findViewById(R.id.connection_error).setVisibility(View.VISIBLE);
+            }
         }
         else {
 
@@ -106,9 +119,17 @@ public class FaqFragment extends Fragment {
 
             try {
                 faqItemList = Conexion.getFaq(this.url);
+                connectionError = false;
             } catch (IOException | JSONException e) {
+                connectionError = true;
+                DataBaseManager dataBaseManager = DataBaseManager.getInstance(weakReference.get());
+                try {
+                    faqItemList = dataBaseManager.getFAQs();
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
                 e.printStackTrace();
-                cancel(true);
+//                cancel(true);
             }
 
             return faqItemList;
@@ -132,10 +153,30 @@ public class FaqFragment extends Fragment {
         @Override
         protected void onPostExecute(List<FaqItem> faqItems) {
 
-            RecyclerView recyclerView = (RecyclerView) weakReference.get().findViewById(R.id.faq_item_list);
-            if (faqItems.size() == 0)
-                Snackbar.make(weakReference.get().findViewById(R.id.faq_coordinator), R.string.no_faq_error, Snackbar.LENGTH_LONG).show();
-            else {
+            if (!connectionError && faqItems != null && faqItems.size() != 0){
+                //consulta a la red satisfactoria
+                DataBaseManager dataBaseManager = DataBaseManager.getInstance(weakReference.get());
+                dataBaseManager.deleteAllFAQs();
+                for (int i = 0; i < faqItems.size(); i++) {
+                    dataBaseManager.insertFAQ(faqItems.get(i));
+                }
+                dataBaseManager.closeDbConnections();
+            }
+            else if (!connectionError && faqItems != null && faqItems.size() == 0){
+                //no faqs
+                Toast.makeText(weakReference.get(), R.string.no_faq_error, Toast.LENGTH_LONG).show();
+            }
+            else if (connectionError && faqItems != null && faqItems.size() == 0){
+                //no faqs en base de datos = connection error
+                weakReference.get().findViewById(R.id.connection_error).setVisibility(View.VISIBLE);
+                weakReference.get().findViewById(R.id.faq_title).setVisibility(View.GONE);
+                weakReference.get().findViewById(R.id.faq_item_list).setVisibility(View.GONE);
+            }
+
+            connectionError = faqItems == null || faqItems.size() == 0;
+
+            if (!connectionError){
+                RecyclerView recyclerView = (RecyclerView) weakReference.get().findViewById(R.id.faq_item_list);
                 adapter = new FaqList(faqItems);
                 recyclerView.setAdapter(adapter);
             }

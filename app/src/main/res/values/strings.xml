@@ -91,6 +91,8 @@
     <string name="inbox">Inbox</string>
     <string name="sent">Sent</string>
     <string name="drafts">Drafts</string>
+    <string name="submit">Submit</string>
+    <string name="best_solutions">Best Solutions</string>
     <string name="send_mail">Send mail</string>
     <string name="save_draft">Save draft</string>
     <string name="cancel">Cancel</string>

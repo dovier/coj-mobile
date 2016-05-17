@@ -46,7 +46,9 @@ import java.util.List;
 
 import cu.uci.coj.Conexion;
 import cu.uci.coj.DataBaseManager;
+import cu.uci.coj.Extras.StartFragment;
 import cu.uci.coj.Image;
+import cu.uci.coj.Judgments.BestSolutionsFragment;
 import cu.uci.coj.Profiles.ProfileFragment;
 import cu.uci.coj.R;
 import cu.uci.coj.ScreenOrientationLocker;
@@ -57,18 +59,18 @@ import cu.uci.coj.ScreenOrientationLocker;
 public class ProblemFragment extends Fragment {
 
     private static View rootView;
-    private static View errorView;
 
     private final static String ARGS_PROBLEM_DESCRIPTION = "problem_description";
     private final static String ARGS_PROBLEM_ITEM = "problem_item";
     private final static String ARGS_DATABASE = "database_load";
     private final static String ARGS_CONNECTION_ERROR = "connection_error";
+    private final static String ARGS_LOGIN = "login";
 
     private static ProblemItem problemItem;
     private static Problem problemDescription;
     private static boolean saved = false;
     private static boolean connectionError = false;
-//    private static DataBaseManager dataBaseManager;
+    private static boolean login = false;
 
     public ProblemFragment() {}
 
@@ -77,10 +79,11 @@ public class ProblemFragment extends Fragment {
      * this fragment using the provided parameters.
      * @return A new instance of fragment PoblemFragment.
      */
-    public static ProblemFragment newInstance(ProblemItem problemItem){
+    public static ProblemFragment newInstance(ProblemItem problemItem, boolean login){
         ProblemFragment fragment = new ProblemFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARGS_PROBLEM_ITEM, problemItem);
+        args.putBoolean(ARGS_LOGIN, login);
         fragment.setArguments(args);
         return fragment;
     }
@@ -100,6 +103,7 @@ public class ProblemFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         problemItem = (ProblemItem) getArguments().getSerializable(ARGS_PROBLEM_ITEM);
+        login = getArguments().getBoolean(ARGS_LOGIN);
     }
 
     @Override
@@ -114,9 +118,8 @@ public class ProblemFragment extends Fragment {
             if (!connectionError)
                 createView(getContext(), problemDescription);
             else{
-                CoordinatorLayout layout = (CoordinatorLayout) rootView.findViewById(R.id.problem_coordinator);
-                layout.removeAllViews();
-                layout.addView(errorView);
+                rootView.findViewById(R.id.problem_description_scroll).setVisibility(View.GONE);
+                rootView.findViewById(R.id.connection_error).setVisibility(View.VISIBLE);
             }
         }
         else {
@@ -130,7 +133,34 @@ public class ProblemFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_problem, container, false);
-        errorView = inflater.inflate(R.layout.connection_error, container, false);
+
+        if (login){
+            rootView.findViewById(R.id.submit).setVisibility(View.VISIBLE);
+        }
+        else {
+            rootView.findViewById(R.id.submit).setVisibility(View.GONE);
+        }
+
+        TextView submit = (TextView) rootView.findViewById(R.id.submit);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("lol submit");
+            }
+        });
+
+
+        TextView best_solutions = (TextView) rootView.findViewById(R.id.best_solutions);
+        best_solutions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right)
+                        .replace(R.id.container, BestSolutionsFragment.newInstance((int)problemItem.getLongId()))
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
 
         return rootView;
     }
@@ -584,9 +614,7 @@ public class ProblemFragment extends Fragment {
 
             progressDialog.dismiss();
             connectionError = true;
-            CoordinatorLayout layout = (CoordinatorLayout) rootView.findViewById(R.id.problem_coordinator);
-            layout.removeAllViews();
-            layout.addView(errorView);
+
             new ScreenOrientationLocker(fragment_reference.get()).unlock();
 
 

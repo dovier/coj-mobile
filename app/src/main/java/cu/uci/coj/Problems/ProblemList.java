@@ -119,7 +119,7 @@ public class ProblemList extends RecyclerView.Adapter<ProblemList.ViewHolder> im
 
                 FragmentManager fm = ((FragmentActivity) holder.itemView.getContext()).getSupportFragmentManager();
                 fm.beginTransaction()
-                        .replace(R.id.container, ProblemFragment.newInstance(holder.mItem))
+                        .replace(R.id.container, ProblemFragment.newInstance(holder.mItem, login))
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .addToBackStack(null)
                         .commit();

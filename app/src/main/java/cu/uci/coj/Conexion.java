@@ -83,6 +83,7 @@ public class Conexion {
     public final static String URL_USER_PROFILE_UPDATE = URL_USER_PROFILE + "update";
 
     public final static String URL_JUDGMENT_PAGE = COJ_URL + API_URL + "/judgment/page/";
+    public final static String URL_JUDGMENT_BEST_SOLUTIONS = COJ_URL + API_URL + "/judgment/best/";
     public final static String URL_JUDGMENT_FILTER = COJ_URL + API_URL + "/judgment?";
 
     public final static String URL_WELCOME_PAGE = COJ_URL + API_URL + "/extras/entry/";
@@ -562,6 +563,13 @@ public class Conexion {
 
     }
 
+    /**
+     * Get list of judgments
+     * @param url Api url
+     * @return List of Judgments
+     * @throws IOException
+     * @throws JSONException
+     */
     public static List<Judgment> getJudgmentsItem(String url) throws IOException, JSONException {
 
         List<Judgment> judgments = new ArrayList<>();
