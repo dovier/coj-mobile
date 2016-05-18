@@ -35,6 +35,7 @@ public class MailListFragment extends Fragment {
 
     private static String ARGS_ADAPTER = "adapter";
     private static String ARGS_FOLDER = "folder";
+    private static String ARGS_ERROR = "error";
 
     private static boolean connectionError = false;
     private static MailFolder folder;
@@ -57,6 +58,7 @@ public class MailListFragment extends Fragment {
 
         outState.putSerializable(ARGS_FOLDER, folder);
         outState.putSerializable(ARGS_ADAPTER, adapter);
+        outState.putBoolean(ARGS_ERROR, connectionError);
 
     }
 
@@ -67,6 +69,19 @@ public class MailListFragment extends Fragment {
         if (savedInstanceState != null){
             folder = (MailFolder) savedInstanceState.getSerializable(ARGS_FOLDER);
             adapter = (EmailList) savedInstanceState.getSerializable(ARGS_ADAPTER);
+            connectionError = savedInstanceState.getBoolean(ARGS_ERROR);
+
+            if (connectionError){
+                getActivity().findViewById(R.id.connection_error).setVisibility(View.VISIBLE);
+                getActivity().findViewById(R.id.email_list).setVisibility(View.GONE);
+            }
+            else {
+                RecyclerView recyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_email_list);
+                recyclerView.setAdapter(adapter);
+
+                getActivity().findViewById(R.id.connection_error).setVisibility(View.GONE);
+                getActivity().findViewById(R.id.email_list).setVisibility(View.VISIBLE);
+            }
         }
         else {
             new mAsyncTask(getActivity()).execute(folder);

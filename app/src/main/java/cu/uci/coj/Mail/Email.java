@@ -55,7 +55,10 @@ public class Email implements Serializable{
         }
 
         date = jsonObject.getLong("date");
-        isRead = jsonObject.getBoolean("isread");
+        if (folder == MailFolder.INBOX)
+            isRead = jsonObject.getBoolean("isread");
+        else
+            isRead = true;
 
     }
 

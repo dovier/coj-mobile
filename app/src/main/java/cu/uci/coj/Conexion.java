@@ -58,6 +58,7 @@ public class Conexion {
     public final static String URL_MAIL_DRAFT = URL_MAIL + "/draft";
     public final static String URL_MAIL_DELETE = URL_MAIL + "/delete";
     public final static String URL_MAIL_SEND = URL_MAIL + "/send";
+    public final static String URL_MAIL_TOGGLE_STATUS = URL_MAIL + "/toggle/status/";
 
     public final static String URL_PROBLEM_PAGE = COJ_URL + API_URL + "/problem/page/";
     public final static String URL_PROBLEM = COJ_URL + API_URL + "/problem/";
@@ -1357,6 +1358,19 @@ public class Conexion {
         }
     }
 
+    /**
+     * Submit a problem solution
+     * @param context Application context
+     * @param id Problem id
+     * @param keyLanguage Programming language for solution
+     * @param source Solution
+     * @return Error message or null if there was not error
+     *
+     * @throws NoLoginFileException
+     * @throws JSONException
+     * @throws IOException
+     * @throws UnauthorizedException
+     */
     public static String submitSolution(Context context, String id, String keyLanguage, String source) throws NoLoginFileException, JSONException, IOException, UnauthorizedException {
 
         JSONObject json = new JSONObject();
@@ -1395,6 +1409,63 @@ public class Conexion {
                     case "token or apikey incorrect": {
                         getNewToken(context);
                         return submitSolution(context, id, keyLanguage, source);
+                    }
+                }
+            }
+            default: {
+                try {
+                    JSONObject jsonObject = new JSONObject(resp);
+                    return jsonObject.getString("error");
+                }
+                catch (JSONException e){
+                    return resp;
+                }
+            }
+        }
+    }
+
+    /**
+     * Mark an email read or unread depends on actual status
+     *
+     * @param context Application context
+     * @param id Problem ID for toggle status
+     * @return Error message if occurred or Null if was successful
+     * @throws NoLoginFileException
+     * @throws JSONException
+     * @throws IOException
+     * @throws UnauthorizedException
+     */
+    public static String mailToggleStatus(Context context, String id) throws NoLoginFileException, JSONException, IOException, UnauthorizedException {
+
+        String token = LoginData.read(context).getToken();
+
+        Request request = new Request.Builder()
+                .header("apikey", API_KEY)
+                .header("token", token)
+                .url(URL_MAIL_TOGGLE_STATUS + id)
+                .put(new FormBody.Builder().build())
+                .build();
+        Response response = new OkHttpClient().newCall(request).execute();
+
+        String resp = response.body().string();
+
+        switch (response.code()){
+            case 200: {
+                return null;
+            }
+            case 401: {
+                JSONObject jsonObject = new JSONObject(resp);
+                String error = jsonObject.getString("error");
+
+                switch (error){
+
+                    case "token expirated": {
+                        getNewToken(context);
+                        return mailToggleStatus(context, id);
+                    }
+                    case "token or apikey incorrect": {
+                        getNewToken(context);
+                        return mailToggleStatus(context, id );
                     }
                 }
             }

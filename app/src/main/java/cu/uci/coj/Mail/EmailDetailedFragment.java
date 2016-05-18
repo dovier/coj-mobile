@@ -93,6 +93,10 @@ public class EmailDetailedFragment extends Fragment {
             e.printStackTrace();
         }
 
+        if (!email.isRead()){
+            new ToggleStatus(getActivity()).execute(email.getIdEmail());
+        }
+
         TextView textView = (TextView)rootView.findViewById(R.id.to);
         textView.setText(email.getStringTo() == null ? user : email.getStringTo());
         textView = (TextView)rootView.findViewById(R.id.from);
@@ -138,6 +142,27 @@ public class EmailDetailedFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    public static class ToggleStatus extends AsyncTask<Integer, Void, Void>{
+
+        protected WeakReference<FragmentActivity> fragment_reference;
+
+        public ToggleStatus(FragmentActivity activity) {
+            this.fragment_reference = new WeakReference<>(activity);
+        }
+
+        @Override
+        protected Void doInBackground(Integer... integers) {
+
+            try {
+                Conexion.mailToggleStatus(fragment_reference.get(), ""+integers[0]);
+            } catch (NoLoginFileException | JSONException | IOException | UnauthorizedException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
     }
 
     private static class mAsyncTask extends AsyncTask<Void, Void, Void> {

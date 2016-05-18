@@ -57,6 +57,10 @@ public class EmailList extends RecyclerView.Adapter<EmailList.ViewHolder> implem
             }
         }
 
+        if (!emails.get(position).isRead()){
+            holder.mItemView.setBackgroundResource(R.color.no_accept_background);
+        }
+
         final FragmentManager fm = ((FragmentActivity)holder.mItemView.getContext()).getSupportFragmentManager();
         holder.mItemView.setOnClickListener(new View.OnClickListener() {
             @Override
