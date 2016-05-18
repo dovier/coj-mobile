@@ -83,6 +83,7 @@ public class Conexion {
     public final static String URL_USER_PROFILE_UPDATE = URL_USER_PROFILE + "update";
 
     public final static String URL_JUDGMENT_PAGE = COJ_URL + API_URL + "/judgment/page/";
+    public final static String URL_JUDGMENT_SUBMIT = COJ_URL + API_URL + "/judgment/submit";
     public final static String URL_JUDGMENT_BEST_SOLUTIONS = COJ_URL + API_URL + "/judgment/best/";
     public final static String URL_JUDGMENT_FILTER = COJ_URL + API_URL + "/judgment?";
 
@@ -1352,6 +1353,59 @@ public class Conexion {
             default: {
                 JSONObject jsonObject = new JSONObject(response.body().string());
                 return jsonObject.getString("error");
+            }
+        }
+    }
+
+    public static String submitSolution(Context context, String id, String keyLanguage, String source) throws NoLoginFileException, JSONException, IOException, UnauthorizedException {
+
+        JSONObject json = new JSONObject();
+
+        String token = LoginData.read(context).getToken();
+
+        json.put("apikey", API_KEY);
+        json.put("token", token);
+        json.put("keylanguage", keyLanguage);
+        json.put("pid", id);
+        json.put("source", source);
+
+        RequestBody body = RequestBody.create(JSON, json.toString());
+        Request request = new Request.Builder()
+                .url(URL_JUDGMENT_SUBMIT)
+                .post(body)
+                .build();
+        Response response = new OkHttpClient().newCall(request).execute();
+
+        String resp = response.body().string();
+
+        switch (response.code()){
+            case 200: {
+                return null;
+            }
+            case 401: {
+                JSONObject jsonObject = new JSONObject(resp);
+                String error = jsonObject.getString("error");
+
+                switch (error){
+
+                    case "token expirated": {
+                        getNewToken(context);
+                        return submitSolution(context, id, keyLanguage, source);
+                    }
+                    case "token or apikey incorrect": {
+                        getNewToken(context);
+                        return submitSolution(context, id, keyLanguage, source);
+                    }
+                }
+            }
+            default: {
+                try {
+                    JSONObject jsonObject = new JSONObject(resp);
+                    return jsonObject.getString("error");
+                }
+                catch (JSONException e){
+                    return resp;
+                }
             }
         }
     }

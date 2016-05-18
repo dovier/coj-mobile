@@ -1,5 +1,6 @@
 package cu.uci.coj.Problems;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -23,13 +24,16 @@ import org.json.JSONException;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 import cu.uci.coj.Conexion;
+import cu.uci.coj.Exceptions.NoLoginFileException;
+import cu.uci.coj.Exceptions.UnauthorizedException;
+import cu.uci.coj.Extras.StartFragment;
 import cu.uci.coj.Filters.Filter;
+import cu.uci.coj.Judgments.JudgmentsFragment;
 import cu.uci.coj.R;
 import cu.uci.coj.ScreenOrientationLocker;
 
@@ -121,7 +125,7 @@ public class SubmitFragment extends Fragment {
 
         }
         else {
-            new mAsyncTask(getActivity()).execute();
+            new Languages(getActivity()).execute();
         }
 
     }
@@ -148,6 +152,7 @@ public class SubmitFragment extends Fragment {
         final EditText id = (EditText) rootView.findViewById(R.id.problem_id);
         final EditText source = (EditText) rootView.findViewById(R.id.source_code_text);
         final EditText file = (EditText) rootView.findViewById(R.id.file_path);
+        final Spinner spinner = (Spinner) rootView.findViewById(R.id.language_spinner);
 
         Button reset = (Button) rootView.findViewById(R.id.reset);
         reset.setOnClickListener(new View.OnClickListener() {
@@ -165,7 +170,17 @@ public class SubmitFragment extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String id_text = id.getText().toString();
+                String source_text = source.getText().toString();
+                int selected = spinner.getSelectedItemPosition();
 
+                if (id_text.length() <= 0 || source_text.length() <= 0 || selected <= 0){
+                    Toast.makeText(getActivity(), "Invalid values", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    String langKey = language.getFilterValue(selected);
+                    new mAsyncTask(getActivity()).execute(id_text, langKey, source_text);
+                }
             }
         });
 
@@ -221,13 +236,76 @@ public class SubmitFragment extends Fragment {
         }
     }
 
-
-    public static class mAsyncTask extends AsyncTask<Void, Void, Void> {
+    public static class mAsyncTask extends AsyncTask<String, Void, String> {
 
         protected WeakReference<FragmentActivity> fragment_reference;
         protected ProgressDialog progressDialog;
 
         public mAsyncTask(FragmentActivity activity) {
+            fragment_reference = new WeakReference<>(activity);
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            final FragmentActivity activity = fragment_reference.get();
+
+            new ScreenOrientationLocker(activity).lock();
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog = ProgressDialog.show(activity, "",
+                            activity.getString(R.string.loading), true);
+                }
+            });
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            String id = strings[0];
+            String language = strings[1];
+            String source = strings[2];
+
+            String message = null;
+            try {
+                message = Conexion.submitSolution(fragment_reference.get(), id, language, source);
+            } catch (NoLoginFileException | JSONException | UnauthorizedException | IOException e) {
+                e.printStackTrace();
+                message = e.getMessage();
+            }
+
+            return message;
+        }
+
+        @Override
+        protected void onPostExecute(String message) {
+
+            Activity activity = fragment_reference.get();
+            if (message != null){
+                Toast.makeText(activity, activity.getResources().getString(R.string.submit_error)+": "+message, Toast.LENGTH_LONG).show();
+            }
+            else{
+                Toast.makeText(activity, activity.getResources().getString(R.string.submit_successful), Toast.LENGTH_LONG).show();
+                fragment_reference.get().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right)
+                        .replace(R.id.container, JudgmentsFragment.newInstance())
+                        .addToBackStack(null)
+                        .commit();
+            }
+
+            progressDialog.dismiss();
+            new ScreenOrientationLocker(fragment_reference.get()).unlock();
+
+        }
+    }
+
+    public static class Languages extends AsyncTask<Void, Void, Void> {
+
+        protected WeakReference<FragmentActivity> fragment_reference;
+        protected ProgressDialog progressDialog;
+
+        public Languages(FragmentActivity activity) {
             fragment_reference = new WeakReference<>(activity);
         }
 

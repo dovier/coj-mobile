@@ -10,10 +10,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.Html;
@@ -46,7 +46,6 @@ import java.util.List;
 
 import cu.uci.coj.Conexion;
 import cu.uci.coj.DataBaseManager;
-import cu.uci.coj.Extras.StartFragment;
 import cu.uci.coj.Image;
 import cu.uci.coj.Judgments.BestSolutionsFragment;
 import cu.uci.coj.Profiles.ProfileFragment;
@@ -71,6 +70,7 @@ public class ProblemFragment extends Fragment {
     private static boolean saved = false;
     private static boolean connectionError = false;
     private static boolean login = false;
+    private static FragmentManager fm = null;
 
     public ProblemFragment() {}
 
@@ -134,6 +134,8 @@ public class ProblemFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_problem, container, false);
 
+        fm = getActivity().getSupportFragmentManager();
+
         if (login){
             rootView.findViewById(R.id.submit).setVisibility(View.VISIBLE);
         }
@@ -145,9 +147,9 @@ public class ProblemFragment extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction()
+                fm.beginTransaction()
                         .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right)
-                        .replace(R.id.container, SubmitFragment.newInstance((int)problemItem.getLongId()))
+                        .replace(R.id.container, SubmitFragment.newInstance((int) problemItem.getLongId()))
                         .addToBackStack(null)
                         .commit();
             }
@@ -158,7 +160,7 @@ public class ProblemFragment extends Fragment {
         best_solutions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction()
+                fm.beginTransaction()
                         .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right)
                         .replace(R.id.container, BestSolutionsFragment.newInstance((int)problemItem.getLongId()))
                         .addToBackStack(null)
@@ -541,7 +543,7 @@ public class ProblemFragment extends Fragment {
         rootView.findViewById(R.id.added_by).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction ft = ((FragmentActivity)context).getSupportFragmentManager().beginTransaction();
+                FragmentTransaction ft = fm.beginTransaction();
                 ft.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right);
                 ft.replace(R.id.container, ProfileFragment.newInstance(((TextView) rootView.findViewById(R.id.added_by)).getText().toString()));
                 ft.addToBackStack(null);

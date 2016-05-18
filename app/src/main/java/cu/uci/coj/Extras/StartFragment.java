@@ -217,6 +217,7 @@ public class StartFragment extends Fragment {
                 message = Conexion.addEntry(fragment_reference.get(), entries[0]);
             } catch (NoLoginFileException | JSONException | UnauthorizedException | IOException e) {
                 e.printStackTrace();
+                message = e.getMessage();
             }
 
             return message;
