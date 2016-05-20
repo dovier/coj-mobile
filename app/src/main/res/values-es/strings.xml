@@ -224,4 +224,8 @@
     <string name="upload">Cargar archivo</string>
     <string name="user_passwd_error">Usuario o contraseña incorrectos</string>
     <string name="wait_few_seconds">Espere unos segundos y revise su correo electrónico</string>
+    <string name="server_preference">Configuracón del servidor</string>
+    <string name="server_name">Nombre del servidor</string>
+    <string name="invalid_server">Servidor incorrecto</string>
+    <string name="restart_application">Debe reiniciar la aplicación</string>
 </resources>
