@@ -244,4 +244,8 @@
     <string name="server_name">Server name</string>
     <string name="invalid_server">Invalid server name</string>
     <string name="restart_application">Should restart the application</string>
+
+    <string name="no_more_countries">No more countries</string>
+    <string name="no_more_institutions">No more institutions</string>
+
 </resources>

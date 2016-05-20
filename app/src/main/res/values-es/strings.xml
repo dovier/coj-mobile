@@ -174,10 +174,10 @@
     <string name="no_contest_error">No hay competencias</string>
     <string name="no_faq_error">No hay FAQs</string>
     <string name="no_matches">No hay coincidencias</string>
-    <string name="no_more_entries_error">No hay mas comentarios</string>
-    <string name="no_more_judgments">No hay mas calificaciones</string>
-    <string name="no_more_problems">No hay mas problemas</string>
-    <string name="no_more_users">No hay mas usuarios</string>
+    <string name="no_more_entries_error">No hay más comentarios</string>
+    <string name="no_more_judgments">No hay más calificaciones</string>
+    <string name="no_more_problems">No hay más problemas</string>
+    <string name="no_more_users">No hay más usuarios</string>
     <string name="notifications_coj_board">Notificar COJboard</string>
     <string name="notifications_new_contest">Notificar nuevas competencias</string>
     <string name="notifications_new_private_messages">Notificar nuevos mensajes privados</string>
@@ -228,4 +228,6 @@
     <string name="server_name">Nombre del servidor</string>
     <string name="invalid_server">Servidor incorrecto</string>
     <string name="restart_application">Debe reiniciar la aplicación</string>
+    <string name="no_more_countries">No hay más paises</string>
+    <string name="no_more_institutions">No hay más instituciones</string>
 </resources>
