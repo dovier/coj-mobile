@@ -1,5 +1,6 @@
 package cu.uci.coj.Standings;
 
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +41,15 @@ public class InstitutionStandingItem extends RecyclerView.Adapter<InstitutionSta
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = institutionRanks.get(position);
         holder.rank.setText(holder.mItem.getRank());
-        //falta la imagen del pais no se de que forma
+
+        try {
+            InputStream ims = holder.itemView.getContext().getAssets().open(institutionRanks.get(position).getCountry()+".png");
+            Drawable d = Drawable.createFromStream(ims, null);
+            holder.country.setImageDrawable(d);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         holder.institution.setText(holder.mItem.getInstitution());
         holder.users.setText(holder.mItem.getUsers());
         holder.ac.setText(holder.mItem.getAc());

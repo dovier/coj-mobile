@@ -1273,7 +1273,7 @@ public class Conexion {
      * @throws IOException
      * @throws JSONException
      */
-    public static String forgotPassword( String email) throws IOException, JSONException {
+    public static String forgotPassword(String email) throws IOException, JSONException {
 
         RequestBody requestBody = new FormBody.Builder()
                 .add("apikey", Conexion.API_KEY)

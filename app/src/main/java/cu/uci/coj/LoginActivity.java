@@ -62,7 +62,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                //forgott password
+                Intent intent = new Intent(getApplicationContext(), RecoverPassword.class);
+                startActivity(intent);
 
             }
         });

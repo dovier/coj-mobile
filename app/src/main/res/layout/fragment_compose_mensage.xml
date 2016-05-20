@@ -70,16 +70,6 @@
             android:contentDescription="@string/send_mail"
             android:src="@drawable/send_mail" />
 
-        <!--<ImageView-->
-            <!--android:id="@+id/save_mail"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="100"-->
-            <!--android:padding="@dimen/padding"-->
-            <!--android:contentDescription="@string/save_draft"-->
-            <!--android:tint="@color/white"-->
-            <!--android:src="@drawable/save" />-->
-
         <ImageView
             android:id="@+id/discard_mail"
             android:layout_width="0dp"

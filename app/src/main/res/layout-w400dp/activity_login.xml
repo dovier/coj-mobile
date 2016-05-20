@@ -10,6 +10,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="cu.uci.coj.LoginActivity">
 
+    <ImageView
+        android:layout_weight="100"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="fitCenter"
+        android:layout_gravity="center"
+        android:padding="@dimen/activity_vertical_margin"
+        android:src="@drawable/coj_logo"/>
+
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"

@@ -112,7 +112,7 @@
     <string name="saved">Problem saved</string>
     <string name="deleted">Deleted problem </string>
     <string name="off_line_mode">Off line</string>
-    <string name="no_more_problems">No problems to load</string>
+    <string name="no_more_problems">No more problems to load</string>
     <string name="no_more_judgments">No more judgments to load</string>
     <string name="no_more_users">No more users</string>
     <string name="no_matches">No matches</string>
@@ -232,5 +232,10 @@
     <string name="file_long">File too long</string>
     <string name="file_load_error">Error loading file</string>
     <string name="error_occurred">Error occurred</string>
-    <string name="wait_few_seconds">Please, wait a few minutes and check your e-mail</string>
+    <string name="wait_few_seconds">Please, wait a few minutes and check your e-mail.</string>
+
+    <string name="title_activity_recover_password">Recover user password</string>
+    <string name="instructions_mail">We will send an e-mail with instructions to the specified address</string>
+    <string name="recover">Recover</string>
+    <string name="invalid_email">Invalid email</string>
 </resources>

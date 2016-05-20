@@ -83,25 +83,25 @@
                 android:layout_gravity="bottom"
                 android:layout_weight="30" />
 
-            <Button
-                android:id="@+id/submit"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="30"
-                android:background="@drawable/layout_button_rounded"
-                android:text="@string/submit"
-                android:textColor="@color/white" />
+                <Button
+                    android:id="@+id/submit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="30"
+                    android:background="@drawable/layout_button_rounded"
+                    android:text="@string/submit"
+                    android:textColor="@color/white" />
 
-            <Button
-                android:id="@+id/reset"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_weight="30"
-                android:background="@drawable/layout_button_rounded"
-                android:text="@string/reset"
-                android:textColor="@color/white" />
+                <Button
+                    android:id="@+id/reset"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_weight="30"
+                    android:background="@drawable/layout_button_rounded"
+                    android:text="@string/reset"
+                    android:textColor="@color/white" />
 
         </LinearLayout>
 
