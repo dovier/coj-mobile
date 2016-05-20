@@ -239,12 +239,19 @@ public class Conexion {
                         .build())
                     .execute();
 
-        if (!response.isSuccessful())
-            throw new JSONException("Unexpected code " + response);
-
         JSONObject mJSONObject = new JSONObject(response.body().string());
 
-        return new Problem(mJSONObject);
+        String error = "";
+        try {
+            error = mJSONObject.getString("error");
+        }
+        catch (JSONException e){
+
+            return new Problem(mJSONObject);
+
+        }
+
+        throw new IOException("Unexpected error: " + error);
 
     }
 
@@ -266,7 +273,7 @@ public class Conexion {
                 .execute();
 
         if (!response.isSuccessful())
-            throw new IOException("Unexpected code " + response);
+            throw new IOException("Unexpected code: " + response);
 
         JSONObject JsonCompare = new JSONObject(response.body().string());
 
@@ -520,14 +527,13 @@ public class Conexion {
      * Select favorite problem or not favorite.
      *
      * @param id problem id
-     * @param favorite favorite or not
      * @param token user token
      *
      * @return operation successful or not
      * @throws IOException
      * @throws JSONException
      */
-    public static boolean toggleFavorite(int id, boolean favorite, String token) throws IOException, JSONException {
+    public static boolean toggleFavorite(int id, String token) throws IOException, JSONException {
 
         Request request = new Request.Builder()
                 .header("apikey", API_KEY)
@@ -583,11 +589,6 @@ public class Conexion {
                 .execute();
 
         String resp = response.body().string();
-        switch (response.code()){
-            case 400: {
-                return judgments;
-            }
-        }
 
         if (!response.isSuccessful())
             throw new IOException("Unexpected code " + response);

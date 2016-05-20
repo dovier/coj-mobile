@@ -187,7 +187,7 @@ public class ProblemList extends RecyclerView.Adapter<ProblemList.ViewHolder> im
         protected Void doInBackground(Void... voids) {
 
             try {
-                Conexion.toggleFavorite(id, favorite, token);
+                Conexion.toggleFavorite(id, token);
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }

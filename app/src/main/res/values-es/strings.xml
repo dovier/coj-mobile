@@ -149,7 +149,6 @@
     <string name="following">Suguiendo</string>
     <string name="forward">Reenviar</string>
     <string name="frozen_time">Tiempo congelado (tiempo restante sin actualizar las posiciones)</string>
-    <string name="game_theory"></string>
     <string name="gender">Sexo</string>
     <string name="hints">Sugerencia(s)</string>
     <string name="image_error">Error cargando las imágenes</string>
@@ -157,7 +156,7 @@
     <string name="institution">Institución</string>
     <string name="instructions_mail">Enviaremos instrucciones a la dirección de correo especificada</string>
     <string name="invalid_email">Correo incorrecto</string>
-    <string name="judgment">Calificacion</string>
+    <string name="judgment">Calificación</string>
     <string name="judgment_filter">Filtro de calificaciones</string>
     <string name="judgment_list_error">Error obteniendo la lista de calificaciones</string>
     <string name="judgments">Calificaciones</string>
@@ -171,10 +170,7 @@
     <string name="mail">Correo</string>
     <string name="mail_example">Ponga su texto aquí</string>
     <string name="male">Masculino</string>
-    <string name="mem"></string>
     <string name="must_logged_in">Debe estar logueado</string>
-    <string name="navigation_drawer_close"></string>
-    <string name="nick_name"></string>
     <string name="no_contest_error">No hay competencias</string>
     <string name="no_faq_error">No hay FAQs</string>
     <string name="no_matches">No hay coincidencias</string>
@@ -189,7 +185,6 @@
     <string name="notifications_submissions">Notificar nuevos envios</string>
     <string name="overall_data">Descripción general</string>
     <string name="penalty_each_rejected">Penalización por cada envío rechazado</string>
-    <string name="prob"></string>
     <string name="problem_id">ID del problema</string>
     <string name="recommended">Recomendados</string>
     <string name="recover">Recuperar</string>
@@ -214,7 +209,6 @@
     <string name="source_code">Código fuente</string>
     <string name="standing_list_error">Error obteniendo las posiciones</string>
     <string name="standings">Posiciones</string>
-    <string name="sub"></string>
     <string name="submission_date">Fecha del último envío</string>
     <string name="submit">Enviar</string>
     <string name="submit_error">Error enviando la solución</string>
