@@ -187,7 +187,7 @@ public class ComposeMessage extends Fragment {
 
             Activity activity = fragment_reference.get();
             try {
-                Conexion.deleteEmail(activity, MailFolder.DRAFT, ids[0]);
+                Conexion.getInstance(fragment_reference.get()).deleteEmail(activity, MailFolder.DRAFT, ids[0]);
 
                 activity.runOnUiThread(new Runnable() {
                     @Override
@@ -238,10 +238,10 @@ public class ComposeMessage extends Fragment {
         protected Void doInBackground(String... strings) {
 
             try {
-                Conexion.sendEmail(fragment_reference.get(), strings[0], strings[1], strings[2]);
+                Conexion.getInstance(fragment_reference.get()).sendEmail(fragment_reference.get(), strings[0], strings[1], strings[2]);
                 if (id != 0){
                     try {
-                        Conexion.deleteEmail(fragment_reference.get(), MailFolder.DRAFT, id);
+                        Conexion.getInstance(fragment_reference.get()).deleteEmail(fragment_reference.get(), MailFolder.DRAFT, id);
                     }catch (Exception e){
                         e.printStackTrace();
                     }

@@ -81,17 +81,16 @@ public class FaqFragment extends Fragment {
         else {
 
             adapter = new FaqList();
-            new mAsyncTask(getActivity()).execute(Conexion.URL_FAQ);
+            new mAsyncTask(getActivity()).execute();
 
         }
 
     }
 
-    public static class mAsyncTask extends AsyncTask<String, Void, List<FaqItem>>{
+    public static class mAsyncTask extends AsyncTask<Void, Void, List<FaqItem>>{
 
         protected WeakReference<FragmentActivity> weakReference;
         protected ProgressDialog progressDialog;
-        protected String url;
 
         public mAsyncTask(FragmentActivity fragmentActivity) {
             this.weakReference = new WeakReference<>(fragmentActivity);
@@ -112,13 +111,12 @@ public class FaqFragment extends Fragment {
         }
 
         @Override
-        protected List<FaqItem> doInBackground(String... url) {
+        protected List<FaqItem> doInBackground(Void... voids) {
 
-            this.url = url[0];
             List<FaqItem> faqItemList = new ArrayList<>();
 
             try {
-                faqItemList = Conexion.getFaq(this.url);
+                faqItemList = Conexion.getInstance(weakReference.get()).getFaq();
                 connectionError = false;
             } catch (IOException | JSONException e) {
                 connectionError = true;
@@ -129,7 +127,6 @@ public class FaqFragment extends Fragment {
                     e1.printStackTrace();
                 }
                 e.printStackTrace();
-//                cancel(true);
             }
 
             return faqItemList;
@@ -142,7 +139,7 @@ public class FaqFragment extends Fragment {
             snackbar.setAction(R.string.reload, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new mAsyncTask(weakReference.get()).execute(url);
+                    new mAsyncTask(weakReference.get()).execute();
                 }
             });
             snackbar.show();

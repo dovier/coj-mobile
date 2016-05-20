@@ -83,7 +83,7 @@ public class RunningContestFragment extends Fragment {
         else{
             adapter = new ContestListItem(new ArrayList<Contest>());
             recyclerView.setAdapter(adapter);
-            new mAsyncTask(getActivity()).execute(Conexion.URL_CONTEST_RUNNING);
+            new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).URL_CONTEST_RUNNING);
         }
 
     }
@@ -135,7 +135,7 @@ public class RunningContestFragment extends Fragment {
             snackbar.setAction(R.string.reload, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new mAsyncTask(fragment_reference.get()).execute(Conexion.URL_CONTEST_RUNNING);
+                    new mAsyncTask(fragment_reference.get()).execute(Conexion.getInstance(fragment_reference.get()).URL_CONTEST_RUNNING);
                 }
             });
             snackbar.show();
@@ -152,7 +152,7 @@ public class RunningContestFragment extends Fragment {
 
             try {
                 String url = urls[0];
-                contests = Conexion.getContests(url);
+                contests = Conexion.getInstance(fragment_reference.get()).getContests(url);
             } catch (IOException | JSONException e) {
 
                 DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get().getApplicationContext());

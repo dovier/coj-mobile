@@ -101,7 +101,7 @@ public class StartFragment extends Fragment {
 
         }
         else{
-            new mAsyncTask(getActivity()).execute(Conexion.URL_WELCOME_PAGE + page++);
+            new mAsyncTask(getActivity()).execute();
         }
     }
 
@@ -179,7 +179,7 @@ public class StartFragment extends Fragment {
                     int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
                     if (lastVisibleItemPosition != RecyclerView.NO_POSITION && lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 1 && dy > 10) {
 
-                        new mAsyncTask(getActivity()).execute(Conexion.URL_WELCOME_PAGE + page++);
+                        new mAsyncTask(getActivity()).execute();
 
                     }
                 }
@@ -219,7 +219,7 @@ public class StartFragment extends Fragment {
             String message = null;
 
             try {
-                message = Conexion.addEntry(fragment_reference.get(), entries[0]);
+                message = Conexion.getInstance(fragment_reference.get()).addEntry(fragment_reference.get(), entries[0]);
             } catch (NoLoginFileException | JSONException | UnauthorizedException | IOException e) {
                 e.printStackTrace();
                 message = e.getMessage();
@@ -251,11 +251,10 @@ public class StartFragment extends Fragment {
         }
     }
 
-    public static class mAsyncTask extends AsyncTask<String, Void, List<EntriesItem>> {
+    public static class mAsyncTask extends AsyncTask<Void, Void, List<EntriesItem>> {
 
         protected WeakReference<FragmentActivity> fragment_reference;
         protected ProgressDialog progressDialog;
-        protected String url;
         protected boolean secondPage;
 
         public mAsyncTask(FragmentActivity fragment_reference) {
@@ -277,13 +276,12 @@ public class StartFragment extends Fragment {
         }
 
         @Override
-        protected List<EntriesItem> doInBackground(String... url) {
+        protected List<EntriesItem> doInBackground(Void... voids) {
 
-            this.url = url[0];
             List<EntriesItem> list = new ArrayList<>();
 
             try {
-                list = Conexion.getEntries(this.url);
+                list = Conexion.getInstance(fragment_reference.get()).getEntries(page++);
                 secondPage = true;
             } catch (IOException | JSONException e) {
 
@@ -313,7 +311,6 @@ public class StartFragment extends Fragment {
                     cancel(true);
 
                 e.printStackTrace();
-//                cancel(true);
             }
 
             return list;
@@ -327,7 +324,7 @@ public class StartFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     last_page = false;
-                    new mAsyncTask(fragment_reference.get()).execute(url);
+                    new mAsyncTask(fragment_reference.get()).execute();
                 }
             });
             snackbar.show();
@@ -349,7 +346,7 @@ public class StartFragment extends Fragment {
             }
 
             if (page == 2 && secondPage){
-                new mAsyncTask(fragment_reference.get()).execute(Conexion.URL_WELCOME_PAGE + page++);
+                new mAsyncTask(fragment_reference.get()).execute();
             }
 
             RecyclerView recyclerView = (RecyclerView) fragment_reference.get().findViewById(R.id.entries_item_list);

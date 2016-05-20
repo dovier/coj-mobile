@@ -332,7 +332,7 @@ public class CountryStandingFragment extends Fragment {
 
             try {
                 localPage = pages[0];
-                list = Conexion.getCountryRank(localPage);
+                list = Conexion.getInstance(fragment_reference.get()).getCountryRank(localPage);
             } catch (IOException | JSONException e) {
 
                 DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get().getApplicationContext());

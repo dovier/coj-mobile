@@ -2,8 +2,10 @@ package cu.uci.coj;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -18,8 +20,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 
@@ -126,7 +132,6 @@ public class MainActivity extends AppCompatActivity
 
             switch (getSupportFragmentManager().getBackStackEntryCount()){
                 case 1: {
-                    System.out.println("lol 1");
                     Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
                     if (fragment != null && fragment.isVisible()) {
 
@@ -210,16 +215,18 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
         switch (id){
             case R.id.action_login: {
+                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
                 MainActivity.this.finish();
                 return true;
             }
             case R.id.action_faq: {
+                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
                 getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_left, R.anim.exit_to_right)
                         .replace(R.id.container, FaqFragment.newInstance())
@@ -228,6 +235,8 @@ public class MainActivity extends AppCompatActivity
                 return true;
             }
             case R.id.action_logout: {
+                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
                 login = !LoginData.delete(this);
                 updateMenu();
                 cleanDrawerMenu();
@@ -238,6 +247,47 @@ public class MainActivity extends AppCompatActivity
                         .addToBackStack(null)
                         .commit();
                 return true;
+            }
+            case  R.id.server_settings: {
+
+                AlertDialog.Builder preferenceMessage = new AlertDialog.Builder(this);
+                final View preferenceView = getLayoutInflater().inflate(R.layout.preference_dialog, null);
+                preferenceMessage.setView(preferenceView);
+
+                final EditText serverEdit = (EditText) preferenceView.findViewById(R.id.coj_server);
+
+                final String preference_name = getResources().getString(R.string.preference_name);
+
+                SharedPreferences prefs = getSharedPreferences(preference_name, Context.MODE_PRIVATE);
+                String server = prefs.getString(preference_name, Conexion.DEFAULT_COJ_URL);
+
+                serverEdit.setText(server);
+
+                preferenceMessage.setTitle(R.string.server_preference);
+
+                final SharedPreferences.Editor editor = getSharedPreferences(preference_name, MODE_PRIVATE).edit();
+
+                preferenceMessage.setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        String new_server = serverEdit.getText().toString();
+
+                        if (Patterns.WEB_URL.matcher(new_server).matches()){
+                            editor.putString(preference_name, new_server);
+                            editor.apply();
+                            Toast.makeText(getApplicationContext(), R.string.restart_application, Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(), R.string.invalid_server, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+                preferenceMessage.setNegativeButton(R.string.cancel, null);
+                preferenceMessage.show();
+
+                break;
             }
         }
 

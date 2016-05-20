@@ -63,7 +63,7 @@ public class EntriesList extends RecyclerView.Adapter<EntriesList.ViewHolder> im
          * TODO: quitar cuando se use con la url real del COJ
          */
         String image_url = entriesItemList.get(position).getAvatar();
-        image_url = image_url.replace("http://coj.uci.cu", Conexion.IMAGE_URL);
+        image_url = image_url.replace("http://coj.uci.cu", Conexion.getInstance(holder.itemView.getContext()).IMAGE_URL);
 
         final int dim = (int)holder.itemView.getContext().getResources().getDimension(R.dimen.avatar_size);
 

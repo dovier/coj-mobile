@@ -267,9 +267,9 @@ public class SubmitFragment extends Fragment {
             String language = strings[1];
             String source = strings[2];
 
-            String message = null;
+            String message;
             try {
-                message = Conexion.submitSolution(fragment_reference.get(), id, language, source);
+                message = Conexion.getInstance(fragment_reference.get()).submitSolution(fragment_reference.get(), id, language, source);
             } catch (NoLoginFileException | JSONException | UnauthorizedException | IOException e) {
                 e.printStackTrace();
                 message = e.getMessage();
@@ -328,7 +328,7 @@ public class SubmitFragment extends Fragment {
         protected Void doInBackground(Void... voids) {
 
             try {
-                language = Conexion.getLanguageFilters(fragment_reference.get().getResources().getString(R.string.select_programming_language));
+                language = Conexion.getInstance(fragment_reference.get()).getLanguageFilters(fragment_reference.get().getResources().getString(R.string.select_programming_language));
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
                 cancel(true);

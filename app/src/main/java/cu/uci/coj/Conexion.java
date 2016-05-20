@@ -1,12 +1,16 @@
 package cu.uci.coj;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Patterns;
+import android.webkit.URLUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,60 +43,146 @@ import okhttp3.Response;
 
 public class Conexion {
 
-    public final static String COJ_URL = "http://10.8.144.141:8084";
-    public final static String API_URL = "/api";
+    public static Conexion conexion = null;
 
-    public final static String API_KEY = "nTBitFVbpDrdeBa7Ki8vRjSt9z3XE+hAdRHY7XbY9CNvV9p5G/KnxZoTLGOu/gs5Wp/5ABt5S+AzX8gvtIdz9eNH149cw5lncunoeULJhehGY2v3aC6B7Rp+s6MmK6JCdBP/vjbPfGWuJyGfIw3iPxSeQrW987rKRRYEN//lAkgYBJMCgE/Ei+U0QdHlLqvd";
+    public final static String DEFAULT_COJ_URL = "http://coj.uci.cu";
+    public String COJ_URL;
+    public String API_URL = "/api";
 
-    public final static String IMAGE_URL = "http://coj.uci.cu";
+    public String API_KEY = "nTBitFVbpDrdeBa7Ki8vRjSt9z3XE+hAdRHY7XbY9CNvV9p5G/KnxZoTLGOu/gs5Wp/5ABt5S+AzX8gvtIdz9eNH149cw5lncunoeULJhehGY2v3aC6B7Rp+s6MmK6JCdBP/vjbPfGWuJyGfIw3iPxSeQrW987rKRRYEN//lAkgYBJMCgE/Ei+U0QdHlLqvd";
 
-    public final static String URL_CREATE_ACCOUNT = COJ_URL + "/user/createnewaccount.xhtml";
-    public final static String URL_FORGOT_PASSWORD = COJ_URL + "/private/forgottenpassword";
+    public String IMAGE_URL = COJ_URL;
 
-    public final static String URL_GENERATE_API = COJ_URL + API_URL + "/private/generateapi";
-    public final static String URL_LOGIN = COJ_URL + API_URL + "/private/login";
+    public String URL_CREATE_ACCOUNT = COJ_URL + "/user/createnewaccount.xhtml";
+    public String URL_FORGOT_PASSWORD = COJ_URL + "/private/forgottenpassword";
 
-    public final static String URL_MAIL = COJ_URL + API_URL + "/mail";
-    public final static String URL_MAIL_INBOX = URL_MAIL + "/inbox";
-    public final static String URL_MAIL_OUTBOX = URL_MAIL + "/outbox";
-    public final static String URL_MAIL_DRAFT = URL_MAIL + "/draft";
-    public final static String URL_MAIL_DELETE = URL_MAIL + "/delete";
-    public final static String URL_MAIL_SEND = URL_MAIL + "/send";
-    public final static String URL_MAIL_TOGGLE_STATUS = URL_MAIL + "/toggle/status/";
+    public String URL_GENERATE_API = COJ_URL + API_URL + "/private/generateapi";
+    public String URL_LOGIN = COJ_URL + API_URL + "/private/login";
 
-    public final static String URL_PROBLEM_PAGE = COJ_URL + API_URL + "/problem/page/";
-    public final static String URL_PROBLEM = COJ_URL + API_URL + "/problem/";
-    public final static String URL_PROBLEM_FILTER = COJ_URL + API_URL + "/problem?";
-    public final static String URL_TOGGLE_FAVORITE = URL_PROBLEM + "togglefavorite/";
+    public String URL_MAIL = COJ_URL + API_URL + "/mail";
+    public String URL_MAIL_INBOX = URL_MAIL + "/inbox";
+    public String URL_MAIL_OUTBOX = URL_MAIL + "/outbox";
+    public String URL_MAIL_DRAFT = URL_MAIL + "/draft";
+    public String URL_MAIL_DELETE = URL_MAIL + "/delete";
+    public String URL_MAIL_SEND = URL_MAIL + "/send";
+    public String URL_MAIL_TOGGLE_STATUS = URL_MAIL + "/toggle/status/";
 
-    public final static String URL_RANKING_BY_USER = COJ_URL + API_URL + "/ranking/byuser/page/";
-    public final static String URL_RANKING_BY_INSTITUTION = COJ_URL + API_URL + "/ranking/byinstitution/page/";
-    public final static String URL_RANKING_BY_COUNTRY = COJ_URL + API_URL + "/ranking/bycountry";
-    public final static String URL_RANKING_BY_COUNTRY_PAGE = URL_RANKING_BY_COUNTRY + "/page/";
-    public final static String URL_RANKING_INSTITUTION_BY_COUNTRY = COJ_URL + API_URL + "/ranking/institutionbycountry/";
+    public String URL_PROBLEM_PAGE = COJ_URL + API_URL + "/problem/page/";
+    public String URL_PROBLEM = COJ_URL + API_URL + "/problem/";
+    public String URL_PROBLEM_FILTER = COJ_URL + API_URL + "/problem?";
+    public String URL_TOGGLE_FAVORITE = URL_PROBLEM + "togglefavorite/";
 
-    public final static String URL_CONTEST_NEXT = COJ_URL + API_URL + "/contest/next";
-    public final static String URL_CONTEST_RUNNING = COJ_URL + API_URL + "/contest/running";
-    public final static String URL_CONTEST_PAST = COJ_URL + API_URL + "/contest/past";
-    public final static String URL_CONTEST_DETAIL = COJ_URL + API_URL + "/contest/";
+    public String URL_RANKING_BY_USER = COJ_URL + API_URL + "/ranking/byuser/page/";
+    public String URL_RANKING_BY_INSTITUTION = COJ_URL + API_URL + "/ranking/byinstitution/page/";
+    public String URL_RANKING_BY_COUNTRY = COJ_URL + API_URL + "/ranking/bycountry";
+    public String URL_RANKING_BY_COUNTRY_PAGE = URL_RANKING_BY_COUNTRY + "/page/";
+    public String URL_RANKING_INSTITUTION_BY_COUNTRY = COJ_URL + API_URL + "/ranking/institutionbycountry/";
 
-    public final static String URL_FILTER_CLASSIFICATION = COJ_URL + API_URL +"/filter/classifications";
-    public final static String URL_FILTER_LANGUAGE = COJ_URL + API_URL +"/filter/languages";
+    public String URL_CONTEST_NEXT = COJ_URL + API_URL + "/contest/next";
+    public String URL_CONTEST_RUNNING = COJ_URL + API_URL + "/contest/running";
+    public String URL_CONTEST_PAST = COJ_URL + API_URL + "/contest/past";
+    public String URL_CONTEST_DETAIL = COJ_URL + API_URL + "/contest/";
 
-    public final static String URL_COMPARE_USER = COJ_URL + API_URL + "/statistic/compare/";
-    public final static String URL_USER_PROFILE = COJ_URL + API_URL + "/userprofile/";
-    public final static String URL_USER_PROFILE_UPDATE = URL_USER_PROFILE + "update";
+    public String URL_FILTER_CLASSIFICATION = COJ_URL + API_URL +"/filter/classifications";
+    public String URL_FILTER_LANGUAGE = COJ_URL + API_URL +"/filter/languages";
 
-    public final static String URL_JUDGMENT_PAGE = COJ_URL + API_URL + "/judgment/page/";
-    public final static String URL_JUDGMENT_SUBMIT = COJ_URL + API_URL + "/judgment/submit";
-    public final static String URL_JUDGMENT_BEST_SOLUTIONS = COJ_URL + API_URL + "/judgment/best/";
-    public final static String URL_JUDGMENT_FILTER = COJ_URL + API_URL + "/judgment?";
+    public String URL_COMPARE_USER = COJ_URL + API_URL + "/statistic/compare/";
+    public String URL_USER_PROFILE = COJ_URL + API_URL + "/userprofile/";
+    public String URL_USER_PROFILE_UPDATE = URL_USER_PROFILE + "update";
 
-    public final static String URL_WELCOME_PAGE = COJ_URL + API_URL + "/extras/entry/";
-    public final static String URL_ADD_ENTRY = COJ_URL + API_URL + "/extras/entry";
-    public final static String URL_FAQ = COJ_URL + API_URL + "/extras/faq";
+    public String URL_JUDGMENT_PAGE = COJ_URL + API_URL + "/judgment/page/";
+    public String URL_JUDGMENT_SUBMIT = COJ_URL + API_URL + "/judgment/submit";
+    public String URL_JUDGMENT_BEST_SOLUTIONS = COJ_URL + API_URL + "/judgment/best/";
+    public String URL_JUDGMENT_FILTER = COJ_URL + API_URL + "/judgment?";
 
-    public static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    public String URL_WELCOME_PAGE = COJ_URL + API_URL + "/extras/entry/";
+    public String URL_ADD_ENTRY = COJ_URL + API_URL + "/extras/entry";
+    public String URL_FAQ = COJ_URL + API_URL + "/extras/faq";
+
+    public final static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
+    private void generateURLs(){
+        API_URL = "/api";
+
+        API_KEY = "nTBitFVbpDrdeBa7Ki8vRjSt9z3XE+hAdRHY7XbY9CNvV9p5G/KnxZoTLGOu/gs5Wp/5ABt5S+AzX8gvtIdz9eNH149cw5lncunoeULJhehGY2v3aC6B7Rp+s6MmK6JCdBP/vjbPfGWuJyGfIw3iPxSeQrW987rKRRYEN//lAkgYBJMCgE/Ei+U0QdHlLqvd";
+
+        IMAGE_URL = COJ_URL;
+
+        URL_CREATE_ACCOUNT = COJ_URL + "/user/createnewaccount.xhtml";
+        URL_FORGOT_PASSWORD = COJ_URL + "/private/forgottenpassword";
+
+        URL_GENERATE_API = COJ_URL + API_URL + "/private/generateapi";
+        URL_LOGIN = COJ_URL + API_URL + "/private/login";
+
+        URL_MAIL = COJ_URL + API_URL + "/mail";
+        URL_MAIL_INBOX = URL_MAIL + "/inbox";
+        URL_MAIL_OUTBOX = URL_MAIL + "/outbox";
+        URL_MAIL_DRAFT = URL_MAIL + "/draft";
+        URL_MAIL_DELETE = URL_MAIL + "/delete";
+        URL_MAIL_SEND = URL_MAIL + "/send";
+        URL_MAIL_TOGGLE_STATUS = URL_MAIL + "/toggle/status/";
+
+        URL_PROBLEM_PAGE = COJ_URL + API_URL + "/problem/page/";
+        URL_PROBLEM = COJ_URL + API_URL + "/problem/";
+        URL_PROBLEM_FILTER = COJ_URL + API_URL + "/problem?";
+        URL_TOGGLE_FAVORITE = URL_PROBLEM + "togglefavorite/";
+
+        URL_RANKING_BY_USER = COJ_URL + API_URL + "/ranking/byuser/page/";
+        URL_RANKING_BY_INSTITUTION = COJ_URL + API_URL + "/ranking/byinstitution/page/";
+        URL_RANKING_BY_COUNTRY = COJ_URL + API_URL + "/ranking/bycountry";
+        URL_RANKING_BY_COUNTRY_PAGE = URL_RANKING_BY_COUNTRY + "/page/";
+        URL_RANKING_INSTITUTION_BY_COUNTRY = COJ_URL + API_URL + "/ranking/institutionbycountry/";
+
+        URL_CONTEST_NEXT = COJ_URL + API_URL + "/contest/next";
+        URL_CONTEST_RUNNING = COJ_URL + API_URL + "/contest/running";
+        URL_CONTEST_PAST = COJ_URL + API_URL + "/contest/past";
+        URL_CONTEST_DETAIL = COJ_URL + API_URL + "/contest/";
+
+        URL_FILTER_CLASSIFICATION = COJ_URL + API_URL +"/filter/classifications";
+        URL_FILTER_LANGUAGE = COJ_URL + API_URL +"/filter/languages";
+
+        URL_COMPARE_USER = COJ_URL + API_URL + "/statistic/compare/";
+        URL_USER_PROFILE = COJ_URL + API_URL + "/userprofile/";
+        URL_USER_PROFILE_UPDATE = URL_USER_PROFILE + "update";
+
+        URL_JUDGMENT_PAGE = COJ_URL + API_URL + "/judgment/page/";
+        URL_JUDGMENT_SUBMIT = COJ_URL + API_URL + "/judgment/submit";
+        URL_JUDGMENT_BEST_SOLUTIONS = COJ_URL + API_URL + "/judgment/best/";
+        URL_JUDGMENT_FILTER = COJ_URL + API_URL + "/judgment?";
+
+        URL_WELCOME_PAGE = COJ_URL + API_URL + "/extras/entry/";
+        URL_ADD_ENTRY = COJ_URL + API_URL + "/extras/entry";
+        URL_FAQ = COJ_URL + API_URL + "/extras/faq";
+    }
+
+    public Conexion(String url) {
+        if (url != null) {
+            COJ_URL = url;
+            generateURLs();
+        }
+        else{
+            COJ_URL = DEFAULT_COJ_URL;
+            generateURLs();
+        }
+    }
+
+    public static Conexion getInstance(Context context){
+
+        String preference_name = context.getResources().getString(R.string.preference_name);
+
+        SharedPreferences prefs = context.getSharedPreferences(preference_name, Context.MODE_PRIVATE);
+        String server = prefs.getString(preference_name, Conexion.DEFAULT_COJ_URL);
+
+        if (conexion == null){
+            if (server != null && Patterns.WEB_URL.matcher(server).matches())
+                conexion = new Conexion(server);
+            else
+                conexion = new Conexion(null);
+        }
+
+        return conexion;
+
+    }
 
     /**
      * Get ApiKey for identify programmer in API services.
@@ -100,7 +190,7 @@ public class Conexion {
      * @return ApiKey
      * @throws IOException
      */
-    public static String getApiKey() throws IOException {
+    public String getApiKey() throws IOException {
 
         String jsonApi =
                 "{" +
@@ -133,7 +223,7 @@ public class Conexion {
      * @throws NoLoginFileException
      * @throws UnauthorizedException
      */
-    public static String getNewToken(Context context) throws NoLoginFileException, UnauthorizedException {
+    public String getNewToken(Context context) throws NoLoginFileException, UnauthorizedException {
 
         LoginData loginData = LoginData.read(context);
 
@@ -164,7 +254,7 @@ public class Conexion {
      * @throws IOException
      * @throws JSONException
      */
-    public static String login(Context context, String user, String pswd) throws IOException, JSONException, UnauthorizedException {
+    public String login(Context context, String user, String pswd) throws IOException, JSONException, UnauthorizedException {
 
         //eliminar del disco cualquier intento de login anterior excepto en caso de IOException (no hay coneccion)
         LoginData oldLoginData = null;
@@ -231,7 +321,7 @@ public class Conexion {
      * @throws IOException
      * @throws JSONException
      */
-    public static Problem getProblem(String id) throws IOException, JSONException {
+    public Problem getProblem(String id) throws IOException, JSONException {
 
         Response response = new OkHttpClient().newCall(
                 new Request.Builder()
@@ -258,17 +348,18 @@ public class Conexion {
     /**
      * Compare two users and return a Compare object with comparation data
      *
-     * @param url from compare service completed with usernames.
-     *            Example: http://coj.uci.cu/api/stadistic/compare/{user1}/{user2}
+     * @param user1 UserName from first user
+     * @param user2 UserName from second user
+     *
      * @return Compare object
      * @throws IOException
      * @throws JSONException
      */
-    public static Compare getCompareUsers(String url) throws IOException, JSONException {
+    public Compare getCompareUsers(String user1, String user2) throws IOException, JSONException {
 
         Response response = new OkHttpClient().newCall(
                 new Request.Builder()
-                        .url(url)
+                        .url(URL_COMPARE_USER + user1 + "/" + user2)
                         .build())
                 .execute();
 
@@ -311,13 +402,13 @@ public class Conexion {
 
     }
 
-    public static List<UserRank> getUserRank(String url) throws IOException, JSONException {
+    public List<UserRank> getUserRank(int page) throws IOException, JSONException {
 
         List<UserRank> standing = new ArrayList<>();
 
         Response response = new OkHttpClient().newCall(
                 new Request.Builder()
-                        .url(url)
+                        .url(URL_RANKING_BY_USER + page)
                         .build())
                 .execute();
 
@@ -336,13 +427,13 @@ public class Conexion {
         return standing;
     }
 
-    public static List<InstitutionRank> getInstitutionRank(String url) throws IOException, JSONException {
+    public List<InstitutionRank> getInstitutionRank(int page) throws IOException, JSONException {
 
         List<InstitutionRank> standing = new ArrayList<>();
 
         Response response = new OkHttpClient().newCall(
                 new Request.Builder()
-                        .url(url)
+                        .url(URL_RANKING_BY_INSTITUTION + page)
                         .build())
                 .execute();
 
@@ -370,7 +461,7 @@ public class Conexion {
      * @throws IOException
      * @throws JSONException
      */
-    public static List<InstitutionRank> getInstitutionByCountryRank(int country_id) throws IOException, JSONException {
+    public List<InstitutionRank> getInstitutionByCountryRank(int country_id) throws IOException, JSONException {
 
         List<InstitutionRank> institutionRank = new ArrayList<>();
 
@@ -409,16 +500,16 @@ public class Conexion {
      * @throws IOException
      * @throws JSONException
      */
-    public static List<CountryRank> getCountryRank(int page) throws IOException, JSONException {
+    public List<CountryRank> getCountryRank(int page) throws IOException, JSONException {
 
         List<CountryRank> standing = new ArrayList<>();
 
         String url;
         if (page == -1){
-            url = Conexion.URL_RANKING_BY_COUNTRY;
+            url = URL_RANKING_BY_COUNTRY;
         }
         else {
-            url = Conexion.URL_RANKING_BY_COUNTRY_PAGE + page;
+            url = URL_RANKING_BY_COUNTRY_PAGE + page;
         }
 
         Response response = new OkHttpClient().newCall(
@@ -452,7 +543,7 @@ public class Conexion {
      * @throws IOException
      * @throws JSONException
      */
-    public static List<ProblemItem> getProblemsItem(Context context, String url, Boolean login)
+    public List<ProblemItem> getProblemsItem(Context context, String url, Boolean login)
             throws IOException, JSONException, UnauthorizedException, NoLoginFileException {
 
         List<ProblemItem> result = new ArrayList<>();
@@ -533,7 +624,7 @@ public class Conexion {
      * @throws IOException
      * @throws JSONException
      */
-    public static boolean toggleFavorite(int id, String token) throws IOException, JSONException {
+    public boolean toggleFavorite(int id, String token) throws IOException, JSONException {
 
         Request request = new Request.Builder()
                 .header("apikey", API_KEY)
@@ -578,7 +669,7 @@ public class Conexion {
      * @throws IOException
      * @throws JSONException
      */
-    public static List<Judgment> getJudgmentsItem(String url) throws IOException, JSONException {
+    public List<Judgment> getJudgmentsItem(String url) throws IOException, JSONException {
 
         List<Judgment> judgments = new ArrayList<>();
 
@@ -606,7 +697,7 @@ public class Conexion {
         return judgments;
     }
 
-    public static List<Contest> getContests(String url) throws IOException, JSONException {
+    public List<Contest> getContests(String url) throws IOException, JSONException {
 
         List<Contest> contestList = new ArrayList<>();
 
@@ -636,21 +727,16 @@ public class Conexion {
 
     }
 
-    public static List<EntriesItem> getEntries(String url) throws IOException, JSONException {
+    public List<EntriesItem> getEntries(int page) throws IOException, JSONException {
         List<EntriesItem> entriesItemList = new ArrayList<>();
 
         Response response = new OkHttpClient().newCall(
                 new Request.Builder()
-                        .url(url)
+                        .url(URL_WELCOME_PAGE + page)
                         .build())
                 .execute();
 
         String resp = response.body().string();
-        switch (response.code()){
-            case 400: {
-                return entriesItemList;
-            }
-        }
 
         JSONArray JsonEntriesArray = new JSONArray(resp);
 
@@ -664,13 +750,13 @@ public class Conexion {
         return entriesItemList;
     }
 
-    public static List<FaqItem> getFaq(String url) throws IOException, JSONException {
+    public List<FaqItem> getFaq() throws IOException, JSONException {
 
         List<FaqItem> faqItemList = new ArrayList<>();
 
         Response response = new OkHttpClient().newCall(
                 new Request.Builder()
-                        .url(url)
+                        .url(URL_FAQ)
                         .build())
                 .execute();
 
@@ -698,7 +784,7 @@ public class Conexion {
      * @throws IOException
      * @throws JSONException
      */
-    public static ContestDetail getContestDetail(int id) throws IOException, JSONException {
+    public ContestDetail getContestDetail(int id) throws IOException, JSONException {
 
         Response response = new OkHttpClient().newCall(
                 new Request.Builder()
@@ -727,7 +813,7 @@ public class Conexion {
      * @throws IOException
      * @throws JSONException
      */
-    public static UserProfile getUserProfile(String username) throws IOException, JSONException {
+    public UserProfile getUserProfile(String username) throws IOException, JSONException {
 
         Response response = new OkHttpClient().newCall(
                 new Request.Builder()
@@ -749,7 +835,7 @@ public class Conexion {
 
     }
 
-    public static String updateUserProfile(Context context, String nickName, String firstName, String lastName,
+    public String updateUserProfile(Context context, String nickName, String firstName, String lastName,
                            String email_string, int institution_code, int country_code,
                            int language_code, int gender_code) throws NoLoginFileException, IOException, JSONException, UnauthorizedException {
 
@@ -863,7 +949,7 @@ public class Conexion {
      * @throws IOException
      * @throws JSONException
      */
-    public static Filter<Integer> getClassificationFilters(String firstElement) throws IOException, JSONException {
+    public Filter<Integer> getClassificationFilters(String firstElement) throws IOException, JSONException {
 
         Filter<Integer> languageFilter = new Filter<>(firstElement);
 
@@ -890,7 +976,7 @@ public class Conexion {
      * @throws IOException
      * @throws JSONException
      */
-    public static Filter<Integer> getInstitutionFilter(Integer country_id, String firstElement) throws IOException, JSONException {
+    public Filter<Integer> getInstitutionFilter(Integer country_id, String firstElement) throws IOException, JSONException {
 
         Filter<Integer> institutions = new Filter<>(firstElement);
 
@@ -915,7 +1001,7 @@ public class Conexion {
      * @throws IOException
      * @throws JSONException
      */
-    public static Filter<Integer> getCountryFilter(String firstElement) throws IOException, JSONException {
+    public Filter<Integer> getCountryFilter(String firstElement) throws IOException, JSONException {
 
         Filter<Integer> country = new Filter<>(firstElement);
 
@@ -941,7 +1027,7 @@ public class Conexion {
      * @throws IOException
      * @throws JSONException
      */
-    public static Filter<String> getLanguageFilters(String firstElement) throws IOException, JSONException {
+    public Filter<String> getLanguageFilters(String firstElement) throws IOException, JSONException {
 
         Filter<String> languageFilter = new Filter<>(firstElement);
 
@@ -967,7 +1053,7 @@ public class Conexion {
      * @throws IOException
      * @throws JSONException
      */
-    public static Filter<Integer> getIDLanguageFilters(String firstElement) throws IOException, JSONException {
+    public Filter<Integer> getIDLanguageFilters(String firstElement) throws IOException, JSONException {
 
         Filter<Integer> languageFilter = new Filter<>(firstElement);
 
@@ -1050,7 +1136,7 @@ public class Conexion {
      * @throws JSONException
      * @throws UnauthorizedException
      */
-    public static boolean sendEmail(Context context, String to, String subject, String content)
+    public boolean sendEmail(Context context, String to, String subject, String content)
             throws NoLoginFileException, IOException, JSONException, UnauthorizedException {
 
         String token = LoginData.read(context).getToken();
@@ -1116,7 +1202,7 @@ public class Conexion {
      * @throws JSONException
      * @throws UnauthorizedException
      */
-    public static boolean deleteEmail(Context context, MailFolder folder, int emailID)
+    public boolean deleteEmail(Context context, MailFolder folder, int emailID)
             throws NoLoginFileException, IOException, JSONException, UnauthorizedException {
 
         String token = LoginData.read(context).getToken();
@@ -1196,7 +1282,7 @@ public class Conexion {
      * @throws JSONException
      * @throws UnauthorizedException
      */
-    public static List<Email> getEmails(Context context, MailFolder folder) throws NoLoginFileException, IOException,
+    public List<Email> getEmails(Context context, MailFolder folder) throws NoLoginFileException, IOException,
             JSONException, UnauthorizedException {
 
         List<Email> emails = new ArrayList<>();
@@ -1274,10 +1360,10 @@ public class Conexion {
      * @throws IOException
      * @throws JSONException
      */
-    public static String forgotPassword(String email) throws IOException, JSONException {
+    public String forgotPassword(String email) throws IOException, JSONException {
 
         RequestBody requestBody = new FormBody.Builder()
-                .add("apikey", Conexion.API_KEY)
+                .add("apikey", API_KEY)
                 .add("email", email)
                 .build();
 
@@ -1313,7 +1399,7 @@ public class Conexion {
      * @throws IOException
      * @throws UnauthorizedException
      */
-    public static String addEntry(Context context, String entry) throws NoLoginFileException, JSONException, IOException, UnauthorizedException {
+    public String addEntry(Context context, String entry) throws NoLoginFileException, JSONException, IOException, UnauthorizedException {
 
         JSONObject json = new JSONObject();
 
@@ -1372,7 +1458,7 @@ public class Conexion {
      * @throws IOException
      * @throws UnauthorizedException
      */
-    public static String submitSolution(Context context, String id, String keyLanguage, String source) throws NoLoginFileException, JSONException, IOException, UnauthorizedException {
+    public String submitSolution(Context context, String id, String keyLanguage, String source) throws NoLoginFileException, JSONException, IOException, UnauthorizedException {
 
         JSONObject json = new JSONObject();
 
@@ -1436,7 +1522,7 @@ public class Conexion {
      * @throws IOException
      * @throws UnauthorizedException
      */
-    public static String mailToggleStatus(Context context, String id) throws NoLoginFileException, JSONException, IOException, UnauthorizedException {
+    public String mailToggleStatus(Context context, String id) throws NoLoginFileException, JSONException, IOException, UnauthorizedException {
 
         String token = LoginData.read(context).getToken();
 

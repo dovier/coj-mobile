@@ -119,7 +119,7 @@ public class CompareFragment extends Fragment {
                 compare_layout.setVisibility(View.GONE);
                 compare_layout.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_out));
                 if (user_1.getText().length() != 0 && user_2.getText().length() != 0)
-                    new mAsyncTask(getActivity(), CompareFragment.this).execute(Conexion.URL_COMPARE_USER + user_1.getText().toString() + "/" + user_2.getText().toString());
+                    new mAsyncTask(getActivity(), CompareFragment.this).execute(user_1.getText().toString(), user_2.getText().toString());
                 else
                     mListener.compareFragmentCallBack(getResources().getString(R.string.user_invalid));
 
@@ -365,7 +365,7 @@ public class CompareFragment extends Fragment {
         protected Compare doInBackground(String... url) {
 
             try {
-                compare = Conexion.getCompareUsers(url[0]);
+                compare = Conexion.getInstance(fragment_reference.get()).getCompareUsers(url[0], url[1]);
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
                 compare = null;

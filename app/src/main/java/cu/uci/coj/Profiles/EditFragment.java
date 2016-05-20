@@ -225,7 +225,7 @@ public class EditFragment extends Fragment {
         protected String doInBackground(Integer... integers) {
 
             try {
-                return Conexion.updateUserProfile(fragment_reference.get(), nick, name, last_name, email,
+                return Conexion.getInstance(fragment_reference.get()).updateUserProfile(fragment_reference.get(), nick, name, last_name, email,
                         integers[0], integers[1], integers[2], integers[3]);
             } catch (NoLoginFileException | IOException | JSONException e) {
                 e.printStackTrace();
@@ -293,7 +293,7 @@ public class EditFragment extends Fragment {
         protected Filter<Integer> doInBackground(Integer... integers) {
 
             try {
-                return Conexion.getInstitutionFilter(integers[0], fragment_reference.get().getResources().getString(R.string.institution));
+                return Conexion.getInstance(fragment_reference.get()).getInstitutionFilter(integers[0], fragment_reference.get().getResources().getString(R.string.institution));
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
                 cancel(true);
@@ -371,8 +371,8 @@ public class EditFragment extends Fragment {
         protected Void doInBackground(Void... voids) {
 
             try {
-                country = Conexion.getCountryFilter(fragment_reference.get().getResources().getString(R.string.country));
-                language = Conexion.getIDLanguageFilters(fragment_reference.get().getResources().getString(R.string.default_programming_language));
+                country = Conexion.getInstance(fragment_reference.get()).getCountryFilter(fragment_reference.get().getResources().getString(R.string.country));
+                language = Conexion.getInstance(fragment_reference.get()).getIDLanguageFilters(fragment_reference.get().getResources().getString(R.string.default_programming_language));
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
                 cancel(true);

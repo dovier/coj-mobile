@@ -156,7 +156,7 @@ public class EmailDetailedFragment extends Fragment {
         protected Void doInBackground(Integer... integers) {
 
             try {
-                Conexion.mailToggleStatus(fragment_reference.get(), ""+integers[0]);
+                Conexion.getInstance(fragment_reference.get()).mailToggleStatus(fragment_reference.get(), "" + integers[0]);
             } catch (NoLoginFileException | JSONException | IOException | UnauthorizedException e) {
                 e.printStackTrace();
             }
@@ -179,7 +179,7 @@ public class EmailDetailedFragment extends Fragment {
 
             Activity activity = fragment_reference.get();
             try {
-                Conexion.deleteEmail(activity, email.getFolder(), email.getIdEmail());
+                Conexion.getInstance(fragment_reference.get()).deleteEmail(activity, email.getFolder(), email.getIdEmail());
 
                 activity.runOnUiThread(new Runnable() {
                     @Override

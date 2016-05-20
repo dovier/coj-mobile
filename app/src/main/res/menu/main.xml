@@ -14,6 +14,9 @@
     <item android:id="@+id/action_logout"
         android:title="@string/action_logout"
         android:visible="false"
-        android:icon="@drawable/logout"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/server_settings"
+        android:title="@string/server_preference"
         app:showAsAction="never" />
 </menu>

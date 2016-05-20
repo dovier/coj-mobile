@@ -320,7 +320,7 @@ public class ProfileFragment extends Fragment {
             final LinearLayout error = (LinearLayout) activity.findViewById(R.id.connection_error);
             final NestedScrollView nestedScroll = (NestedScrollView) activity.findViewById(R.id.nested_scroll_view);
             try {
-                userProfile = Conexion.getUserProfile(user[0]);
+                userProfile = Conexion.getInstance(fragment_reference.get()).getUserProfile(user[0]);
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

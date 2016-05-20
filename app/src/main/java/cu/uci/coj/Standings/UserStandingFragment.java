@@ -101,7 +101,7 @@ public class UserStandingFragment extends Fragment {
         else {
 
             adapter = new UserStandingItem(new ArrayList<UserRank>());
-            new mAsyncTask(getActivity()).execute(Conexion.URL_RANKING_BY_USER + page++);
+            new mAsyncTask(getActivity()).execute(page++);
 
         }
     }
@@ -150,8 +150,7 @@ public class UserStandingFragment extends Fragment {
                     int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
                     if (lastVisibleItemPosition != RecyclerView.NO_POSITION && lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 1) {
 
-                        new mAsyncTask(getActivity()).execute(Conexion.URL_RANKING_BY_USER + page);
-                        page++;
+                        new mAsyncTask(getActivity()).execute(page++);
 
                     }
                 }
@@ -304,11 +303,11 @@ public class UserStandingFragment extends Fragment {
     }
 
 
-    static class mAsyncTask extends AsyncTask<String, Void, List<UserRank>> {
+    static class mAsyncTask extends AsyncTask<Integer, Void, List<UserRank>> {
 
         protected WeakReference<FragmentActivity> fragment_reference;
         protected ProgressDialog progressDialog;
-        protected String url;
+        protected int page;
 
         public mAsyncTask(FragmentActivity fragment_reference) {
             this.fragment_reference = new WeakReference<>(fragment_reference);
@@ -329,13 +328,13 @@ public class UserStandingFragment extends Fragment {
         }
 
         @Override
-        protected List<UserRank> doInBackground(String... urls) {
+        protected List<UserRank> doInBackground(Integer... pages) {
 
             List<UserRank> list = null;
 
             try {
-                url = urls[0];
-                list = Conexion.getUserRank(url);
+                page = pages[0];
+                list = Conexion.getInstance(fragment_reference.get()).getUserRank(page);
             } catch (IOException | JSONException e) {
 
                 DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get().getApplicationContext());
@@ -379,7 +378,7 @@ public class UserStandingFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     last_page = false;
-                    new mAsyncTask(fragment_reference.get()).execute(url);
+                    new mAsyncTask(fragment_reference.get()).execute(page);
                 }
             });
             snackbar.show();

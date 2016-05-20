@@ -103,7 +103,7 @@ public class JudgmentsFragment extends Fragment {
         else {
 
             adapter = new JudgmentList(new ArrayList<Judgment>());
-            new mAsyncTask(getActivity()).execute(Conexion.URL_JUDGMENT_PAGE + page++);
+            new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).URL_JUDGMENT_PAGE + page++);
             new languagesFilterAsyncTask(getActivity()).execute();
 
         }
@@ -137,7 +137,7 @@ public class JudgmentsFragment extends Fragment {
                     int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
                     if (lastVisibleItemPosition != RecyclerView.NO_POSITION && lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 1) {
 
-                        new mAsyncTask(getActivity()).execute(Conexion.URL_JUDGMENT_PAGE + page++);
+                        new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).URL_JUDGMENT_PAGE + page++);
 
                     }
                 }
@@ -152,7 +152,7 @@ public class JudgmentsFragment extends Fragment {
             public void onClick(View view) {
                 if (consult_db){
                     page = 1;
-                    new mAsyncTask(getActivity()).execute(Conexion.URL_JUDGMENT_PAGE + page++);
+                    new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).URL_JUDGMENT_PAGE + page++);
                 }
                 else
                     buildFilterMessage();
@@ -202,7 +202,7 @@ public class JudgmentsFragment extends Fragment {
 
                 filter = true;
                 if (url.length() != 0)
-                    new mAsyncTask(getActivity()).execute(Conexion.URL_JUDGMENT_FILTER + url);
+                    new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).URL_JUDGMENT_FILTER + url);
             }
         });
 
@@ -224,7 +224,7 @@ public class JudgmentsFragment extends Fragment {
 
             String firstElement = weakReference.get().getResources().getString(R.string.languages);
             try {
-                languageFilter = Conexion.getLanguageFilters(firstElement);
+                languageFilter = Conexion.getInstance(weakReference.get()).getLanguageFilters(firstElement);
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
                 languageFilter = new Filter<>(firstElement);
@@ -270,8 +270,10 @@ public class JudgmentsFragment extends Fragment {
             final FragmentActivity activity = fragment_reference.get();
             final FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.judgments_fab);
 
+            Conexion conexion = Conexion.getInstance(fragment_reference.get());
+
             try {
-                list = Conexion.getJudgmentsItem(url);
+                list = conexion.getJudgmentsItem(url);
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

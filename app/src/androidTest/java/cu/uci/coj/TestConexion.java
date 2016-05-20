@@ -44,7 +44,6 @@ public class TestConexion extends TestCase {
         }
 
         assertTrue(problem != null);
-//        assertEquals(problem.getRecommendation(), "1960 | 3314 | 1389 | 1244 | 1001 | 1007");
         assertEquals(problem.getEnabledlanguages().length, problem.getMemory().length);
         assertEquals(problem.getEnabledlanguages().length, problem.getTesttime().length);
         assertEquals(problem.getEnabledlanguages().length, problem.getTotaltime().length);

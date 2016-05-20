@@ -132,8 +132,10 @@ public class BestSolutionsFragment extends Fragment {
 
             List<Judgment> list = new ArrayList<>();
 
+            Conexion conexion = Conexion.getInstance(fragment_reference.get());
+
             try {
-                list = Conexion.getJudgmentsItem(Conexion.URL_JUDGMENT_BEST_SOLUTIONS + ids[0]);
+                list = conexion.getJudgmentsItem(conexion.URL_JUDGMENT_BEST_SOLUTIONS + ids[0]);
             } catch (IOException | JSONException e) {
                 list = null;
                 e.printStackTrace();

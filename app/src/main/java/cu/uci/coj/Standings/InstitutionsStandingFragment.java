@@ -100,7 +100,7 @@ public class InstitutionsStandingFragment extends Fragment {
         else {
 
             adapter = new InstitutionStandingItem(new ArrayList<InstitutionRank>());
-            new mAsyncTask(getActivity()).execute(Conexion.URL_RANKING_BY_INSTITUTION + page++);
+            new mAsyncTask(getActivity()).execute(page++);
 
         }
     }
@@ -150,7 +150,7 @@ public class InstitutionsStandingFragment extends Fragment {
                     int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
                     if (lastVisibleItemPosition != RecyclerView.NO_POSITION && lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 1) {
 
-                        new mAsyncTask(getActivity()).execute(Conexion.URL_RANKING_BY_INSTITUTION + page);
+                        new mAsyncTask(getActivity()).execute(page);
                         page++;
 
                     }
@@ -304,10 +304,10 @@ public class InstitutionsStandingFragment extends Fragment {
         }
     }
 
-    static class mAsyncTask extends AsyncTask<String, Void, List<InstitutionRank>> {
+    static class mAsyncTask extends AsyncTask<Integer, Void, List<InstitutionRank>> {
 
         protected WeakReference<FragmentActivity> fragment_reference;
-        protected String url;
+        protected int page;
         protected ProgressDialog progressDialog;
 
         public mAsyncTask(FragmentActivity fragment_reference) {
@@ -329,13 +329,13 @@ public class InstitutionsStandingFragment extends Fragment {
         }
 
         @Override
-        protected List<InstitutionRank> doInBackground(String... urls) {
+        protected List<InstitutionRank> doInBackground(Integer... pages) {
 
             List<InstitutionRank> list = null;
 
             try {
-                url = urls[0];
-                list = Conexion.getInstitutionRank(url);
+                page = pages[0];
+                list = Conexion.getInstance(fragment_reference.get()).getInstitutionRank(page);
             } catch (IOException | JSONException e) {
 
                 DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get().getApplicationContext());
@@ -378,7 +378,7 @@ public class InstitutionsStandingFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     last_page = false;
-                    new mAsyncTask(fragment_reference.get()).execute(url);
+                    new mAsyncTask(fragment_reference.get()).execute(page);
                 }
             });
             snackbar.show();

@@ -91,7 +91,7 @@ public class RecoverPassword extends AppCompatActivity {
 
             String message = null;
             try {
-                Conexion.forgotPassword(emails[0]);
+                Conexion.getInstance(reference.get()).forgotPassword(emails[0]);
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
                 message = e.getMessage();

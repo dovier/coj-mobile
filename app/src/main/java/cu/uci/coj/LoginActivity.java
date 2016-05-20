@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 view.getContext().startActivity(
-                        new Intent(Intent.ACTION_VIEW, Uri.parse(Conexion.URL_CREATE_ACCOUNT)));
+                        new Intent(Intent.ACTION_VIEW, Uri.parse(Conexion.getInstance(getApplicationContext()).URL_CREATE_ACCOUNT)));
             }
         });
 
@@ -147,7 +147,7 @@ public class LoginActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
 
             try {
-                Conexion.forgotPassword(strings[0]);
+                Conexion.getInstance(weakReference.get()).forgotPassword(strings[0]);
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
                 cancel(true);
@@ -216,7 +216,7 @@ public class LoginActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
 
             try {
-                Conexion.login(getApplicationContext(), user, pswd);
+                Conexion.getInstance(weakReference.get()).login(getApplicationContext(), user, pswd);
             } catch (IOException e) {
                 System.out.println("Check network");
                 e.printStackTrace();

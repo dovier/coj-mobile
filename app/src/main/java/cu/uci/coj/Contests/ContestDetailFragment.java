@@ -182,7 +182,7 @@ public class ContestDetailFragment extends Fragment {
             int id = ids[0];
 
             try {
-                return Conexion.getContestDetail(id);
+                return Conexion.getInstance(fragment_reference.get()).getContestDetail(id);
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
                 //leer de la base de datos

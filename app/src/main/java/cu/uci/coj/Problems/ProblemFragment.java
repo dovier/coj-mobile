@@ -301,7 +301,6 @@ public class ProblemFragment extends Fragment {
         //si hay texto antes de la imagen? escribo el webView
         if (split_text[0] != null){
             WebView webView = new WebView(context);
-//            WebView webView = new WebView(rootView.getContext());
             webView.setLayerType(View.LAYER_TYPE_NONE, null);
             webView.setLayoutParams(new ActionBar.LayoutParams(StaggeredGridLayoutManager.LayoutParams.WRAP_CONTENT, StaggeredGridLayoutManager.LayoutParams.WRAP_CONTENT));
             webView.loadData(cleanHtml(context, split_text[0]), "text/html; charset=utf-8", null);
@@ -311,7 +310,7 @@ public class ProblemFragment extends Fragment {
                     if (url != null){
                         if (url.startsWith("/")){
                             view.getContext().startActivity(
-                                new Intent(Intent.ACTION_VIEW, Uri.parse(Conexion.COJ_URL+url)));
+                                new Intent(Intent.ACTION_VIEW, Uri.parse(Conexion.getInstance(context).COJ_URL + url)));
                             return true;
                         }
                         else {
@@ -336,7 +335,7 @@ public class ProblemFragment extends Fragment {
 
             Picasso.with(context)
 //            Picasso.with(rootView.getContext())
-                    .load(Conexion.IMAGE_URL + split_text[1])
+                    .load(Conexion.getInstance(context).IMAGE_URL + split_text[1])
                     .into(imageView, new Callback() {
                         @Override
                         public void onSuccess() {
@@ -589,7 +588,7 @@ public class ProblemFragment extends Fragment {
 
             try {
                 //intetar conectarse
-                problem = Conexion.getProblem(mId);
+                problem = Conexion.getInstance(fragment_reference.get()).getProblem(mId);
 
             } catch (IOException | JSONException e) {
 

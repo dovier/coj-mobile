@@ -15,6 +15,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +58,8 @@ public class ProblemList extends RecyclerView.Adapter<ProblemList.ViewHolder> im
         holder.score.setText(problemItemList.get(position).getScore());
         int color = holder.itemView.getResources().getColor(android.R.color.black);
 
+        final FragmentActivity activity = (FragmentActivity)holder.itemView.getContext();
+
         //si el usuario esta logueado
         if (login) {
 
@@ -83,12 +86,12 @@ public class ProblemList extends RecyclerView.Adapter<ProblemList.ViewHolder> im
                     try {
                         String token = LoginData.read(holder.itemView.getContext()).getToken();
                         if (problemItemList.get(position).isFav()){
-                            new mAsyncTask((int)holder.mItem.getLongId(), token, false).execute();
+                            new mAsyncTask(activity, (int)holder.mItem.getLongId(), token, false).execute();
                             holder.fav.setImageResource(android.R.drawable.btn_star_big_off);
                             problemItemList.get(position).setFav();
                         }
                         else {
-                            new mAsyncTask((int)holder.mItem.getLongId(), token, true).execute();
+                            new mAsyncTask(activity, (int)holder.mItem.getLongId(), token, true).execute();
                             holder.fav.setImageResource(android.R.drawable.btn_star_big_on);
                             problemItemList.get(position).setFav();
                         }
@@ -117,7 +120,7 @@ public class ProblemList extends RecyclerView.Adapter<ProblemList.ViewHolder> im
             public void onClick(View view) {
                 //acceder a la vista del problema
 
-                FragmentManager fm = ((FragmentActivity) holder.itemView.getContext()).getSupportFragmentManager();
+                FragmentManager fm = activity.getSupportFragmentManager();
                 fm.beginTransaction()
                         .replace(R.id.container, ProblemFragment.newInstance(holder.mItem, login))
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -176,8 +179,10 @@ public class ProblemList extends RecyclerView.Adapter<ProblemList.ViewHolder> im
         protected int id;
         protected String token;
         protected boolean favorite;
+        protected WeakReference<FragmentActivity> fragment_reference;
 
-        public mAsyncTask(int id, String token, boolean favorite) {
+        public mAsyncTask(FragmentActivity activity, int id, String token, boolean favorite) {
+            this.fragment_reference = new WeakReference<FragmentActivity>(activity);
             this.id = id;
             this.token = token;
             this.favorite = favorite;
@@ -187,7 +192,7 @@ public class ProblemList extends RecyclerView.Adapter<ProblemList.ViewHolder> im
         protected Void doInBackground(Void... voids) {
 
             try {
-                Conexion.toggleFavorite(id, token);
+                Conexion.getInstance(fragment_reference.get()).toggleFavorite(id, token);
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }

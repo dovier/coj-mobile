@@ -155,7 +155,7 @@ public class MailListFragment extends Fragment {
             MailFolder folder = folders[0];
 
             try {
-                emails = Conexion.getEmails(fragment_reference.get(), folder);
+                emails = Conexion.getInstance(fragment_reference.get()).getEmails(fragment_reference.get(), folder);
                 connectionError = false;
             } catch (NoLoginFileException | UnauthorizedException e) {
                 e.printStackTrace();
