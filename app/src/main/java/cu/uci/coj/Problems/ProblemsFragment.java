@@ -323,21 +323,23 @@ public class ProblemsFragment extends Fragment{
                     DataBaseManager dataBaseManager = DataBaseManager.getInstance(context);
 
                     try {
-                        list = dataBaseManager.getProblemsItem();
+                        if (page == 1) {
+                            list = dataBaseManager.getProblemsItem();
 
-                        if (list != null) {
+                            if (list != null) {
 
-                            activity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(fragment_reference.get().getApplicationContext(), R.string.off_line_mode, Toast.LENGTH_SHORT).show();
-                                    fab.setImageResource(R.drawable.sync);
-                                }
-                            });
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(fragment_reference.get().getApplicationContext(), R.string.off_line_mode, Toast.LENGTH_SHORT).show();
+                                        fab.setImageResource(R.drawable.sync);
+                                    }
+                                });
+                            }
+
+                            consultDB = true;
+                            last_page = true;
                         }
-
-                        consultDB = true;
-                        last_page = true;
                     } catch (Exception e1) {
                         //si la base de datos tambien falla cancelar la operacion
                         e1.printStackTrace();

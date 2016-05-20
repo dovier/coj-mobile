@@ -337,18 +337,20 @@ public class CountryStandingFragment extends Fragment {
 
                 DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get().getApplicationContext());
                 try {
-                    list = dataBaseManager.getCountryStandings();
+                    if (localPage == 1){
+                        list = dataBaseManager.getCountryStandings();
 
-                    if (list != null){
-                        last_page = true;
-                        final FragmentActivity activity = fragment_reference.get();
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(fragment_reference.get().getApplicationContext(), R.string.off_line_mode, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        page = 1;
+                        if (list != null){
+                            last_page = true;
+                            final FragmentActivity activity = fragment_reference.get();
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(fragment_reference.get().getApplicationContext(), R.string.off_line_mode, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            page = 1;
+                        }
                     }
                 } catch (JSONException e1) {
                     e1.printStackTrace();
@@ -361,7 +363,6 @@ public class CountryStandingFragment extends Fragment {
                     cancel(true);
 
                 e.printStackTrace();
-//                cancel(true);
             }
 
             return list;
@@ -397,7 +398,7 @@ public class CountryStandingFragment extends Fragment {
 
             if (countryRanks.size() == 0){
                 last_page = true;
-                Snackbar.make(fragment_reference.get().findViewById(R.id.standing_coordinator), R.string.no_more_users, Snackbar.LENGTH_LONG)
+                Snackbar.make(fragment_reference.get().findViewById(R.id.standing_coordinator), R.string.no_more_countries, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
             else {

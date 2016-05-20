@@ -28,7 +28,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".RecoverPassword"
+            android:name=".RecoverPasswordActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_recover_password"
             android:theme="@style/AppTheme.NoActionBar" />

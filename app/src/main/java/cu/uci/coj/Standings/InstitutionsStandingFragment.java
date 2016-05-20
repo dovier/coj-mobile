@@ -340,18 +340,20 @@ public class InstitutionsStandingFragment extends Fragment {
 
                 DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get().getApplicationContext());
                 try {
-                    list = dataBaseManager.getInstitutionStandings();
+                    if (page == 1){
+                            list = dataBaseManager.getInstitutionStandings();
 
-                    if (list != null){
-                        last_page = true;
-                        final FragmentActivity activity = fragment_reference.get();
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(fragment_reference.get().getApplicationContext(), R.string.off_line_mode, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        page = 1;
+                        if (list != null) {
+                            last_page = true;
+                            final FragmentActivity activity = fragment_reference.get();
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(fragment_reference.get().getApplicationContext(), R.string.off_line_mode, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            page = 1;
+                        }
                     }
                 } catch (JSONException e1) {
                     e1.printStackTrace();
@@ -401,7 +403,7 @@ public class InstitutionsStandingFragment extends Fragment {
 
             if (institutionRanks.size() == 0){
                 last_page = true;
-                Snackbar.make(fragment_reference.get().findViewById(R.id.standing_coordinator), R.string.no_more_users, Snackbar.LENGTH_LONG)
+                Snackbar.make(fragment_reference.get().findViewById(R.id.standing_coordinator), R.string.no_more_institutions, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
             else {

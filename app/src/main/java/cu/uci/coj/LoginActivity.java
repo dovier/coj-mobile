@@ -3,11 +3,9 @@ package cu.uci.coj;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Vibrator;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.AsyncTask;
@@ -23,9 +21,6 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
@@ -62,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(getApplicationContext(), RecoverPassword.class);
+                Intent intent = new Intent(getApplicationContext(), RecoverPasswordActivity.class);
                 startActivity(intent);
 
             }

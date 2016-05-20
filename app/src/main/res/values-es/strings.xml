@@ -215,7 +215,7 @@
     <string name="submit_successful">Solución enviada correctamente</string>
     <string name="template_virtual">Plantilla para concurso virtual:</string>
     <string name="title_activity_login">Entrar</string>
-    <string name="title_activity_recover_password">Recuperar contraseña de usuario</string>
+    <string name="title_activity_recover_password">Recuperar contraseña</string>
     <string name="to">Para:</string>
     <string name="unsolved">Sin resolver</string>
     <string name="untried">Sin intentar</string>

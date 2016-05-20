@@ -339,18 +339,20 @@ public class UserStandingFragment extends Fragment {
 
                 DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get().getApplicationContext());
                 try {
-                    list = dataBaseManager.getUserStandings();
+                    if (page == 1) {
+                        list = dataBaseManager.getUserStandings();
 
-                    if (list != null){
-                        last_page = true;
-                        final FragmentActivity activity = fragment_reference.get();
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(fragment_reference.get().getApplicationContext(), R.string.off_line_mode, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        page = 1;
+                        if (list != null) {
+                            last_page = true;
+                            final FragmentActivity activity = fragment_reference.get();
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(fragment_reference.get().getApplicationContext(), R.string.off_line_mode, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            page = 1;
+                        }
                     }
                 } catch (JSONException e1) {
                     e1.printStackTrace();

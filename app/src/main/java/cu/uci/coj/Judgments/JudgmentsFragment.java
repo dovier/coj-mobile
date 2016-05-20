@@ -284,24 +284,26 @@ public class JudgmentsFragment extends Fragment {
 
                 DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get().getApplicationContext());
                 try {
-                    list = dataBaseManager.getJudgments();
+                    if (page == 1) {
+                        list = dataBaseManager.getJudgments();
 
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            fab.setImageResource(R.drawable.sync);
-                        }
-                    });
-                    if (list != null){
-                        consult_db = true;
-                        last_page = true;
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(fragment_reference.get().getApplicationContext(), R.string.off_line_mode, Toast.LENGTH_SHORT).show();
+                                fab.setImageResource(R.drawable.sync);
                             }
                         });
-                        page = 1;
+                        if (list != null) {
+                            consult_db = true;
+                            last_page = true;
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(fragment_reference.get().getApplicationContext(), R.string.off_line_mode, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            page = 1;
+                        }
                     }
                 } catch (JSONException e1) {
                     e1.printStackTrace();

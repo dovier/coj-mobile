@@ -1,5 +1,6 @@
 package cu.uci.coj.Contests;
 
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
@@ -43,12 +44,16 @@ public class ContestListItem extends RecyclerView.Adapter<ContestListItem.ViewHo
         //rellenar todos los elementos con lo que lleva
         holder.mItem = contestList.get(position);
         holder.id.setText(holder.mItem.getId());
+        Drawable acces;
         if (holder.mItem.isOpen()){
             //es de acceso abierto, establecer icono
+            acces = holder.itemView.getContext().getResources().getDrawable(R.drawable.open_acces);
         }
         else{
             //no es de acceso abierto, establecer icono
-            }
+            acces = holder.itemView.getContext().getResources().getDrawable(R.drawable.private_acces);
+        }
+        holder.acces.setImageDrawable(acces);
         holder.contest_name.setText(holder.mItem.getContest_name());
         holder.start_date.setText(holder.mItem.getStart_date());
         holder.end_date.setText(holder.mItem.getEnd_date());

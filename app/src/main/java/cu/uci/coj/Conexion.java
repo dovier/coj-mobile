@@ -54,7 +54,7 @@ public class Conexion {
     public String IMAGE_URL = COJ_URL;
 
     public String URL_CREATE_ACCOUNT = COJ_URL + "/user/createnewaccount.xhtml";
-    public String URL_FORGOT_PASSWORD = COJ_URL + "/private/forgottenpassword";
+    public String URL_FORGOT_PASSWORD = COJ_URL + API_URL + "/private/forgottenpassword";
 
     public String URL_GENERATE_API = COJ_URL + API_URL + "/private/generateapi";
     public String URL_LOGIN = COJ_URL + API_URL + "/private/login";
@@ -109,7 +109,7 @@ public class Conexion {
         IMAGE_URL = COJ_URL;
 
         URL_CREATE_ACCOUNT = COJ_URL + "/user/createnewaccount.xhtml";
-        URL_FORGOT_PASSWORD = COJ_URL + "/private/forgottenpassword";
+        URL_FORGOT_PASSWORD = COJ_URL + API_URL + "/private/forgottenpassword";
 
         URL_GENERATE_API = COJ_URL + API_URL + "/private/generateapi";
         URL_LOGIN = COJ_URL + API_URL + "/private/login";
@@ -1180,9 +1180,14 @@ public class Conexion {
 
             }
             default: {
-//                JSONObject jsonObject = new JSONObject(resp);
-//                String error = jsonObject.getString("error");
-                String error = resp;
+                String error;
+                try {
+                    JSONObject jsonObject = new JSONObject(resp);
+                    error = jsonObject.getString("error");
+                }
+                catch (JSONException e){
+                    error = resp;
+                }
                 throw new IOException("Unexpected error: "+error);
             }
         }
@@ -1362,25 +1367,28 @@ public class Conexion {
      */
     public String forgotPassword(String email) throws IOException, JSONException {
 
-        RequestBody requestBody = new FormBody.Builder()
-                .add("apikey", API_KEY)
-                .add("email", email)
-                .build();
+        JSONObject json = new JSONObject();
+        json.put("apikey", API_KEY);
+        json.put("email", email);
+
+        RequestBody body = RequestBody.create(JSON, json.toString());
 
         Request request = new Request.Builder()
                 .url(URL_FORGOT_PASSWORD)
-                .post(requestBody)
+                .post(body)
                 .build();
 
         Response response = new OkHttpClient().newCall(request)
                 .execute();
+
+        String resp = response.body().string();
 
         switch (response.code()){
             case 200: {
                 return null;
             }
             default: {
-                JSONObject jsonObject = new JSONObject(response.body().string());
+                JSONObject jsonObject = new JSONObject(resp);
                 return jsonObject.getString("error");
             }
         }

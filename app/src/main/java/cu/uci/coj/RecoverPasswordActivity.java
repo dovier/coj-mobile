@@ -18,7 +18,7 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
-public class RecoverPassword extends AppCompatActivity {
+public class RecoverPasswordActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,9 +89,9 @@ public class RecoverPassword extends AppCompatActivity {
         @Override
         protected String doInBackground(String... emails) {
 
-            String message = null;
+            String message;
             try {
-                Conexion.getInstance(reference.get()).forgotPassword(emails[0]);
+                message = Conexion.getInstance(reference.get()).forgotPassword(emails[0]);
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
                 message = e.getMessage();
