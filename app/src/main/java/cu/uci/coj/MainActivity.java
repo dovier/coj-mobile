@@ -238,6 +238,15 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
                 login = !LoginData.delete(this);
+
+                DataBaseManager db = DataBaseManager.getInstance(getApplicationContext());
+                db.deleteAllProfiles();
+                db.deleteAllEmails(MailFolder.INBOX);
+                db.deleteAllEmails(MailFolder.OUTBOX);
+                db.deleteAllEmails(MailFolder.DRAFT);
+                db.deleteAllProblems();
+                db.closeDbConnections();
+
                 updateMenu();
                 cleanDrawerMenu();
 
@@ -276,6 +285,15 @@ public class MainActivity extends AppCompatActivity
                         if (Patterns.WEB_URL.matcher(new_server).matches()){
                             editor.putString(preference_name, new_server);
                             editor.apply();
+
+                            //clean database
+                            DataBaseManager db = DataBaseManager.getInstance(getApplicationContext());
+                            db.deleteAllData();
+                            db.closeDbConnections();
+
+                            //clean login data
+                            LoginData.delete(getApplicationContext());
+
                             Toast.makeText(getApplicationContext(), R.string.restart_application, Toast.LENGTH_LONG).show();
                         }
                         else {

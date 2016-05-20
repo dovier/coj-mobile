@@ -74,7 +74,6 @@ public class DataBaseManager implements AsyncOperationListener {
 
     private Context context;
     private DaoSession daoSession;
-//    private List<AsyncOperation> completedOperations;
 
     private DaoMaster.DevOpenHelper helper;
     private SQLiteDatabase db;
@@ -772,6 +771,25 @@ public class DataBaseManager implements AsyncOperationListener {
         return null;
     }
 
+    public synchronized void deleteAllData(){
+
+        deleteAllFAQs();
+        deleteAllInboxMessages();
+        deleteAllProfiles();
+        deleteAllOutboxMessages();
+        deleteAllDraftsMessages();
+        deleteAllPreviousContest();
+        deleteAllComingContest();
+        deleteAllRunningContest();
+        deleteAllEntries();
+        deleteAllJudgment();
+        deleteAllUserStandings();
+        deleteAllInstitutionStandings();
+        deleteAllCountryStandings();
+        deleteAllProblems();
+
+    }
+
     public synchronized void deleteAllFAQs(){
 
         try {
@@ -978,6 +996,24 @@ public class DataBaseManager implements AsyncOperationListener {
 
             DBCountryStandingDao countryStandingDao = daoSession.getDBCountryStandingDao();
             countryStandingDao.deleteAll();
+
+            daoSession.clear();
+        } catch (SQLiteException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public synchronized void deleteAllProblems(){
+
+        try {
+            openWritableDb();
+
+            DBProblemItemDao dbProblemItemDao = daoSession.getDBProblemItemDao();
+            dbProblemItemDao.deleteAll();
+
+            DBProblemDao dbProblemDao = daoSession.getDBProblemDao();
+            dbProblemDao.deleteAll();
 
             daoSession.clear();
         } catch (SQLiteException e){
