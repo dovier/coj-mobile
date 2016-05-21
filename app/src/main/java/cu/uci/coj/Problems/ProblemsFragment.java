@@ -336,7 +336,7 @@ public class ProblemsFragment extends Fragment{
                     DataBaseManager dataBaseManager = DataBaseManager.getInstance(context);
 
                     try {
-                        if (page == 1) {
+                        if (page == 2) {
 
                             list = dataBaseManager.getProblemsItem();
 
