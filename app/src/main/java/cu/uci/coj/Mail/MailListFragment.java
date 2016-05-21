@@ -189,6 +189,7 @@ public class MailListFragment extends Fragment {
                     mail_list.setVisibility(View.GONE);
                 }
             });
+            connectionError = true;
             new ScreenOrientationLocker(fragment_reference.get()).unlock();
         }
 
@@ -203,24 +204,22 @@ public class MailListFragment extends Fragment {
                 }
                 dataBaseManager.closeDbConnections();
             }
-            else {
-                connectionError = false;
+
+            if (emails.size() != 0 || !connectionError) {
+                adapter = new EmailList(emails);
+                RecyclerView recyclerView = (RecyclerView) fragment_reference.get().findViewById(R.id.recycler_email_list);
+                recyclerView.setAdapter(adapter);
+
+                fragment_reference.get().findViewById(R.id.connection_error).setVisibility(View.GONE);
+                fragment_reference.get().findViewById(R.id.email_list).setVisibility(View.VISIBLE);
+            }
+            else if (connectionError){
+                fragment_reference.get().findViewById(R.id.connection_error).setVisibility(View.VISIBLE);
+                fragment_reference.get().findViewById(R.id.email_list).setVisibility(View.GONE);
             }
 
-            adapter = new EmailList(emails);
-            RecyclerView recyclerView = (RecyclerView) fragment_reference.get().findViewById(R.id.recycler_email_list);
-            recyclerView.setAdapter(adapter);
-
-            final LinearLayout errorView = (LinearLayout) fragment_reference.get().findViewById(R.id.connection_error);
-            final LinearLayout mail_list = (LinearLayout) fragment_reference.get().findViewById(R.id.email_list);
-            FloatingActionButtonBehavior behavior = new FloatingActionButtonBehavior(false);
-            fragment_reference.get().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    errorView.setVisibility(View.GONE);
-                    mail_list.setVisibility(View.VISIBLE);
-                }
-            });
+            if (emails.size() != 0)
+                connectionError = false;
 
             progressDialog.dismiss();
             new ScreenOrientationLocker(fragment_reference.get()).unlock();

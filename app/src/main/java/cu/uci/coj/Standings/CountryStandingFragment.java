@@ -47,9 +47,11 @@ public class CountryStandingFragment extends Fragment {
     private static final String ARGS_LAST_PAGE = "last_page";
     private static final String ARGS_PAGE = "page";
     private static final String ARGS_ADAPTER = "adapter";
+    private static final String ARGS_ERROR = "error";
 
     private static View rootView;
     private static boolean last_page;
+    private static boolean error;
     private static int page;
     private static CountryStandingItem adapter;
 
@@ -80,6 +82,7 @@ public class CountryStandingFragment extends Fragment {
 
         outState.putSerializable(ARGS_ADAPTER, adapter);
         outState.putBoolean(ARGS_LAST_PAGE, last_page);
+        outState.putBoolean(ARGS_ERROR, error);
         outState.putInt(ARGS_PAGE, page);
     }
 
@@ -92,9 +95,16 @@ public class CountryStandingFragment extends Fragment {
             adapter = (CountryStandingItem) savedInstanceState.getSerializable(ARGS_ADAPTER);
             page = savedInstanceState.getInt(ARGS_PAGE);
             last_page = savedInstanceState.getBoolean(ARGS_LAST_PAGE);
+            error = savedInstanceState.getBoolean(ARGS_ERROR);
 
-            RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.standing_item_list);
-            recyclerView.setAdapter(adapter);
+            if (error){
+                getActivity().findViewById(R.id.table).setVisibility(View.GONE);
+                getActivity().findViewById(R.id.connection_error).setVisibility(View.VISIBLE);
+            }
+            else{
+                RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.standing_item_list);
+                recyclerView.setAdapter(adapter);
+            }
 
         }
         else {
@@ -333,15 +343,18 @@ public class CountryStandingFragment extends Fragment {
             try {
                 localPage = pages[0];
                 list = Conexion.getInstance(fragment_reference.get()).getCountryRank(localPage);
+                error = false;
             } catch (IOException | JSONException e) {
+                error = true;
 
                 DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get().getApplicationContext());
                 try {
                     if (localPage == 1){
                         list = dataBaseManager.getCountryStandings();
 
-                        if (list != null){
+                        if (list != null)
                             last_page = true;
+                        if (list != null && list.size() != 0){
                             final FragmentActivity activity = fragment_reference.get();
                             activity.runOnUiThread(new Runnable() {
                                 @Override
@@ -379,6 +392,7 @@ public class CountryStandingFragment extends Fragment {
                     new mAsyncTask(fragment_reference.get()).execute(localPage);
                 }
             });
+            snackbar.show();
             progressDialog.dismiss();
             last_page = true;
             new ScreenOrientationLocker(fragment_reference.get()).unlock();
@@ -387,7 +401,7 @@ public class CountryStandingFragment extends Fragment {
         @Override
         protected void onPostExecute(List<CountryRank> countryRanks) {
 
-            if (page == 2){
+            if (localPage == 1 && !error){
                 DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get().getApplicationContext());
                 dataBaseManager.deleteAllCountryStandings();
                 for (int i = 0; i < countryRanks.size(); i++) {
@@ -396,13 +410,16 @@ public class CountryStandingFragment extends Fragment {
                 dataBaseManager.closeDbConnections();
             }
 
-            if (countryRanks.size() == 0){
+            if (countryRanks.size() == 0 && !error){
                 last_page = true;
                 Snackbar.make(fragment_reference.get().findViewById(R.id.standing_coordinator), R.string.no_more_countries, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
+            else if (countryRanks.size() == 0 && adapter.getItemCount() == 0 && error){
+                fragment_reference.get().findViewById(R.id.connection_error).setVisibility(View.VISIBLE);
+                fragment_reference.get().findViewById(R.id.table).setVisibility(View.GONE);
+            }
             else {
-
                 final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.standing_item_list);
                 adapter.addAll(countryRanks);
                 recyclerView.swapAdapter(adapter, false);

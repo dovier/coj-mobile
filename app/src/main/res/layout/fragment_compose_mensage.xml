@@ -68,7 +68,8 @@
             android:tint="@color/white"
             android:padding="@dimen/padding"
             android:contentDescription="@string/send_mail"
-            android:src="@drawable/send_mail" />
+            android:src="@drawable/send_mail"
+            android:background="@drawable/layout_button" />
 
         <ImageView
             android:id="@+id/discard_mail"
@@ -78,7 +79,8 @@
             android:padding="@dimen/padding"
             android:tint="@color/white"
             android:contentDescription="@string/cancel"
-            android:src="@drawable/close" />
+            android:src="@drawable/close"
+            android:background="@drawable/layout_button" />
 
     </LinearLayout>
 

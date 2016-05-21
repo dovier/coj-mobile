@@ -47,9 +47,11 @@ public class InstitutionsStandingFragment extends Fragment {
     private static final String ARGS_LAST_PAGE = "last_page";
     private static final String ARGS_PAGE = "page";
     private static final String ARGS_ADAPTER = "adapter";
+    private static final String ARGS_ERROR = "error";
 
     private static View rootView;
     private static boolean last_page;
+    private static boolean error;
     private static int page;
     private static InstitutionStandingItem adapter;
 
@@ -80,6 +82,7 @@ public class InstitutionsStandingFragment extends Fragment {
 
         outState.putSerializable(ARGS_ADAPTER, adapter);
         outState.putBoolean(ARGS_LAST_PAGE, last_page);
+        outState.putBoolean(ARGS_ERROR, error);
         outState.putInt(ARGS_PAGE, page);
     }
 
@@ -92,9 +95,16 @@ public class InstitutionsStandingFragment extends Fragment {
             adapter = (InstitutionStandingItem) savedInstanceState.getSerializable(ARGS_ADAPTER);
             page = savedInstanceState.getInt(ARGS_PAGE);
             last_page = savedInstanceState.getBoolean(ARGS_LAST_PAGE);
+            error = savedInstanceState.getBoolean(ARGS_ERROR);
 
-            RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.standing_item_list);
-            recyclerView.setAdapter(adapter);
+            if (error){
+                getActivity().findViewById(R.id.table).setVisibility(View.GONE);
+                getActivity().findViewById(R.id.connection_error).setVisibility(View.VISIBLE);
+            }
+            else{
+                RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.standing_item_list);
+                recyclerView.setAdapter(adapter);
+            }
 
         }
         else {
@@ -336,20 +346,23 @@ public class InstitutionsStandingFragment extends Fragment {
             try {
                 page = pages[0];
                 list = Conexion.getInstance(fragment_reference.get()).getInstitutionRank(page);
+                error = false;
             } catch (IOException | JSONException e) {
 
+                error = true;
                 DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get().getApplicationContext());
                 try {
                     if (page == 1){
-                            list = dataBaseManager.getInstitutionStandings();
+                        list = dataBaseManager.getInstitutionStandings();
 
-                        if (list != null) {
+                        if (list != null)
                             last_page = true;
+                        if (list != null && list.size() != 0){
                             final FragmentActivity activity = fragment_reference.get();
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(fragment_reference.get().getApplicationContext(), R.string.off_line_mode, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(fragment_reference.get().getApplicationContext(), R.string.off_line_mode, Toast.LENGTH_SHORT).show();
                                 }
                             });
                             page = 1;
@@ -366,7 +379,6 @@ public class InstitutionsStandingFragment extends Fragment {
                     cancel(true);
 
                 e.printStackTrace();
-//                cancel(true);
             }
 
             return list;
@@ -392,7 +404,7 @@ public class InstitutionsStandingFragment extends Fragment {
         @Override
         protected void onPostExecute(List<InstitutionRank> institutionRanks) {
 
-            if (page == 2){
+            if (page == 1 && !error){
                 DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get().getApplicationContext());
                 dataBaseManager.deleteAllInstitutionStandings();
                 for (int i = 0; i < institutionRanks.size(); i++) {
@@ -401,10 +413,14 @@ public class InstitutionsStandingFragment extends Fragment {
                 dataBaseManager.closeDbConnections();
             }
 
-            if (institutionRanks.size() == 0){
+            if (institutionRanks.size() == 0 && !error){
                 last_page = true;
                 Snackbar.make(fragment_reference.get().findViewById(R.id.standing_coordinator), R.string.no_more_institutions, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+            }
+            else if (institutionRanks.size() == 0 && adapter.getItemCount() == 0 && error){
+                fragment_reference.get().findViewById(R.id.connection_error).setVisibility(View.VISIBLE);
+                fragment_reference.get().findViewById(R.id.table).setVisibility(View.GONE);
             }
             else {
 

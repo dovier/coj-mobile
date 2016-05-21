@@ -333,17 +333,17 @@ public class JudgmentsFragment extends Fragment {
 
                 dataBaseManager.closeDbConnections();
 
-                if (list == null) {
-                    final LinearLayout layout_error = (LinearLayout) fragment_reference.get().findViewById(R.id.connection_error);
-                    final LinearLayout layout_list = (LinearLayout) fragment_reference.get().findViewById(R.id.judgments_list);
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            consult_db = true;
-                            layout_error.setVisibility(View.VISIBLE);
-                            layout_list.setVisibility(View.GONE);
-                        }
-                    });
+                if (list == null || list.size() == 0) {
+//                    final LinearLayout layout_error = (LinearLayout) fragment_reference.get().findViewById(R.id.connection_error);
+//                    final LinearLayout layout_list = (LinearLayout) fragment_reference.get().findViewById(R.id.judgments_list);
+//                    activity.runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            consult_db = true;
+//                            layout_error.setVisibility(View.VISIBLE);
+//                            layout_list.setVisibility(View.GONE);
+//                        }
+//                    });
                     cancel(true);
                 }
 
@@ -358,6 +358,15 @@ public class JudgmentsFragment extends Fragment {
         @Override
         protected void onCancelled() {
             super.onCancelled();
+            Snackbar snackbar = Snackbar.make(fragment_reference.get().findViewById(R.id.judgment_coordinator), R.string.judgment_list_error, Snackbar.LENGTH_INDEFINITE);
+            snackbar.setAction(R.string.reload, new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    last_page = false;
+                    new mAsyncTask(fragment_reference.get()).execute(url);
+                }
+            });
+            snackbar.show();
             last_page = true;
             progressDialog.dismiss();
             new ScreenOrientationLocker(fragment_reference.get()).unlock();

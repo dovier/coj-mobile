@@ -34,9 +34,11 @@ import cu.uci.coj.ScreenOrientationLocker;
 public class RunningContestFragment extends Fragment {
 
     private final String ARGS_ADAPTER = "adapter";
+    private final String ARGS_NETWORK = "network";
 
     private ContestListItem adapter;
     private RecyclerView recyclerView;
+    private boolean network;
 
     public RunningContestFragment() {
         // Required empty public constructor
@@ -59,10 +61,6 @@ public class RunningContestFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -70,6 +68,7 @@ public class RunningContestFragment extends Fragment {
         super.onSaveInstanceState(outState);
 
         outState.putSerializable(ARGS_ADAPTER, adapter);
+        outState.putBoolean(ARGS_NETWORK, network);
     }
 
     @Override
@@ -78,7 +77,14 @@ public class RunningContestFragment extends Fragment {
 
         if (savedInstanceState != null){
             adapter = (ContestListItem) savedInstanceState.getSerializable(ARGS_ADAPTER);
-            recyclerView.setAdapter(adapter);
+            network = savedInstanceState.getBoolean(ARGS_NETWORK);
+
+            if (network)
+                recyclerView.setAdapter(adapter);
+            else {
+                getActivity().findViewById(R.id.connection_error).setVisibility(View.VISIBLE);
+                getActivity().findViewById(R.id.table).setVisibility(View.GONE);
+            }
         }
         else{
             adapter = new ContestListItem(new ArrayList<Contest>());
@@ -105,7 +111,6 @@ public class RunningContestFragment extends Fragment {
 
         protected WeakReference<FragmentActivity> fragment_reference;
         protected ProgressDialog progressDialog;
-        protected boolean network;
 
         public mAsyncTask(FragmentActivity fragment_reference) {
             this.fragment_reference = new WeakReference<>(fragment_reference);
@@ -130,15 +135,14 @@ public class RunningContestFragment extends Fragment {
         @Override
         protected void onCancelled() {
 
-            Snackbar snackbar = Snackbar.make(fragment_reference.get().findViewById(R.id.contest_coordinator), R.string.contest_list_error, Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Action", null);
-            snackbar.setAction(R.string.reload, new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    new mAsyncTask(fragment_reference.get()).execute(Conexion.getInstance(fragment_reference.get()).getURL_CONTEST_RUNNING());
-                }
-            });
-            snackbar.show();
+//            Snackbar snackbar = Snackbar.make(fragment_reference.get().findViewById(R.id.contest_coordinator), R.string.contest_list_error, Snackbar.LENGTH_INDEFINITE);
+//            snackbar.setAction(R.string.reload, new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    new mAsyncTask(fragment_reference.get()).execute(Conexion.getInstance(fragment_reference.get()).getURL_CONTEST_RUNNING());
+//                }
+//            });
+//            snackbar.show();
             progressDialog.dismiss();
             new ScreenOrientationLocker(fragment_reference.get()).unlock();
 
@@ -148,18 +152,20 @@ public class RunningContestFragment extends Fragment {
         protected List<Contest> doInBackground(String... urls) {
 
             List<Contest> contests = null;
-            network = false;
 
             try {
                 String url = urls[0];
                 contests = Conexion.getInstance(fragment_reference.get()).getContests(url);
+                network = true;
             } catch (IOException | JSONException e) {
+
+                network = false;
 
                 DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get().getApplicationContext());
                 try {
                     contests = dataBaseManager.getRunningContest();
 
-                    if (contests != null){
+                    if (contests != null && contests.size() != 0){
                         final FragmentActivity activity = fragment_reference.get();
                         activity.runOnUiThread(new Runnable() {
                             @Override
@@ -196,9 +202,12 @@ public class RunningContestFragment extends Fragment {
                 }
                 dataBaseManager.closeDbConnections();
             }
-            if (contests.size() == 0){
-                Snackbar.make(fragment_reference.get().findViewById(R.id.contest_coordinator), R.string.no_contest_error, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            if (contests.size() == 0 && network){
+                Snackbar.make(fragment_reference.get().findViewById(R.id.contest_coordinator), R.string.no_contest_error, Snackbar.LENGTH_LONG).show();
+            }
+            else if (contests.size() == 0 && adapter.getItemCount() == 0 && !network){
+                fragment_reference.get().findViewById(R.id.connection_error).setVisibility(View.VISIBLE);
+                fragment_reference.get().findViewById(R.id.table).setVisibility(View.GONE);
             }
             else {
 

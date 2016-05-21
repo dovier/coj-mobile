@@ -227,7 +227,7 @@ public class StartFragment extends Fragment {
         @Override
         protected String doInBackground(String... entries) {
 
-            String message = null;
+            String message;
 
             try {
                 message = Conexion.getInstance(fragment_reference.get()).addEntry(fragment_reference.get(), entries[0]);
@@ -237,11 +237,6 @@ public class StartFragment extends Fragment {
             }
 
             return message;
-        }
-
-        @Override
-        protected void onCancelled(String s) {
-            super.onCancelled(s);
         }
 
         @Override
@@ -289,7 +284,7 @@ public class StartFragment extends Fragment {
         @Override
         protected List<EntriesItem> doInBackground(Void... voids) {
 
-            List<EntriesItem> list = new ArrayList<>();
+            List<EntriesItem> list = null;
 
             try {
                 list = Conexion.getInstance(fragment_reference.get()).getEntries(page++);
@@ -299,11 +294,12 @@ public class StartFragment extends Fragment {
                 secondPage = false;
                 DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get().getApplicationContext());
                 try {
-                    list = dataBaseManager.getEntries();
+                    if (page == 2) {
+                        list = dataBaseManager.getEntries();
 
-                    if (list != null){
-                        last_page = true;
-                        if (list.size() != 0){
+                        if (list != null)
+                            last_page = true;
+                        if (list != null && list.size() != 0) {
                             final FragmentActivity activity = fragment_reference.get();
                             activity.runOnUiThread(new Runnable() {
                                 @Override
@@ -332,15 +328,18 @@ public class StartFragment extends Fragment {
         @Override
         protected void onCancelled() {
             super.onCancelled();
-            Snackbar snackbar = Snackbar.make(fragment_reference.get().findViewById(R.id.home_coordinator), R.string.entries_error, Snackbar.LENGTH_INDEFINITE);
-            snackbar.setAction(R.string.reload, new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    last_page = false;
-                    new mAsyncTask(fragment_reference.get()).execute();
-                }
-            });
-            snackbar.show();
+//            Snackbar snackbar = Snackbar.make(fragment_reference.get().findViewById(R.id.home_coordinator), R.string.entries_error, Snackbar.LENGTH_INDEFINITE);
+//            snackbar.setAction(R.string.reload, new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    last_page = false;
+//                    new mAsyncTask(fragment_reference.get()).execute();
+//                }
+//            });
+//            snackbar.show();
+
+            Toast.makeText(fragment_reference.get(), R.string.entries_error, Toast.LENGTH_LONG).show();
+
             last_page = true;
             progressDialog.dismiss();
             new ScreenOrientationLocker(fragment_reference.get()).unlock();

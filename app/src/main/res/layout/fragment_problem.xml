@@ -43,6 +43,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:background="@drawable/border"
                 android:orientation="horizontal">
@@ -53,10 +54,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:paddingEnd="@dimen/activity_horizontal_margin"
-                    android:paddingStart="@dimen/activity_horizontal_margin"
-                    android:paddingBottom="@dimen/activity_vertical_margin"
-                    android:paddingTop="@dimen/activity_vertical_margin"
+                    android:padding="@dimen/padding"
                     android:text="@string/submit"
                     android:layout_gravity="center"
                     android:visibility="gone"
@@ -68,10 +66,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:paddingEnd="@dimen/activity_horizontal_margin"
-                    android:paddingStart="@dimen/activity_horizontal_margin"
-                    android:paddingBottom="@dimen/activity_vertical_margin"
-                    android:paddingTop="@dimen/activity_vertical_margin"
+                    android:padding="@dimen/padding"
                     android:text="@string/best_solutions"
                     android:background="@drawable/layout_button"/>
 
@@ -123,7 +118,8 @@
                         android:id="@+id/created_by"
                         android:layout_weight="70"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/layout_button" />
 
                 </LinearLayout>
 

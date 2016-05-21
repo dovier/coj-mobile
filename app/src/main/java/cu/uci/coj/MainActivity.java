@@ -218,6 +218,7 @@ public class MainActivity extends AppCompatActivity
         switch (id){
             case R.id.action_login: {
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                cleanDrawerMenu();
 
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
@@ -226,6 +227,7 @@ public class MainActivity extends AppCompatActivity
             }
             case R.id.action_faq: {
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                cleanDrawerMenu();
 
                 getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_left, R.anim.exit_to_right)

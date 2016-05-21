@@ -49,10 +49,12 @@ public class UserStandingFragment extends Fragment {
     private static final String ARGS_LAST_PAGE = "last_page";
     private static final String ARGS_PAGE = "page";
     private static final String ARGS_ADAPTER = "adapter";
+    private static final String ARGS_ERROR = "error";
 
     private static View rootView;
     private static boolean last_page;
     private static int page;
+    private static boolean error;
     private static UserStandingItem adapter;
 
     public UserStandingFragment() {
@@ -81,6 +83,7 @@ public class UserStandingFragment extends Fragment {
 
         outState.putSerializable(ARGS_ADAPTER, adapter);
         outState.putBoolean(ARGS_LAST_PAGE, last_page);
+        outState.putBoolean(ARGS_ERROR, error);
         outState.putInt(ARGS_PAGE, page);
     }
 
@@ -92,10 +95,17 @@ public class UserStandingFragment extends Fragment {
 
             adapter = (UserStandingItem) savedInstanceState.getSerializable(ARGS_ADAPTER);
             page = savedInstanceState.getInt(ARGS_PAGE);
+            error = savedInstanceState.getBoolean(ARGS_ERROR);
             last_page = savedInstanceState.getBoolean(ARGS_LAST_PAGE);
 
-            RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.standing_item_list);
-            recyclerView.setAdapter(adapter);
+            if (error){
+                getActivity().findViewById(R.id.table).setVisibility(View.GONE);
+                getActivity().findViewById(R.id.connection_error).setVisibility(View.VISIBLE);
+            }
+            else{
+                RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.standing_item_list);
+                recyclerView.setAdapter(adapter);
+            }
 
         }
         else {
@@ -335,23 +345,26 @@ public class UserStandingFragment extends Fragment {
             try {
                 page = pages[0];
                 list = Conexion.getInstance(fragment_reference.get()).getUserRank(page);
+                error = false;
             } catch (IOException | JSONException e) {
 
+                error = true;
                 DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get().getApplicationContext());
                 try {
                     if (page == 1) {
                         list = dataBaseManager.getUserStandings();
 
-                        if (list != null) {
+                        if (list != null)
                             last_page = true;
+                        if (list != null && list.size() != 0){
                             final FragmentActivity activity = fragment_reference.get();
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(fragment_reference.get().getApplicationContext(), R.string.off_line_mode, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(fragment_reference.get().getApplicationContext(), R.string.off_line_mode, Toast.LENGTH_SHORT).show();
                                 }
                             });
-                            page = 1;
+                           page = 1;
                         }
                     }
                 } catch (JSONException e1) {
@@ -392,7 +405,7 @@ public class UserStandingFragment extends Fragment {
         @Override
         protected void onPostExecute(List<UserRank> userRanks) {
 
-            if (page == 2){
+            if (page == 1 && !error){
                 DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get().getApplicationContext());
                 dataBaseManager.deleteAllUserStandings();
                 for (int i = 0; i < userRanks.size(); i++) {
@@ -401,10 +414,14 @@ public class UserStandingFragment extends Fragment {
                 dataBaseManager.closeDbConnections();
             }
 
-            if (userRanks.size() == 0){
+            if (userRanks.size() == 0 && !error){
                 last_page = true;
                 Snackbar.make(fragment_reference.get().findViewById(R.id.standing_coordinator), R.string.no_more_users, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+            }
+            else if (userRanks.size() == 0 && adapter.getItemCount() == 0 && error){
+                fragment_reference.get().findViewById(R.id.connection_error).setVisibility(View.VISIBLE);
+                fragment_reference.get().findViewById(R.id.table).setVisibility(View.GONE);
             }
             else {
 
@@ -413,6 +430,10 @@ public class UserStandingFragment extends Fragment {
                 recyclerView.swapAdapter(adapter, false);
 
             }
+
+            if (userRanks.size() == 0 && adapter.getItemCount() == 0)
+                error = true;
+
             progressDialog.dismiss();
             new ScreenOrientationLocker(fragment_reference.get()).unlock();
         }
