@@ -457,6 +457,9 @@ public class Conexion {
                         .build())
                 .execute();
 
+        if (response.code() == 400)
+            return standing;
+
         if (!response.isSuccessful())
             throw new IOException("Unexpected code " + response);
 
@@ -481,6 +484,9 @@ public class Conexion {
                         .url(URL_RANKING_BY_INSTITUTION + page)
                         .build())
                 .execute();
+
+        if (response.code() == 400)
+            return standing;
 
         if (!response.isSuccessful())
             throw new IOException("Unexpected code " + response);
@@ -562,6 +568,9 @@ public class Conexion {
                         .url(url)
                         .build())
                 .execute();
+
+        if (response.code() == 400)
+            return standing;
 
         if (!response.isSuccessful())
             throw new IOException("Unexpected code " + response);
