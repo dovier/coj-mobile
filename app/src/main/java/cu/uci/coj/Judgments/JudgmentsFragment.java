@@ -48,6 +48,7 @@ public class JudgmentsFragment extends Fragment {
     private static final String ARGS_ADAPTER = "adapter";
     private static final String ARGS_FILTER = "filter";
     private static final String ARGS_CONSULT_DB = "database";
+    private static final String ARGS_ERROR = "error";
 
     private static View rootView;
     private static JudgmentList adapter;
@@ -55,6 +56,7 @@ public class JudgmentsFragment extends Fragment {
     private static boolean last_page;
     private static boolean consult_db;
     private static int page;
+    private static boolean error = false;
     private static boolean filter = false;
 
     public JudgmentsFragment() {
@@ -82,6 +84,7 @@ public class JudgmentsFragment extends Fragment {
         outState.putBoolean(ARGS_FILTER, filter);
         outState.putBoolean(ARGS_LAST_PAGE, last_page);
         outState.putBoolean(ARGS_CONSULT_DB, consult_db);
+        outState.putBoolean(ARGS_ERROR, error);
     }
 
     @Override
@@ -95,9 +98,19 @@ public class JudgmentsFragment extends Fragment {
             filter = savedInstanceState.getBoolean(ARGS_FILTER);
             last_page = savedInstanceState.getBoolean(ARGS_LAST_PAGE);
             consult_db = savedInstanceState.getBoolean(ARGS_CONSULT_DB);
+            error = savedInstanceState.getBoolean(ARGS_ERROR);
 
             RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.judgments_items_list);
-            recyclerView.setAdapter(adapter);
+
+            if (error){
+                recyclerView.setVisibility(View.GONE);
+                getActivity().findViewById(R.id.judgments_list).setVisibility(View.GONE);
+                getActivity().findViewById(R.id.connection_error).setVisibility(View.VISIBLE);
+                FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.judgments_fab);
+                fab.setImageResource(R.drawable.sync);
+            }
+            else
+                recyclerView.setAdapter(adapter);
 
         }
         else {
@@ -152,6 +165,11 @@ public class JudgmentsFragment extends Fragment {
             public void onClick(View view) {
                 if (consult_db){
                     page = 1;
+                    last_page = false;
+                    filter = false;
+                    recyclerView.setVisibility(View.VISIBLE);
+                    getActivity().findViewById(R.id.judgments_list).setVisibility(View.VISIBLE);
+                    getActivity().findViewById(R.id.connection_error).setVisibility(View.GONE);
                     new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).getURL_JUDGMENT_PAGE() + page++);
                 }
                 else
@@ -280,20 +298,24 @@ public class JudgmentsFragment extends Fragment {
                         fab.setImageResource(R.drawable.filter);
                     }
                 });
+                error = false;
             } catch (IOException | JSONException e) {
+
+                error = true;
+
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        fab.setImageResource(R.drawable.sync);
+                    }
+                });
 
                 DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get().getApplicationContext());
                 try {
-                    if (page == 1) {
+                    if (page == 2) {
                         list = dataBaseManager.getJudgments();
 
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                fab.setImageResource(R.drawable.sync);
-                            }
-                        });
-                        if (list != null) {
+                        if (list != null && list.size() != 0) {
                             consult_db = true;
                             last_page = true;
                             activity.runOnUiThread(new Runnable() {
@@ -302,7 +324,6 @@ public class JudgmentsFragment extends Fragment {
                                     Toast.makeText(fragment_reference.get().getApplicationContext(), R.string.off_line_mode, Toast.LENGTH_SHORT).show();
                                 }
                             });
-                            page = 1;
                         }
                     }
                 } catch (JSONException e1) {
@@ -327,7 +348,6 @@ public class JudgmentsFragment extends Fragment {
                 }
 
                 e.printStackTrace();
-//                cancel(true);
             }
 
             return list;
@@ -358,7 +378,13 @@ public class JudgmentsFragment extends Fragment {
             });
 
             final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.judgments_items_list);
-            if (!filter && judgments.size() == 0){
+            if (!filter && judgments.size() == 0 && adapter.getItemCount() == 0 && error){
+                consult_db = true;
+                recyclerView.setVisibility(View.GONE);
+                fragment_reference.get().findViewById(R.id.judgments_list).setVisibility(View.GONE);
+                fragment_reference.get().findViewById(R.id.connection_error).setVisibility(View.VISIBLE);
+            }
+            else if (!filter && judgments.size() == 0 && !error){
                 last_page = true;
                 Snackbar.make(fragment_reference.get().findViewById(R.id.judgment_coordinator), R.string.no_more_judgments, Snackbar.LENGTH_LONG).show();
             }
@@ -376,7 +402,7 @@ public class JudgmentsFragment extends Fragment {
             progressDialog.dismiss();
             new ScreenOrientationLocker(fragment_reference.get()).unlock();
 
-            if (page == 2 && !consult_db && !filter){
+            if (page == 2 && !error && !filter){
                 DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get().getApplicationContext());
                 dataBaseManager.deleteAllJudgment();
                 for (int i = 0; i < judgments.size(); i++) {

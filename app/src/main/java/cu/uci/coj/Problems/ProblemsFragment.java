@@ -52,6 +52,7 @@ public class ProblemsFragment extends Fragment{
     private static final String ARGS_FILTER = "filter";
     private static final String ARGS_DATABASE = "data_base";
     private static final String ARGS_CLASSIFICATION_FILTER = "problem_filter";
+    private static final String ARGS_ERROR = "error";
 
     private static View rootView;
     private static ProblemList adapter;
@@ -60,6 +61,7 @@ public class ProblemsFragment extends Fragment{
     private static boolean consultDB;
     private static boolean filter = false;
     private static boolean login = false;
+    private static boolean error = false;
     private static Filter<Integer> classificationFilter;
 
 //    private static View progressRootView;
@@ -91,6 +93,7 @@ public class ProblemsFragment extends Fragment{
         outState.putBoolean(ARGS_FILTER, filter);
         outState.putBoolean(ARGS_LAST_PAGE, last_page);
         outState.putBoolean(ARGS_DATABASE, consultDB);
+        outState.putBoolean(ARGS_ERROR, error);
     }
 
     @Override
@@ -105,9 +108,17 @@ public class ProblemsFragment extends Fragment{
             filter = savedInstanceState.getBoolean(ARGS_FILTER);
             last_page = savedInstanceState.getBoolean(ARGS_LAST_PAGE);
             consultDB = savedInstanceState.getBoolean(ARGS_DATABASE);
+            error = savedInstanceState.getBoolean(ARGS_ERROR);
 
             RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.problem_item_list);
-            recyclerView.setAdapter(adapter);
+            if (!error){
+                recyclerView.setAdapter(adapter);
+            }
+            else {
+                getActivity().findViewById(R.id.connection_error).setVisibility(View.VISIBLE);
+                getActivity().findViewById(R.id.table).setVisibility(View.GONE);
+                recyclerView.setVisibility(View.GONE);
+            }
 
         }
         else {
@@ -185,6 +196,9 @@ public class ProblemsFragment extends Fragment{
                     page = 1;
                     last_page = false;
                     adapter = new ProblemList(new ArrayList<ProblemItem>(), login);
+                    getActivity().findViewById(R.id.connection_error).setVisibility(View.GONE);
+                    getActivity().findViewById(R.id.table).setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.VISIBLE);
                     new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).getURL_PROBLEM_PAGE() + page++);
                     new classificationFilterAsyncTask(getActivity()).execute();
                 }
@@ -311,31 +325,30 @@ public class ProblemsFragment extends Fragment{
                         }
                     });
                     consultDB = false;
-                } catch (UnauthorizedException e) {
-                    e.printStackTrace();
-                } catch (NoLoginFileException e) {
+                } catch (UnauthorizedException | NoLoginFileException e) {
                     e.printStackTrace();
                 }
 
             } catch (IOException | JSONException e) {
                 if (consultDB){
 
+                    error = true;
                     DataBaseManager dataBaseManager = DataBaseManager.getInstance(context);
 
                     try {
                         if (page == 1) {
+
                             list = dataBaseManager.getProblemsItem();
 
-                            if (list != null) {
-
-                                activity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
+                            final List<ProblemItem> finalList = list;
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (finalList != null && finalList.size() != 0)
                                         Toast.makeText(fragment_reference.get().getApplicationContext(), R.string.off_line_mode, Toast.LENGTH_SHORT).show();
-                                        fab.setImageResource(R.drawable.sync);
-                                    }
-                                });
-                            }
+                                    fab.setImageResource(R.drawable.sync);
+                                }
+                            });
 
                             consultDB = true;
                             last_page = true;
@@ -386,7 +399,21 @@ public class ProblemsFragment extends Fragment{
             adapter.setLogin(login);
 
             final RecyclerView recyclerView = (RecyclerView) fragment_reference.get().findViewById(R.id.problem_item_list);
-            if (!filter && problemItems.size() == 0){
+            //no es un filtro, la lista esta vacia y hubo error conexion a la base de datos entonces mostrar error de conexion
+            if (!filter && problemItems.size() == 0 && adapter.getItemCount() == 0 && error){
+                fragment_reference.get().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        fragment_reference.get().findViewById(R.id.connection_error).setVisibility(View.VISIBLE);
+                        fragment_reference.get().findViewById(R.id.table).setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.GONE);
+                        final FloatingActionButton fab = (FloatingActionButton) fragment_reference.get().findViewById(R.id.problems_fab);
+                        fab.setImageResource(R.drawable.sync);
+                    }
+                });
+            }
+            //no es un filtro, la lista obtenida esta vacia y no hubo error entonces no mas problemas
+            else if (!filter && problemItems.size() == 0 && !error){
                 last_page = true;
                 Snackbar.make(fragment_reference.get().findViewById(R.id.problems_coordinator), R.string.no_more_problems, Snackbar.LENGTH_LONG).show();
             }
@@ -401,6 +428,9 @@ public class ProblemsFragment extends Fragment{
                 new_adapter.setProblemItemList(problemItems);
                 recyclerView.swapAdapter(new_adapter, true);
             }
+
+            if (error && problemItems.size() != 0)
+                error = false;
 
             progressDialog.dismiss();
             new ScreenOrientationLocker(fragment_reference.get()).unlock();

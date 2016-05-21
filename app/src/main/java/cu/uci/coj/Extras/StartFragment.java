@@ -51,10 +51,12 @@ public class StartFragment extends Fragment {
     private static final String ARG_PAGE = "page";
     private static final String ARG_LAST_PAGE = "last_page";
     private static final String ARG_ADAPTER = "adapter";
+    private static final String ARG_ERROR = "error";
 
     private static View rootView;
     private static EntriesList adapter;
     private static boolean last_page;
+    private static boolean error = false;
     private static int page;
     private static boolean login = false;
 
@@ -84,6 +86,7 @@ public class StartFragment extends Fragment {
         outState.putSerializable(ARG_ADAPTER, adapter);
         outState.putInt(ARG_PAGE, page);
         outState.putBoolean(ARG_LAST_PAGE, last_page);
+        outState.putBoolean(ARG_ERROR, error);
     }
 
     @Override
@@ -95,9 +98,17 @@ public class StartFragment extends Fragment {
             adapter = (EntriesList) savedInstanceState.getSerializable(ARG_ADAPTER);
             page = savedInstanceState.getInt(ARG_PAGE);
             last_page = savedInstanceState.getBoolean(ARG_LAST_PAGE);
+            error = savedInstanceState.getBoolean(ARG_ERROR);
 
-            RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.entries_item_list);
-            recyclerView.setAdapter(adapter);
+            if (!error){
+                RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.entries_item_list);
+                recyclerView.setAdapter(adapter);
+            }
+            else {
+                getActivity().findViewById(R.id.connection_error).setVisibility(View.VISIBLE);
+                getActivity().findViewById(R.id.input_layout).setVisibility(View.GONE);
+                getActivity().findViewById(R.id.entries_item_list).setVisibility(View.GONE);
+            }
 
         }
         else{
@@ -292,13 +303,15 @@ public class StartFragment extends Fragment {
 
                     if (list != null){
                         last_page = true;
-                        final FragmentActivity activity = fragment_reference.get();
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(fragment_reference.get().getApplicationContext(), R.string.off_line_mode, Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        if (list.size() != 0){
+                            final FragmentActivity activity = fragment_reference.get();
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(fragment_reference.get().getApplicationContext(), R.string.off_line_mode, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
                     }
                 } catch (JSONException e1) {
                     e1.printStackTrace();
@@ -349,14 +362,29 @@ public class StartFragment extends Fragment {
                 new mAsyncTask(fragment_reference.get()).execute();
             }
 
-            RecyclerView recyclerView = (RecyclerView) fragment_reference.get().findViewById(R.id.entries_item_list);
-            if (entriesItems.size() == 0){
+            final RecyclerView recyclerView = (RecyclerView) fragment_reference.get().findViewById(R.id.entries_item_list);
+            adapter = (EntriesList) recyclerView.getAdapter();
+
+            if (entriesItems.size() == 0 && adapter.getItemCount() == 0){
+                error = true;
+
+                final Activity activity = fragment_reference.get();
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        activity.findViewById(R.id.connection_error).setVisibility(View.VISIBLE);
+                        activity.findViewById(R.id.input_layout).setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.GONE);
+                    }
+                });
+
+            }
+            else if (entriesItems.size() == 0){
                 Snackbar.make(fragment_reference.get().findViewById(R.id.home_coordinator), R.string.no_more_entries_error, Snackbar.LENGTH_LONG)
                         .setAction(null, null).show();
             }
             else {
 
-                adapter = (EntriesList) recyclerView.getAdapter();
                 adapter.addAll(entriesItems);
                 recyclerView.swapAdapter(adapter, false);
 

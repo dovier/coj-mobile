@@ -625,6 +625,16 @@ public class Conexion {
             case 200: {
                 JSONArray mJsonArray = new JSONArray(resp);
 
+                if (login && mJsonArray.length() != 0){
+                    try {
+                        mJsonArray.getJSONObject(0).getBoolean("favorite");
+                    }
+                    catch (JSONException e){
+                        getNewToken(context);
+                        return getProblemsItem(context, url, login);
+                    }
+                }
+
                 for (int i = 0; i < mJsonArray.length(); i++) {
 
                     result.add(new ProblemItem(mJsonArray.getJSONObject(i)));
@@ -641,13 +651,11 @@ public class Conexion {
                 switch (error){
                     case "token expirated": {
                         getNewToken(context);
-                        getProblemsItem(context, url, login);
-                        break;
+                        return getProblemsItem(context, url, login);
                     }
                     case "token or apikey incorrect": {
                         getNewToken(context);
-                        getProblemsItem(context, url, login);
-                        break;
+                        return getProblemsItem(context, url, login);
                     }
                     default: {
                         throw new IOException("Unexpected code " + error);
