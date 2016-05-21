@@ -21,6 +21,7 @@ import java.util.List;
 
 import cu.uci.coj.Conexion;
 import cu.uci.coj.Exceptions.NoLoginFileException;
+import cu.uci.coj.Exceptions.UnauthorizedException;
 import cu.uci.coj.LoginData;
 import cu.uci.coj.R;
 import cu.uci.coj.Status;
@@ -83,20 +84,15 @@ public class ProblemList extends RecyclerView.Adapter<ProblemList.ViewHolder> im
                 public void onClick(View view) {
                     //onclick del favorito
 
-                    try {
-                        String token = LoginData.read(holder.itemView.getContext()).getToken();
-                        if (problemItemList.get(position).isFav()){
-                            new mAsyncTask(activity, (int)holder.mItem.getLongId(), token, false).execute();
-                            holder.fav.setImageResource(android.R.drawable.btn_star_big_off);
-                            problemItemList.get(position).setFav();
-                        }
-                        else {
-                            new mAsyncTask(activity, (int)holder.mItem.getLongId(), token, true).execute();
-                            holder.fav.setImageResource(android.R.drawable.btn_star_big_on);
-                            problemItemList.get(position).setFav();
-                        }
-                    } catch (NoLoginFileException e) {
-                        e.printStackTrace();
+                    if (problemItemList.get(position).isFav()){
+                        new mAsyncTask(activity, (int)holder.mItem.getLongId(), false).execute();
+                        holder.fav.setImageResource(android.R.drawable.btn_star_big_off);
+                        problemItemList.get(position).setFav();
+                    }
+                    else {
+                        new mAsyncTask(activity, (int)holder.mItem.getLongId(), true).execute();
+                        holder.fav.setImageResource(android.R.drawable.btn_star_big_on);
+                        problemItemList.get(position).setFav();
                     }
 
                 }
@@ -177,14 +173,12 @@ public class ProblemList extends RecyclerView.Adapter<ProblemList.ViewHolder> im
     public static class mAsyncTask extends AsyncTask<Void, Void, Void>{
 
         protected int id;
-        protected String token;
         protected boolean favorite;
         protected WeakReference<FragmentActivity> fragment_reference;
 
-        public mAsyncTask(FragmentActivity activity, int id, String token, boolean favorite) {
-            this.fragment_reference = new WeakReference<FragmentActivity>(activity);
+        public mAsyncTask(FragmentActivity activity, int id, boolean favorite) {
+            this.fragment_reference = new WeakReference<>(activity);
             this.id = id;
-            this.token = token;
             this.favorite = favorite;
         }
 
@@ -192,8 +186,8 @@ public class ProblemList extends RecyclerView.Adapter<ProblemList.ViewHolder> im
         protected Void doInBackground(Void... voids) {
 
             try {
-                Conexion.getInstance(fragment_reference.get()).toggleFavorite(id, token);
-            } catch (IOException | JSONException e) {
+                Conexion.getInstance(fragment_reference.get()).toggleFavorite(fragment_reference.get(), id);
+            } catch (IOException | JSONException | NoLoginFileException | UnauthorizedException e) {
                 e.printStackTrace();
             }
 

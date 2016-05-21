@@ -5,6 +5,8 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
+import cu.uci.coj.Conexion;
+
 /**
  * Created by osvel on 4/24/16.
  */
@@ -70,14 +72,6 @@ public class UserProfile implements Serializable{
     public String getUserName() {
         return userName;
     }
-
-//    public String getSex() {
-//        return sex;
-//    }
-
-//    public String getCountry_code() {
-//        return country;
-//    }
 
     public String getInstitution() {
         return institution;

@@ -79,7 +79,7 @@ public class PreviousContestFragment extends Fragment {
         else{
             adapter = new ContestListItem(new ArrayList<Contest>());
             recyclerView.setAdapter(adapter);
-            new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).URL_CONTEST_PAST);
+            new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).getURL_CONTEST_PAST());
         }
 
     }
@@ -131,7 +131,7 @@ public class PreviousContestFragment extends Fragment {
             snackbar.setAction(R.string.reload, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new mAsyncTask(fragment_reference.get()).execute(Conexion.getInstance(fragment_reference.get()).URL_CONTEST_PAST);
+                    new mAsyncTask(fragment_reference.get()).execute(Conexion.getInstance(fragment_reference.get()).getURL_CONTEST_PAST());
                 }
             });
             snackbar.show();

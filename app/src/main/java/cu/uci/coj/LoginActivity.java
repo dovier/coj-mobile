@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 view.getContext().startActivity(
-                        new Intent(Intent.ACTION_VIEW, Uri.parse(Conexion.getInstance(getApplicationContext()).URL_CREATE_ACCOUNT)));
+                        new Intent(Intent.ACTION_VIEW, Uri.parse(Conexion.getInstance(getApplicationContext()).getURL_CREATE_ACCOUNT())));
             }
         });
 

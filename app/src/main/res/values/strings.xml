@@ -25,7 +25,7 @@
     <string name="must_logged_in">Must be logged in</string>
     <string name="empty_recipient">Empty recipient</string>
     <string name="empty_fields_short">Empty fields</string>
-    <string name="empty_fields">Empty message or subject. Send it anyway?</string>
+    <string name="empty_fields">Empty fields. Send it anyway?</string>
     <string name="empty_fields_error">Message or subject must not be empty</string>
     <string name="send_ok">Sent successful</string>
     <string name="delete_ok">Successful deleted</string>

@@ -209,8 +209,11 @@ public class ProfileFragment extends Fragment {
 
             final int dim = (int)view.getResources().getDimension(R.dimen.avatar_size);
 
+            String image = userProfile.getAvatar();
+            image = image.replace("http://coj.uci.cu", Conexion.getInstance(context).getIMAGE_URL());
+
             Picasso.with(view)
-                    .load(userProfile.getAvatar())
+                    .load(image)
                     .resize(dim, dim)
                     .transform(transformation)
                     .into(avatar, new Callback() {

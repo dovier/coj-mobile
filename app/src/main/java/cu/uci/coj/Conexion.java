@@ -3,14 +3,12 @@ package cu.uci.coj;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Patterns;
-import android.webkit.URLUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,65 +44,62 @@ public class Conexion {
     public static Conexion conexion = null;
 
     public final static String DEFAULT_COJ_URL = "http://coj.uci.cu";
-    public String COJ_URL;
-    public String API_URL = "/api";
+    private String COJ_URL;
 
-    public String API_KEY = "nTBitFVbpDrdeBa7Ki8vRjSt9z3XE+hAdRHY7XbY9CNvV9p5G/KnxZoTLGOu/gs5Wp/5ABt5S+AzX8gvtIdz9eNH149cw5lncunoeULJhehGY2v3aC6B7Rp+s6MmK6JCdBP/vjbPfGWuJyGfIw3iPxSeQrW987rKRRYEN//lAkgYBJMCgE/Ei+U0QdHlLqvd";
+    private String API_KEY = "nTBitFVbpDrdeBa7Ki8vRjSt9z3XE+hAdRHY7XbY9CNvV9p5G/KnxZoTLGOu/gs5Wp/5ABt5S+AzX8gvtIdz9eNH149cw5lncunoeULJhehGY2v3aC6B7Rp+s6MmK6JCdBP/vjbPfGWuJyGfIw3iPxSeQrW987rKRRYEN//lAkgYBJMCgE/Ei+U0QdHlLqvd";
 
-    public String IMAGE_URL = COJ_URL;
+    private String IMAGE_URL;
 
-    public String URL_CREATE_ACCOUNT = COJ_URL + "/user/createnewaccount.xhtml";
-    public String URL_FORGOT_PASSWORD = COJ_URL + API_URL + "/private/forgottenpassword";
+    private String URL_CREATE_ACCOUNT;
+    private String URL_FORGOT_PASSWORD;
 
-    public String URL_GENERATE_API = COJ_URL + API_URL + "/private/generateapi";
-    public String URL_LOGIN = COJ_URL + API_URL + "/private/login";
+    private String URL_GENERATE_API;
+    private String URL_LOGIN;
 
-    public String URL_MAIL = COJ_URL + API_URL + "/mail";
-    public String URL_MAIL_INBOX = URL_MAIL + "/inbox";
-    public String URL_MAIL_OUTBOX = URL_MAIL + "/outbox";
-    public String URL_MAIL_DRAFT = URL_MAIL + "/draft";
-    public String URL_MAIL_DELETE = URL_MAIL + "/delete";
-    public String URL_MAIL_SEND = URL_MAIL + "/send";
-    public String URL_MAIL_TOGGLE_STATUS = URL_MAIL + "/toggle/status/";
+    private String URL_MAIL_INBOX;
+    private String URL_MAIL_OUTBOX;
+    private String URL_MAIL_DRAFT;
+    private String URL_MAIL_DELETE;
+    private String URL_MAIL_SEND;
+    private String URL_MAIL_TOGGLE_STATUS;
 
-    public String URL_PROBLEM_PAGE = COJ_URL + API_URL + "/problem/page/";
-    public String URL_PROBLEM = COJ_URL + API_URL + "/problem/";
-    public String URL_PROBLEM_FILTER = COJ_URL + API_URL + "/problem?";
-    public String URL_TOGGLE_FAVORITE = URL_PROBLEM + "togglefavorite/";
+    private String URL_PROBLEM_PAGE;
+    private String URL_PROBLEM;
+    private String URL_PROBLEM_FILTER;
+    private String URL_TOGGLE_FAVORITE;
 
-    public String URL_RANKING_BY_USER = COJ_URL + API_URL + "/ranking/byuser/page/";
-    public String URL_RANKING_BY_INSTITUTION = COJ_URL + API_URL + "/ranking/byinstitution/page/";
-    public String URL_RANKING_BY_COUNTRY = COJ_URL + API_URL + "/ranking/bycountry";
-    public String URL_RANKING_BY_COUNTRY_PAGE = URL_RANKING_BY_COUNTRY + "/page/";
-    public String URL_RANKING_INSTITUTION_BY_COUNTRY = COJ_URL + API_URL + "/ranking/institutionbycountry/";
+    private String URL_RANKING_BY_USER;
+    private String URL_RANKING_BY_INSTITUTION;
+    private String URL_RANKING_BY_COUNTRY;
+    private String URL_RANKING_BY_COUNTRY_PAGE;
+    private String URL_RANKING_INSTITUTION_BY_COUNTRY;
 
-    public String URL_CONTEST_NEXT = COJ_URL + API_URL + "/contest/next";
-    public String URL_CONTEST_RUNNING = COJ_URL + API_URL + "/contest/running";
-    public String URL_CONTEST_PAST = COJ_URL + API_URL + "/contest/past";
-    public String URL_CONTEST_DETAIL = COJ_URL + API_URL + "/contest/";
+    private String URL_CONTEST_NEXT;
+    private String URL_CONTEST_RUNNING;
+    private String URL_CONTEST_PAST;
+    private String URL_CONTEST_DETAIL;
 
-    public String URL_FILTER_CLASSIFICATION = COJ_URL + API_URL +"/filter/classifications";
-    public String URL_FILTER_LANGUAGE = COJ_URL + API_URL +"/filter/languages";
+    private String URL_FILTER_CLASSIFICATION;
+    private String URL_FILTER_LANGUAGE;
 
-    public String URL_COMPARE_USER = COJ_URL + API_URL + "/statistic/compare/";
-    public String URL_USER_PROFILE = COJ_URL + API_URL + "/userprofile/";
-    public String URL_USER_PROFILE_UPDATE = URL_USER_PROFILE + "update";
+    private String URL_COMPARE_USER;
+    private String URL_USER_PROFILE;
+    private String URL_USER_PROFILE_UPDATE;
 
-    public String URL_JUDGMENT_PAGE = COJ_URL + API_URL + "/judgment/page/";
-    public String URL_JUDGMENT_SUBMIT = COJ_URL + API_URL + "/judgment/submit";
-    public String URL_JUDGMENT_BEST_SOLUTIONS = COJ_URL + API_URL + "/judgment/best/";
-    public String URL_JUDGMENT_FILTER = COJ_URL + API_URL + "/judgment?";
+    private String URL_JUDGMENT_PAGE;
+    private String URL_JUDGMENT_SUBMIT;
+    private String URL_JUDGMENT_BEST_SOLUTIONS;
+    private String URL_JUDGMENT_FILTER;
 
-    public String URL_WELCOME_PAGE = COJ_URL + API_URL + "/extras/entry/";
-    public String URL_ADD_ENTRY = COJ_URL + API_URL + "/extras/entry";
-    public String URL_FAQ = COJ_URL + API_URL + "/extras/faq";
+    private String URL_WELCOME_PAGE;
+    private String URL_ADD_ENTRY;
+    private String URL_FAQ;
 
     public final static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private void generateURLs(){
-        API_URL = "/api";
 
-        API_KEY = "nTBitFVbpDrdeBa7Ki8vRjSt9z3XE+hAdRHY7XbY9CNvV9p5G/KnxZoTLGOu/gs5Wp/5ABt5S+AzX8gvtIdz9eNH149cw5lncunoeULJhehGY2v3aC6B7Rp+s6MmK6JCdBP/vjbPfGWuJyGfIw3iPxSeQrW987rKRRYEN//lAkgYBJMCgE/Ei+U0QdHlLqvd";
+        String API_URL = "/api";
 
         IMAGE_URL = COJ_URL;
 
@@ -114,7 +109,7 @@ public class Conexion {
         URL_GENERATE_API = COJ_URL + API_URL + "/private/generateapi";
         URL_LOGIN = COJ_URL + API_URL + "/private/login";
 
-        URL_MAIL = COJ_URL + API_URL + "/mail";
+        String URL_MAIL = COJ_URL + API_URL + "/mail";
         URL_MAIL_INBOX = URL_MAIL + "/inbox";
         URL_MAIL_OUTBOX = URL_MAIL + "/outbox";
         URL_MAIL_DRAFT = URL_MAIL + "/draft";
@@ -184,35 +179,81 @@ public class Conexion {
 
     }
 
+    public String getCOJ_URL() {
+        return COJ_URL;
+    }
+
+    public String getIMAGE_URL() {
+        return IMAGE_URL;
+    }
+
+    public String getURL_CREATE_ACCOUNT() {
+        return URL_CREATE_ACCOUNT;
+    }
+
+    public String getURL_PROBLEM_PAGE() {
+        return URL_PROBLEM_PAGE;
+    }
+
+    public String getURL_PROBLEM_FILTER() {
+        return URL_PROBLEM_FILTER;
+    }
+
+    public String getURL_CONTEST_NEXT() {
+        return URL_CONTEST_NEXT;
+    }
+
+    public String getURL_CONTEST_RUNNING() {
+        return URL_CONTEST_RUNNING;
+    }
+
+    public String getURL_CONTEST_PAST() {
+        return URL_CONTEST_PAST;
+    }
+
+    public String getURL_JUDGMENT_PAGE() {
+        return URL_JUDGMENT_PAGE;
+    }
+
+    public String getURL_JUDGMENT_BEST_SOLUTIONS() {
+        return URL_JUDGMENT_BEST_SOLUTIONS;
+    }
+
+    public String getURL_JUDGMENT_FILTER() {
+        return URL_JUDGMENT_FILTER;
+    }
+
     /**
      * Get ApiKey for identify programmer in API services.
      *
      * @return ApiKey
      * @throws IOException
      */
-    public String getApiKey() throws IOException {
-
-        String jsonApi =
-                "{" +
-                "\"username\" : \"Jaco\"," +
-                "\"password\" : \"jacomino123\"" +
-                "}";
-
-        OkHttpClient client = new OkHttpClient();
-
-        RequestBody body = RequestBody.create(JSON, jsonApi);
-        Request request = new Request.Builder()
-                .url(URL_GENERATE_API)
-                .post(body)
-                .build();
-        Response response = client.newCall(request).execute();
-
-        if (!response.isSuccessful())
-            throw new IOException("Unexpected code " + response);
-
-        return response.body().string();
-
-    }
+//    public String getApiKey() throws IOException, JSONException {
+//
+//        String jsonApi =
+//                "{" +
+//                "\"username\" : \"Jaco\"," +
+//                "\"password\" : \"jacomino123\"" +
+//                "}";
+//
+//        OkHttpClient client = new OkHttpClient();
+//
+//        RequestBody body = RequestBody.create(JSON, jsonApi);
+//        Request request = new Request.Builder()
+//                .url(URL_GENERATE_API)
+//                .post(body)
+//                .build();
+//        Response response = client.newCall(request).execute();
+//
+//        if (!response.isSuccessful())
+//            throw new IOException("Unexpected code " + response);
+//
+//        JSONObject jsonObject = new JSONObject(response.body().string());
+//
+//        return jsonObject.getString("apikey");
+//
+//    }
 
     /**
      * Request for new login token when expired
@@ -255,6 +296,10 @@ public class Conexion {
      * @throws JSONException
      */
     public String login(Context context, String user, String pswd) throws IOException, JSONException, UnauthorizedException {
+
+        System.out.println("lol username: "+user);
+        System.out.println("lol pswd: " + pswd);
+        System.out.println("lol apikey: " + API_KEY);
 
         //eliminar del disco cualquier intento de login anterior excepto en caso de IOException (no hay coneccion)
         LoginData oldLoginData = null;
@@ -595,10 +640,12 @@ public class Conexion {
                 String error = new JSONObject(resp).getString("error");
                 switch (error){
                     case "token expirated": {
+                        getNewToken(context);
                         getProblemsItem(context, url, login);
                         break;
                     }
                     case "token or apikey incorrect": {
+                        getNewToken(context);
                         getProblemsItem(context, url, login);
                         break;
                     }
@@ -617,14 +664,16 @@ public class Conexion {
     /**
      * Select favorite problem or not favorite.
      *
+     * @param context application context
      * @param id problem id
-     * @param token user token
      *
      * @return operation successful or not
      * @throws IOException
      * @throws JSONException
      */
-    public boolean toggleFavorite(int id, String token) throws IOException, JSONException {
+    public boolean toggleFavorite(Context context, int id) throws IOException, JSONException, UnauthorizedException, NoLoginFileException {
+
+        String token = LoginData.read(context).getToken();
 
         Request request = new Request.Builder()
                 .header("apikey", API_KEY)
@@ -647,9 +696,11 @@ public class Conexion {
                 String error = new JSONObject(response.body().string()).getString("error");
                 switch (error){
                     case "token expirated": {
+                        getNewToken(context);
                         throw new InvalidTokenException();
                     }
                     case "token or apikey incorrect":{
+                        getNewToken(context);
                         throw new InvalidTokenException();
                     }
                 }

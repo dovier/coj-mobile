@@ -114,7 +114,7 @@ public class ProblemsFragment extends Fragment{
 
             consultDB = true;
             adapter = new ProblemList(new ArrayList<ProblemItem>(), login);
-            new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).URL_PROBLEM_PAGE + page++);
+            new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).getURL_PROBLEM_PAGE() + page++);
             new classificationFilterAsyncTask(getActivity()).execute();
 
         }
@@ -161,7 +161,7 @@ public class ProblemsFragment extends Fragment{
                     int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
                     if (lastVisibleItemPosition != RecyclerView.NO_POSITION && lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 1 && dy > 10) {
 
-                        new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).URL_PROBLEM_PAGE + page++);
+                        new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).getURL_PROBLEM_PAGE() + page++);
 
                     }
                 }
@@ -185,7 +185,7 @@ public class ProblemsFragment extends Fragment{
                     page = 1;
                     last_page = false;
                     adapter = new ProblemList(new ArrayList<ProblemItem>(), login);
-                    new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).URL_PROBLEM_PAGE + page++);
+                    new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).getURL_PROBLEM_PAGE() + page++);
                     new classificationFilterAsyncTask(getActivity()).execute();
                 }
             }
@@ -232,7 +232,7 @@ public class ProblemsFragment extends Fragment{
 
                 filter = true;
                 if (url.length() != 0)
-                    new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).URL_PROBLEM_FILTER + url);
+                    new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).getURL_PROBLEM_FILTER() + url);
             }
         });
 

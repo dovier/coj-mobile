@@ -118,7 +118,7 @@
     <string name="drafts">Papelera</string>
     <string name="edit">Editar</string>
     <string name="email">Correo electrónico</string>
-    <string name="empty_fields">Mensaje o asunto vacios. ¿Desea enviar?</string>
+    <string name="empty_fields">Posee campos vacios ¿Desea enviar?</string>
     <string name="empty_fields_error">El mensaje y el asunto no deben estar vacios</string>
     <string name="empty_fields_short">Campos incorrectos</string>
     <string name="empty_password">Contraseña incorrecta</string>
@@ -224,7 +224,7 @@
     <string name="upload">Cargar archivo</string>
     <string name="user_passwd_error">Usuario o contraseña incorrectos</string>
     <string name="wait_few_seconds">Espere unos segundos y revise su correo electrónico</string>
-    <string name="server_preference">Configuracón del servidor</string>
+    <string name="server_preference">Configuración del servidor</string>
     <string name="server_name">Nombre del servidor</string>
     <string name="invalid_server">Servidor incorrecto</string>
     <string name="restart_application">Debe reiniciar la aplicación</string>

@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -44,6 +45,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+import cu.uci.coj.Behaviors.FloatingActionButtonBehavior;
 import cu.uci.coj.Conexion;
 import cu.uci.coj.DataBaseManager;
 import cu.uci.coj.Image;
@@ -120,6 +122,13 @@ public class ProblemFragment extends Fragment {
             else{
                 rootView.findViewById(R.id.problem_description_scroll).setVisibility(View.GONE);
                 rootView.findViewById(R.id.connection_error).setVisibility(View.VISIBLE);
+
+                FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.problem_description_fab);
+                CoordinatorLayout.LayoutParams fabLayoutParams = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+                FloatingActionButtonBehavior behavior = new FloatingActionButtonBehavior(false);
+                fabLayoutParams.setBehavior(behavior);
+                fab.setLayoutParams(fabLayoutParams);
+                fab.setVisibility(View.GONE);
             }
         }
         else {
@@ -310,7 +319,7 @@ public class ProblemFragment extends Fragment {
                     if (url != null){
                         if (url.startsWith("/")){
                             view.getContext().startActivity(
-                                new Intent(Intent.ACTION_VIEW, Uri.parse(Conexion.getInstance(context).COJ_URL + url)));
+                                new Intent(Intent.ACTION_VIEW, Uri.parse(Conexion.getInstance(context).getCOJ_URL() + url)));
                             return true;
                         }
                         else {
@@ -329,13 +338,11 @@ public class ProblemFragment extends Fragment {
         }
         if (split_text[1]  != null){
             final ImageView imageView = new ImageView(context);
-//            final ImageView imageView = new ImageView(rootView.getContext());
             layout.addView(imageView);
             imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
             Picasso.with(context)
-//            Picasso.with(rootView.getContext())
-                    .load(Conexion.getInstance(context).IMAGE_URL + split_text[1])
+                    .load(Conexion.getInstance(context).getIMAGE_URL() + split_text[1])
                     .into(imageView, new Callback() {
                         @Override
                         public void onSuccess() {
@@ -616,6 +623,23 @@ public class ProblemFragment extends Fragment {
         @Override
         protected void onCancelled() {
             //invocar el callback para salir del fragment que dio error
+
+            final FragmentActivity activity = fragment_reference.get();
+
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    activity.findViewById(R.id.problem_description_scroll).setVisibility(View.GONE);
+                    activity.findViewById(R.id.connection_error).setVisibility(View.VISIBLE);
+
+                    FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.problem_description_fab);
+                    CoordinatorLayout.LayoutParams fabLayoutParams = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+                    FloatingActionButtonBehavior behavior = new FloatingActionButtonBehavior(false);
+                    fabLayoutParams.setBehavior(behavior);
+                    fab.setLayoutParams(fabLayoutParams);
+                    fab.setVisibility(View.GONE);
+                }
+            });
 
             progressDialog.dismiss();
             connectionError = true;

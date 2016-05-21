@@ -139,7 +139,7 @@ public class ComposeMessage extends Fragment {
                 }
                 else {
                     if (subject.length() == 0 && content.length() == 0){
-                        Toast.makeText(getContext(), getResources().getString(R.string.empty_recipient), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.empty_fields_error), Toast.LENGTH_LONG).show();
                     }
                     else if (subject.length() == 0 || content.length() == 0){
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());

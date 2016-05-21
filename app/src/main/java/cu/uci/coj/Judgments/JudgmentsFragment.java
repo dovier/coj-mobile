@@ -103,7 +103,7 @@ public class JudgmentsFragment extends Fragment {
         else {
 
             adapter = new JudgmentList(new ArrayList<Judgment>());
-            new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).URL_JUDGMENT_PAGE + page++);
+            new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).getURL_JUDGMENT_PAGE() + page++);
             new languagesFilterAsyncTask(getActivity()).execute();
 
         }
@@ -137,7 +137,7 @@ public class JudgmentsFragment extends Fragment {
                     int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
                     if (lastVisibleItemPosition != RecyclerView.NO_POSITION && lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 1) {
 
-                        new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).URL_JUDGMENT_PAGE + page++);
+                        new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).getURL_JUDGMENT_PAGE() + page++);
 
                     }
                 }
@@ -152,7 +152,7 @@ public class JudgmentsFragment extends Fragment {
             public void onClick(View view) {
                 if (consult_db){
                     page = 1;
-                    new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).URL_JUDGMENT_PAGE + page++);
+                    new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).getURL_JUDGMENT_PAGE() + page++);
                 }
                 else
                     buildFilterMessage();
@@ -202,7 +202,7 @@ public class JudgmentsFragment extends Fragment {
 
                 filter = true;
                 if (url.length() != 0)
-                    new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).URL_JUDGMENT_FILTER + url);
+                    new mAsyncTask(getActivity()).execute(Conexion.getInstance(getContext()).getURL_JUDGMENT_FILTER() + url);
             }
         });
 
