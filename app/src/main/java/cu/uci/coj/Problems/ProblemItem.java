@@ -58,7 +58,7 @@ public class ProblemItem implements Serializable{
         submit = JSONObject.getInt("sub");
         accept = JSONObject.getInt("ac");
         accept_percent = JSONObject.getInt("acporciento");
-        score = JSONObject.getInt("score");
+        score = JSONObject.getDouble("score");
         images = new ArrayList<>();
     }
 
