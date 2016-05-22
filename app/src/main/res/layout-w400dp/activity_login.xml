@@ -11,17 +11,19 @@
     tools:context="cu.uci.coj.LoginActivity">
 
     <ImageView
+        android:id="@+id/coj_logo"
         android:layout_weight="100"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:scaleType="fitCenter"
+        android:foregroundGravity="center"
         android:layout_gravity="center"
-        android:padding="@dimen/activity_vertical_margin"
         android:src="@drawable/coj_logo"/>
 
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
+        android:visibility="invisible"
         android:layout_height="wrap_content">
 
         <LinearLayout

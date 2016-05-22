@@ -14,8 +14,15 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewParent;
+import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +46,25 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        ImageView coj_logo = (ImageView) findViewById(R.id.coj_logo);
+
+        TranslateAnimation translate = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF,
+                0, Animation.RELATIVE_TO_PARENT, 0.3f, Animation.RELATIVE_TO_SELF, 0);
+        translate.setStartOffset(500);
+        translate.setDuration(1000);
+
+        coj_logo.startAnimation(translate);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        AlphaAnimation alpha = new AlphaAnimation(0, 1);
+        alpha.setStartOffset(1400);
+        alpha.setDuration(400);
+
+        ScrollView login = (ScrollView) findViewById(R.id.login_form);
+        login.startAnimation(alpha);
+        login.setVisibility(View.VISIBLE);
 
         // Set up the login form.
         userView = (TextView) findViewById(R.id.coj_user);
