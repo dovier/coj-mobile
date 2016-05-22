@@ -297,10 +297,6 @@ public class Conexion {
      */
     public String login(Context context, String user, String pswd) throws IOException, JSONException, UnauthorizedException {
 
-        System.out.println("lol username: "+user);
-        System.out.println("lol pswd: " + pswd);
-        System.out.println("lol apikey: " + API_KEY);
-
         //eliminar del disco cualquier intento de login anterior excepto en caso de IOException (no hay coneccion)
         LoginData oldLoginData = null;
         try {
@@ -670,6 +666,9 @@ public class Conexion {
                         throw new IOException("Unexpected code " + error);
                     }
                 }
+            }
+            case 404: {
+                return result;
             }
             default: {
                 String error = new JSONObject(resp).getString("error");
