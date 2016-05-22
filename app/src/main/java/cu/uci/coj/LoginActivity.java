@@ -51,16 +51,16 @@ public class LoginActivity extends AppCompatActivity {
 
         TranslateAnimation translate = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF,
                 0, Animation.RELATIVE_TO_PARENT, 0.3f, Animation.RELATIVE_TO_SELF, 0);
-        translate.setStartOffset(500);
-        translate.setDuration(1000);
+        translate.setStartOffset(400);
+        translate.setDuration(700);
 
         coj_logo.startAnimation(translate);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         AlphaAnimation alpha = new AlphaAnimation(0, 1);
-        alpha.setStartOffset(1400);
-        alpha.setDuration(400);
+        alpha.setStartOffset(1000);
+        alpha.setDuration(300);
 
         ScrollView login = (ScrollView) findViewById(R.id.login_form);
         login.startAnimation(alpha);
