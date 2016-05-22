@@ -2,6 +2,7 @@ package cu.uci.coj;
 
 import android.support.v4.app.Fragment;
 import android.test.ActivityInstrumentationTestCase2;
+import android.text.LoginFilter;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -59,8 +60,9 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
     public void testGetEntry(){
 
         List<EntriesItem> entries = null;
+        Conexion conexion = Conexion.getInstance(activity);
+
         try {
-            Conexion conexion = Conexion.getInstance(activity);
             entries = conexion.getEntries(2);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
@@ -442,6 +444,27 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
         Fragment fragment = startFragment(ProblemFragment.newInstance(problemsItem.get(0), false));
         TextView submit = (TextView)fragment.getActivity().findViewById(R.id.submit);
         assertEquals(submit.getVisibility(), View.GONE);
+
+    }
+
+    public void testReadLoginFile(){
+
+        String message = "";
+        LoginData login;
+        try {
+            login = LoginData.read(activity);
+        } catch (NoLoginFileException e) {
+            e.printStackTrace();
+            message = e.getMessage();
+            login = null;
+        }
+
+        if (login != null){
+            assertEquals(message, new NoLoginFileException().getMessage());
+        }
+        else {
+            assertEquals(message, "");
+        }
 
     }
 }
