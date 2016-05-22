@@ -2,7 +2,6 @@ package cu.uci.coj;
 
 import android.support.v4.app.Fragment;
 import android.test.ActivityInstrumentationTestCase2;
-import android.text.LoginFilter;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -55,7 +54,6 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
 
         return activity.getSupportFragmentManager().findFragmentByTag("tag");
     }
-
 
     public void testGetEntry(){
 
@@ -428,7 +426,6 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
     }
 
     public void testProblemViewNoLogin(){
-
 
         Conexion conexion = Conexion.getInstance(activity);
 
