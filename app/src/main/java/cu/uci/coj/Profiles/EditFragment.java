@@ -254,8 +254,6 @@ public class EditFragment extends Fragment {
 
             final FragmentActivity activity = fragment_reference.get();
 
-            System.out.println("lol "+message);
-
             if (message != null)
                 Toast.makeText(activity, activity.getResources().getString(R.string.update_error)+": "+message, Toast.LENGTH_LONG).show();
             else

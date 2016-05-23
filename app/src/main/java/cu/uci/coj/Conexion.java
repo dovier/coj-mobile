@@ -910,9 +910,6 @@ public class Conexion {
 
         String url = "?apikey=" + URLEncoder.encode(API_KEY, "UTF-8") + "&token=" + URLEncoder.encode(token, "UTF-8");
 
-        System.out.println("lol API_KEY "+API_KEY);
-        System.out.println("lol TOKEN "+token);
-
         boolean someValue = false;
 
         if (nickName.length() != 0){
