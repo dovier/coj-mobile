@@ -7,10 +7,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.HandlerThread;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -135,7 +137,7 @@ public class EmailDetailedFragment extends Fragment {
             public void onClick(View view) {
                 getFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right)
-                        .replace(R.id.container, ComposeMessage.newInstance(0, "Fwd: "+email.getSubject(), email.getContent()))
+                        .replace(R.id.container, ComposeMessage.newInstance(0, "Fwd: "+ email.getSubject(), Html.fromHtml(email.getContent()).toString()))
                         .addToBackStack(null)
                         .commit();
             }

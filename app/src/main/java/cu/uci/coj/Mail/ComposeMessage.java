@@ -255,17 +255,13 @@ public class ComposeMessage extends Fragment {
                     }
                 });
 
-            } catch (NoLoginFileException e) {
-                System.out.println("lol noLogin");
-                e.printStackTrace();
-            } catch (IOException e) {
-                System.out.println("lol no network");
-                e.printStackTrace();
-            } catch (JSONException e) {
-                System.out.println("lol JsonException");
-                e.printStackTrace();
-            } catch (UnauthorizedException e) {
-                System.out.println("lol unauthorized");
+            } catch (final NoLoginFileException | IOException | UnauthorizedException | JSONException e) {
+                fragment_reference.get().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(fragment_reference.get(), R.string.send_error + ": " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
                 e.printStackTrace();
             }
 
