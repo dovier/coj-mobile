@@ -252,6 +252,12 @@ public class ComposeMessage extends Fragment {
                     @Override
                     public void run() {
                         Toast.makeText(fragment_reference.get(), R.string.send_ok, Toast.LENGTH_LONG).show();
+                        fragment_reference.get().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                fragment_reference.get().getSupportFragmentManager().popBackStack();
+                            }
+                        });
                     }
                 });
 
