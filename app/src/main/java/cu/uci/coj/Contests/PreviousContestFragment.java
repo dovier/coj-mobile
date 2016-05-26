@@ -202,7 +202,13 @@ public class PreviousContestFragment extends Fragment {
                         DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get().getApplicationContext());
                         dataBaseManager.deleteAllPreviousContest();
                         for (int i = 0; i < contests.size(); i++) {
-                            dataBaseManager.insertPreviousContest(contests.get(i));
+                            try {
+                                dataBaseManager.insertPreviousContest(contests.get(i));
+                            }
+                            catch (IllegalStateException e){
+                                e.printStackTrace();
+                                break;
+                            }
                         }
                         dataBaseManager.closeDbConnections();
                     }
