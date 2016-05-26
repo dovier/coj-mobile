@@ -7,8 +7,8 @@
     <string name="action_faq">FAQ</string>
     <string name="action_login">Login</string>
     <string name="action_filter">Filter</string>
-    <string name="caribbean_online_judge">Caribbean Online Judge</string>
-    <string name="thinking_better">Thinking better!!</string>
+    <string name="caribbean_online_judge" translatable="false">Caribbean Online Judge</string>
+    <string name="thinking_better" translatable="false">Thinking better!!</string>
     <string name="profile">Profile</string>
     <string name="archive">24 hour archive</string>
     <string name="contests">Real contests</string>
