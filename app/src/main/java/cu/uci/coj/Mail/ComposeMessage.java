@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
+import android.text.Html;
+import android.text.Spanned;
+import android.text.SpannedString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.net.HttpRetryException;
 
 import cu.uci.coj.Conexion;
 import cu.uci.coj.Exceptions.NoLoginFileException;
@@ -111,7 +115,7 @@ public class ComposeMessage extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_compose_mensage, container, false);
@@ -123,7 +127,7 @@ public class ComposeMessage extends Fragment {
             ((TextView) rootView.findViewById(R.id.subject_editText)).setText(subject);
         }
         if (content != null){
-            ((TextView) rootView.findViewById(R.id.message_editText)).setText(content);
+            ((TextView) rootView.findViewById(R.id.message_editText)).setText(Html.fromHtml(content));
         }
 
         ImageView send = (ImageView) rootView.findViewById(R.id.send_mail);
@@ -132,7 +136,8 @@ public class ComposeMessage extends Fragment {
             public void onClick(View view) {
                 final String to = ((TextView)rootView.findViewById(R.id.to_editText)).getText().toString();
                 final String subject = ((TextView)rootView.findViewById(R.id.subject_editText)).getText().toString();
-                final String content = ((TextView)rootView.findViewById(R.id.message_editText)).getText().toString();
+                Spanned spanned = ((TextView)rootView.findViewById(R.id.message_editText)).getEditableText();
+                final String content = Html.toHtml(spanned);
 
                 if (to.length() == 0){
                     Toast.makeText(getContext(), getResources().getString(R.string.empty_recipient), Toast.LENGTH_LONG).show();

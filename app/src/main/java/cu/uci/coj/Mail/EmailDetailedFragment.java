@@ -13,6 +13,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar;
 import android.text.Html;
+import android.text.Spanned;
+import android.text.SpannedString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,7 +109,10 @@ public class EmailDetailedFragment extends Fragment {
         textView.setText(email.getSubject());
         textView = (TextView)rootView.findViewById(R.id.date);
         textView.setText(email.getStringDate());
+        System.out.println("lol " + email.getContent());
+        Spanned spanned = new SpannedString(email.getContent());
         WebView webView = (WebView)rootView.findViewById(R.id.content);
+//        webView.loadData(Html.toHtml(spanned), "text/html; charset=utf-8", null);
         webView.loadData(email.getContent(), "text/html; charset=utf-8", null);
 
         ImageView imageView = (ImageView) rootView.findViewById(R.id.delete);
@@ -137,7 +142,7 @@ public class EmailDetailedFragment extends Fragment {
             public void onClick(View view) {
                 getFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right)
-                        .replace(R.id.container, ComposeMessage.newInstance(0, "Fwd: "+ email.getSubject(), Html.fromHtml(email.getContent()).toString()))
+                        .replace(R.id.container, ComposeMessage.newInstance(0, "Fwd: " + email.getSubject(), email.getContent()))
                         .addToBackStack(null)
                         .commit();
             }

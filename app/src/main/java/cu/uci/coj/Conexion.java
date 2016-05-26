@@ -1205,17 +1205,17 @@ public class Conexion {
 
         String token = LoginData.read(context).getToken();
 
-        String jsonApi = "{" +
-                "  \"content\": \""+content+"\"," +
-                "  \"to\": \""+to+"\"," +
-                "  \"token\": \""+token+"\"," +
-                "  \"apikey\": \""+API_KEY+"\"," +
-                "  \"subject\": \""+subject+"\"" +
-                "}";
+        JSONObject json = new JSONObject();
+
+        json.put("content", content);
+        json.put("to", to);
+        json.put("token", token);
+        json.put("apikey", API_KEY);
+        json.put("subject", subject);
 
         OkHttpClient client = new OkHttpClient();
 
-        RequestBody body = RequestBody.create(JSON, jsonApi);
+        RequestBody body = RequestBody.create(JSON, json.toString());
         Request request = new Request.Builder()
                 .url(URL_MAIL_SEND)
                 .post(body)
