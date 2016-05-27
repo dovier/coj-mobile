@@ -195,24 +195,13 @@ public class PreviousContestFragment extends Fragment {
         protected void onPostExecute(final List<Contest> contests) {
 
             if (network){
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get().getApplicationContext());
-                        dataBaseManager.deleteAllPreviousContest();
-                        for (int i = 0; i < contests.size(); i++) {
-                            try {
-                                dataBaseManager.insertPreviousContest(contests.get(i));
-                            }
-                            catch (IllegalStateException e){
-                                e.printStackTrace();
-                                break;
-                            }
-                        }
-                        dataBaseManager.closeDbConnections();
-                    }
-                }).start();
+                DataBaseManager dataBaseManager = DataBaseManager.getInstance(fragment_reference.get().getApplicationContext());
+                dataBaseManager.deleteAllPreviousContest();
+                int size = contests.size() > 50 ? 50 : contests.size();
+                for (int i = 0; i < size; i++) {
+                    dataBaseManager.insertPreviousContest(contests.get(i));
+                }
+                dataBaseManager.closeDbConnections();
             }
 
             if (contests.size() == 0 && network){
