@@ -199,7 +199,7 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
         assertTrue(compare != null);
         assertEquals(compare.sizeSolved_user_1(), 0);
         assertEquals(compare.sizeSolved_user_2(), 0);
-        assertEquals(compare.sizeTried_both(), 10);
+        assertEquals(compare.sizeTried_both(), 12);
         assertEquals(compare.getTried_both(3), "1238");
         assertEquals(compare.getSolved_both(4), "1028");
 
@@ -457,10 +457,10 @@ public class ApplicationTest extends ActivityInstrumentationTestCase2<MainActivi
         }
 
         if (login != null){
-            assertEquals(message, new NoLoginFileException().getMessage());
+            assertEquals(message, "");
         }
         else {
-            assertEquals(message, "");
+            assertEquals(message, new NoLoginFileException().getMessage());
         }
 
     }
