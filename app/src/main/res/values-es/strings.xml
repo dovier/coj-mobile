@@ -124,7 +124,7 @@
     <string name="empty_username">Nombre de usuario incorrecto</string>
     <string name="end">Fin</string>
     <string name="entries_error">Error obteniendo los comentarios</string>
-    <string name="entry_empty">Comentario  incorrecta</string>
+    <string name="entry_empty">Comentario incorrecto</string>
     <string name="entry_error">Error enviando el comentario</string>
     <string name="entry_successful">Comentario enviado correctamente</string>
     <string name="error_field_required">Se requiere este campo</string>

@@ -46,6 +46,7 @@ public class UserStandingItem extends RecyclerView.Adapter<UserStandingItem.View
         try {
             InputStream ims = holder.itemView.getContext().getAssets().open(userRankList.get(position).getCountry()+".png");
             Drawable d = Drawable.createFromStream(ims, null);
+            holder.country.setVisibility(View.VISIBLE);
             holder.country.setImageDrawable(d);
         } catch (IOException e) {
             holder.country.setVisibility(View.INVISIBLE);

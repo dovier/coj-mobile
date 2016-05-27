@@ -42,6 +42,7 @@ public class CountryStandingItem extends RecyclerView.Adapter<CountryStandingIte
         try {
             InputStream ims = holder.itemView.getContext().getAssets().open(countryRankList.get(position).getCountryCode()+".png");
             Drawable d = Drawable.createFromStream(ims, null);
+            holder.country.setVisibility(View.VISIBLE);
             holder.country.setImageDrawable(d);
         } catch (IOException e) {
             holder.country.setVisibility(View.INVISIBLE);
