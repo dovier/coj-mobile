@@ -48,6 +48,7 @@ public class UserStandingItem extends RecyclerView.Adapter<UserStandingItem.View
             Drawable d = Drawable.createFromStream(ims, null);
             holder.country.setImageDrawable(d);
         } catch (IOException e) {
+            holder.country.setVisibility(View.INVISIBLE);
             e.printStackTrace();
         }
 

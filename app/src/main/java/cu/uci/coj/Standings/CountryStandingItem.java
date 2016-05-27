@@ -44,6 +44,7 @@ public class CountryStandingItem extends RecyclerView.Adapter<CountryStandingIte
             Drawable d = Drawable.createFromStream(ims, null);
             holder.country.setImageDrawable(d);
         } catch (IOException e) {
+            holder.country.setVisibility(View.INVISIBLE);
             e.printStackTrace();
         }
 
