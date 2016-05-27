@@ -141,7 +141,7 @@ public class Conexion {
         URL_USER_PROFILE_UPDATE = URL_USER_PROFILE + "update";
 
         URL_JUDGMENT_PAGE = COJ_URL + API_URL + "/judgment/page/";
-        URL_JUDGMENT_SUBMIT = COJ_URL + API_URL + "/judgment/submit";
+        URL_JUDGMENT_SUBMIT = COJ_URL + API_URL + "/judgment/submit/";
         URL_JUDGMENT_BEST_SOLUTIONS = COJ_URL + API_URL + "/judgment/best/";
         URL_JUDGMENT_FILTER = COJ_URL + API_URL + "/judgment?";
 
@@ -1532,21 +1532,16 @@ public class Conexion {
      */
     public String submitSolution(Context context, String id, String keyLanguage, String source) throws NoLoginFileException, JSONException, IOException, UnauthorizedException {
 
-        JSONObject json = new JSONObject();
-
         String token = LoginData.read(context).getToken();
 
-        json.put("apikey", API_KEY);
-        json.put("token", token);
-        json.put("keylanguage", keyLanguage);
-        json.put("pid", id);
-        json.put("source", source);
-
-        RequestBody body = RequestBody.create(JSON, json.toString());
+        RequestBody body = RequestBody.create(JSON, source);
         Request request = new Request.Builder()
-                .url(URL_JUDGMENT_SUBMIT)
+                .header("apikey", API_KEY)
+                .header("token", token)
+                .url(URL_JUDGMENT_SUBMIT + keyLanguage + "/"+id)
                 .post(body)
                 .build();
+
         Response response = new OkHttpClient().newCall(request).execute();
 
         String resp = response.body().string();
