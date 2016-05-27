@@ -22,6 +22,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         alpha.setStartOffset(1000);
         alpha.setDuration(300);
 
-        ScrollView login = (ScrollView) findViewById(R.id.login_form);
+        LinearLayout login = (LinearLayout) findViewById(R.id.email_login_form);
         login.startAnimation(alpha);
         login.setVisibility(View.VISIBLE);
 
