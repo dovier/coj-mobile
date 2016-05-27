@@ -122,6 +122,18 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        if (userProfile != null && user.equals(userProfile.getUserName())){
+            AppBarLayout app_bar = (AppBarLayout) getActivity().findViewById(R.id.app_bar);
+            app_bar.setExpanded(true, true);
+            AppBarLayoutBehavior appBarBehavior = new AppBarLayoutBehavior(true);
+            CoordinatorLayout.LayoutParams appBarLayoutParams = (CoordinatorLayout.LayoutParams) app_bar.getLayoutParams();
+            appBarLayoutParams.setBehavior(appBarBehavior);
+            app_bar.setLayoutParams(appBarLayoutParams);
+            CollapsingToolbarLayout toolbar = (CollapsingToolbarLayout) getActivity().findViewById(R.id.collapsing_toolbar_layout);
+            toolbar.setTitle(userProfile.getUserName());
+        }
+
     }
 
     @Override
