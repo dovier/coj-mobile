@@ -196,14 +196,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 
-        if (login){
-            menu.getItem(1).setVisible(false);
-            menu.getItem(2).setVisible(true);
-        }
-        else {
-            menu.getItem(1).setVisible(true);
-            menu.getItem(2).setVisible(false);
-        }
+        menu.getItem(1).setVisible(!login);
+        menu.getItem(2).setVisible(login);
 
         return super.onPrepareOptionsMenu(menu);
     }

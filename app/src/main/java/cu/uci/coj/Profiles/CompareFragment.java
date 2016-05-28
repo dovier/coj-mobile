@@ -140,17 +140,13 @@ public class CompareFragment extends Fragment {
 
         //saber el tamaño de la pantalla en dp
         DisplayMetrics displayMetrics = rootView.getResources().getDisplayMetrics();
-        float density = displayMetrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT;
-//        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-        float dpWidth = displayMetrics.widthPixels / density;
-
-        dpWidth -= rootView.getResources().getDimension(R.dimen.activity_horizontal_margin);
 
         int textView_width = rootView.getResources().getDimensionPixelOffset(R.dimen.circular_problem_width);
         int padding = rootView.getResources().getDimensionPixelOffset(R.dimen.padding_half);
 
         //cantidad de columnas = ancho de la pantalla / (ancho de un elemento + margin del elemento)
-        int columnCount = (int)(dpWidth / (textView_width + padding*2));
+        int columnCount = (int)(displayMetrics.widthPixels - rootView.getResources().getDimension(R.dimen.activity_horizontal_margin)*2)
+                / (textView_width + padding*2);
 
         //cambiar el margen de los elementos dentro del GridLayout
         GridLayout.LayoutParams param;
