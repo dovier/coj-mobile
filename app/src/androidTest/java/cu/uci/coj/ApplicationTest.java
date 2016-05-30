@@ -11,20 +11,22 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.List;
 
-import cu.uci.coj.Exceptions.NoLoginFileException;
-import cu.uci.coj.Exceptions.UnauthorizedException;
-import cu.uci.coj.Extras.EntriesItem;
-import cu.uci.coj.Extras.StartFragment;
-import cu.uci.coj.Judgments.Judgment;
-import cu.uci.coj.Problems.Problem;
-import cu.uci.coj.Problems.ProblemFragment;
-import cu.uci.coj.Problems.ProblemItem;
-import cu.uci.coj.Problems.ProblemsFragment;
-import cu.uci.coj.Profiles.Compare;
-import cu.uci.coj.Profiles.UserProfile;
-import cu.uci.coj.Standings.CountryRank;
-import cu.uci.coj.Standings.InstitutionRank;
-import cu.uci.coj.Standings.UserRank;
+import cu.uci.coj.Application.Exceptions.NoLoginFileException;
+import cu.uci.coj.Application.Exceptions.UnauthorizedException;
+import cu.uci.coj.Application.Extras.EntriesItem;
+import cu.uci.coj.Application.Extras.StartFragment;
+import cu.uci.coj.Application.Judgments.Judgment;
+import cu.uci.coj.Application.LoginData;
+import cu.uci.coj.Application.MainActivity;
+import cu.uci.coj.Application.Problems.Problem;
+import cu.uci.coj.Application.Problems.ProblemFragment;
+import cu.uci.coj.Application.Problems.ProblemItem;
+import cu.uci.coj.Application.Problems.ProblemsFragment;
+import cu.uci.coj.Application.Profiles.Compare;
+import cu.uci.coj.Application.Profiles.UserProfile;
+import cu.uci.coj.Application.Standings.CountryRank;
+import cu.uci.coj.Application.Standings.InstitutionRank;
+import cu.uci.coj.Application.Standings.UserRank;
 
 /**
  * Created by osvel on 5/21/16.

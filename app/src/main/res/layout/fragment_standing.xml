@@ -135,7 +135,7 @@
         android:tint="@color/white"
         android:visibility="gone"
         app:fabSize="mini"
-        app:layout_behavior="cu.uci.coj.Behaviors.FloatingActionButtonBehavior" />
+        app:layout_behavior="cu.uci.coj.Application.Behaviors.FloatingActionButtonBehavior" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_2"
@@ -151,7 +151,7 @@
         android:tint="@color/white"
         android:visibility="gone"
         app:fabSize="mini"
-        app:layout_behavior="cu.uci.coj.Behaviors.FloatingActionButtonBehavior" />
+        app:layout_behavior="cu.uci.coj.Application.Behaviors.FloatingActionButtonBehavior" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_3"
@@ -167,7 +167,7 @@
         android:tint="@color/white"
         android:visibility="gone"
         app:fabSize="mini"
-        app:layout_behavior="cu.uci.coj.Behaviors.FloatingActionButtonBehavior" />
+        app:layout_behavior="cu.uci.coj.Application.Behaviors.FloatingActionButtonBehavior" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/standing_fab"
@@ -177,6 +177,6 @@
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:src="@drawable/standing"
         android:tint="@color/white"
-        app:layout_behavior="cu.uci.coj.Behaviors.FloatingActionButtonBehavior" />
+        app:layout_behavior="cu.uci.coj.Application.Behaviors.FloatingActionButtonBehavior" />
 
 </android.support.design.widget.CoordinatorLayout>

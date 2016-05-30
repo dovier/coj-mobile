@@ -92,6 +92,6 @@
         android:layout_margin="16dp"
         android:tint="@color/white"
         android:src="@drawable/filter"
-        app:layout_behavior="cu.uci.coj.Behaviors.FloatingActionButtonBehavior" />
+        app:layout_behavior="cu.uci.coj.Application.Behaviors.FloatingActionButtonBehavior" />
 
 </android.support.design.widget.CoordinatorLayout>

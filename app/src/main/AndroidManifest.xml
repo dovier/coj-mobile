@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme"
         android:windowSoftInputMode="stateVisible">
         <activity
-            android:name=".MainActivity"
+            android:name=".Application.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,11 +24,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".Application.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".RecoverPasswordActivity"
+            android:name=".Application.RecoverPasswordActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_recover_password"
             android:theme="@style/AppTheme.NoActionBar" />

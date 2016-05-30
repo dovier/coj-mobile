@@ -7,7 +7,7 @@
     android:layout_marginBottom="@dimen/activity_vertical_margin"
     android:layout_marginTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    tools:context=".Profiles.CompareFragment">
+    tools:context=".Application.Profiles.CompareFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

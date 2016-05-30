@@ -10,7 +10,7 @@ public class mDaoGenerator {
     private static final String OUT_DIR = PROJECT_DIR + "/app/src/main/java";
 
     public static void main(String args[]) throws Exception {
-        Schema schema = new Schema(1, "cu.uci.coj.dao");
+        Schema schema = new Schema(1, "cu.uci.coj.Application.dao");
 
         addTables(schema);
 
