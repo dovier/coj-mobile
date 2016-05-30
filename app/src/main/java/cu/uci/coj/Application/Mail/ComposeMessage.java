@@ -23,11 +23,11 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
-import cu.uci.coj.Conexion;
 import cu.uci.coj.Application.Exceptions.NoLoginFileException;
 import cu.uci.coj.Application.Exceptions.UnauthorizedException;
-import cu.uci.coj.R;
 import cu.uci.coj.Application.ScreenOrientationLocker;
+import cu.uci.coj.Conexion;
+import cu.uci.coj.R;
 
 
 /**
