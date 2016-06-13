@@ -215,6 +215,10 @@ public class RunningContestFragment extends Fragment {
                 recyclerView.swapAdapter(adapter, false);
 
             }
+
+            if (contests.size() != 0)
+                network = false;
+
             progressDialog.dismiss();
             new ScreenOrientationLocker(fragment_reference.get()).unlock();
         }

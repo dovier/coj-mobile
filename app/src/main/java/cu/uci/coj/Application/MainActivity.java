@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -25,28 +27,43 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 import cu.uci.coj.Application.Behaviors.AppBarLayoutBehavior;
-import cu.uci.coj.Conexion;
 import cu.uci.coj.Application.Contests.ComingContestFragment;
 import cu.uci.coj.Application.Contests.PreviousContestFragment;
 import cu.uci.coj.Application.Contests.RunningContestFragment;
-import cu.uci.coj.DataBaseManager;
 import cu.uci.coj.Application.Exceptions.NoLoginFileException;
+import cu.uci.coj.Application.Exceptions.UnauthorizedException;
 import cu.uci.coj.Application.Extras.FaqFragment;
 import cu.uci.coj.Application.Extras.StartFragment;
 import cu.uci.coj.Application.Judgments.JudgmentsFragment;
 import cu.uci.coj.Application.Mail.MailFolder;
 import cu.uci.coj.Application.Mail.MailListFragment;
+import cu.uci.coj.Application.Problems.Problem;
+import cu.uci.coj.Application.Problems.ProblemFragment;
+import cu.uci.coj.Application.Problems.ProblemItem;
 import cu.uci.coj.Application.Problems.ProblemsFragment;
 import cu.uci.coj.Application.Profiles.CompareFragment;
 import cu.uci.coj.Application.Profiles.EditFragment;
 import cu.uci.coj.Application.Profiles.ProfileFragment;
-import cu.uci.coj.R;
 import cu.uci.coj.Application.Standings.UserStandingFragment;
+import cu.uci.coj.Conexion;
+import cu.uci.coj.DataBaseManager;
+import cu.uci.coj.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -63,8 +80,10 @@ public class MainActivity extends AppCompatActivity
         try {
             loginData = LoginData.read(this);
             login = loginData != null;
+            System.out.println("lol login ok");
         } catch (NoLoginFileException e) {
             login = false;
+            System.out.println("lol login error");
             e.printStackTrace();
         }
 
@@ -306,6 +325,9 @@ public class MainActivity extends AppCompatActivity
 
                 break;
             }
+            case R.id.update_database: {
+                new mAsyncTask(this).execute();
+            }
         }
 
         return false;
@@ -420,34 +442,157 @@ public class MainActivity extends AppCompatActivity
         protected WeakReference<Activity> reference;
         protected ProgressDialog progressDialog;
 
+
         public mAsyncTask(Activity reference) {
             this.reference = new WeakReference<>(reference);
         }
 
         @Override
         protected void onPreExecute() {
-            final Activity activity = reference.get();
-
-            new ScreenOrientationLocker(activity).lock();
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    progressDialog = ProgressDialog.show(activity, "",
-                            activity.getString(R.string.loading), true);
-                }
-            });
+//            final Activity activity = reference.get();
+//
+//            new ScreenOrientationLocker(activity).lock();
+//            activity.runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    progressDialog = ProgressDialog.show(activity, "",
+//                            activity.getString(R.string.loading), true);
+//                }
+//            });
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
 
+            List<ProblemItem> problem_page;
+            int page = 1;
+            int last_problem = 1000;
+
+            DataBaseManager dataBaseManager = DataBaseManager.getInstance(reference.get());
+            dataBaseManager.deleteAllData();
+
+            Conexion conexion = Conexion.getInstance(reference.get());
+
+            //descargar la lista de problemas
+            do {
+
+                try {
+                    problem_page = conexion.getProblemsItem(reference.get(), conexion.getURL_PROBLEM_PAGE()+page, false);
+                    if (problem_page.size() != 0)
+                        last_problem = (int) problem_page.get(problem_page.size()-1).getLongId();
+                    System.out.println("saving page " + page);
+                    //guardar en la base de datos
+
+                    for (int i = 0; i < problem_page.size(); i ++){
+                        dataBaseManager.insertProblemItem(problem_page.get(i));
+                    }
+
+                } catch (IOException | NoLoginFileException | UnauthorizedException | JSONException e) {
+                    System.out.println("saving page " + page + " error");
+                    e.printStackTrace();
+                    problem_page = new ArrayList<>();
+                }
+                page ++;
+
+            } while (problem_page.size() != 0);
+
+            //descargar los problemas
+            for (int i = 1000; i <= last_problem; i++) {
+                try {
+
+                    if (i % 400 == 0 && i != 1000){
+                        System.out.println("saving waiting 3 minutes");
+                        Thread.sleep(180*1000);
+                    }
+
+                    Problem problem = conexion.getProblem("" + i);
+
+                    //guardar en la base de datos
+                    dataBaseManager.insertProblem((long)i, problem);
+
+                    //guardar las imagenes
+                    downloadImages(problem.getDescription());
+                    downloadImages(problem.getInputSpecifications());
+                    downloadImages(problem.getOutputSpecification());
+                    downloadImages(problem.getHints());
+
+                    System.out.println("saving problem "+i);
+
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                    System.out.println("saving problem "+ i +" error");
+                } catch (InterruptedException e) {
+                    System.out.println("saving wait error");
+                    e.printStackTrace();
+                }
+            }
+
             return null;
+        }
+
+        private void downloadImages(String text){
+
+            final String images[] = ProblemFragment.getImgURL(text);
+
+            if (images[1] != null && images[1].length() != 0){
+                reference.get().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        final ImageView imageView = new ImageView(reference.get());
+                        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+
+                        String url = Conexion.getInstance(reference.get()).getIMAGE_URL() + images[1];
+                        url = url.replace(" ", "%20");
+
+                        Picasso.with(reference.get())
+                                .load(url)
+                                .into(imageView, new Callback() {
+                                    @Override
+                                    public void onSuccess() {
+
+                                        String splitted[] = images[1].split("/");
+                                        String name = splitted[splitted.length - 1];
+
+                                        System.out.println("saving image " + name);
+
+                                        Bitmap bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+
+                                        if (bmp != null) {
+                                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                            bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                                            byte[] byteArray = stream.toByteArray();
+                                            try {
+                                                FileOutputStream outputStream = reference.get().openFileOutput(name, Context.MODE_PRIVATE);
+                                                outputStream.write(byteArray);
+                                                outputStream.close();
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onError() {
+
+                                    }
+                                });
+
+                    }
+                });
+            }
+
+            if (images[2] != null && images[2].length() != 0){
+                downloadImages(images[2]);
+            }
+
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            progressDialog.dismiss();
-            new ScreenOrientationLocker(reference.get()).unlock();
+//            progressDialog.dismiss();
+//            new ScreenOrientationLocker(reference.get()).unlock();
         }
     }
 }

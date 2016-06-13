@@ -109,6 +109,7 @@ public class EditFragment extends Fragment {
         countrySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
                 if (i != 0){
                     int id = country.getFilterValue(i);
                     new Institutions(getActivity()).execute(id);

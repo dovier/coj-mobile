@@ -423,8 +423,11 @@ public class CountryStandingFragment extends Fragment {
                 final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.standing_item_list);
                 adapter.addAll(countryRanks);
                 recyclerView.swapAdapter(adapter, false);
-
             }
+
+            if (countryRanks.size() != 0)
+                error = false;
+
             progressDialog.dismiss();
             new ScreenOrientationLocker(fragment_reference.get()).unlock();
         }

@@ -408,6 +408,9 @@ public class JudgmentsFragment extends Fragment {
                 recyclerView.setAdapter(new_adapter);
             }
 
+            if (judgments.size() != 0)
+                error = false;
+
             progressDialog.dismiss();
             new ScreenOrientationLocker(fragment_reference.get()).unlock();
 

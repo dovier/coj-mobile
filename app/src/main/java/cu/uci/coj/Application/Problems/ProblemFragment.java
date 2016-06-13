@@ -42,7 +42,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.List;
 
 import cu.uci.coj.Application.Behaviors.FloatingActionButtonBehavior;
@@ -171,7 +174,7 @@ public class ProblemFragment extends Fragment {
             public void onClick(View view) {
                 fm.beginTransaction()
                         .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right)
-                        .replace(R.id.container, BestSolutionsFragment.newInstance((int)problemItem.getLongId()))
+                        .replace(R.id.container, BestSolutionsFragment.newInstance((int) problemItem.getLongId()))
                         .addToBackStack(null)
                         .commit();
             }
@@ -232,60 +235,83 @@ public class ProblemFragment extends Fragment {
      *      array[1] = img URL
      *      array[2] = string after img
      *
-     * @param text
-     * @return
+     * @param text with problem description
+     *
+     * @return array with images urls
      */
-    private static String[] getImgURL(String text){
+    public static String[] getImgURL(String text){
+
+        String[] code = new String[3];
 
         //limpiar el texto de caracteres no deseados
-        String only_text = text.replace(" ", "");
-        only_text = only_text.replace("\n", "");
-        only_text = only_text.replace("\t", "");
-        only_text = only_text.toLowerCase();
+//        String only_text = text.replace(" ", "");
+//        only_text = only_text.replace("\n", "");
+//        only_text = only_text.replace("\t", "");
+//        only_text = only_text.toLowerCase();
 
         String lower_case_text = text.toLowerCase();
 
         //buscar la etiqueta img
-        String[] split_aux = only_text.split("<img");
+        String[] split_aux = lower_case_text.split("img");
         String url = null;
 
         String[] new_split;
-        int url_index;
+        int url_index, url_end_index;
         //si se encontro alguna etiqueta y en la cadena despues de ella existe alguna etiqueta src se toma la url
         for (int i = 1; i < split_aux.length; i++) {
-            if (split_aux[i].contains("src=\"")){
-                split_aux = split_aux[i].split("src=\"");
-                url = split_aux[1].split("\"")[0];
+            if (split_aux[i].contains("src")){
+                split_aux = split_aux[i].split("src");
+
+                try {
+                    int j = 0;
+                    while (split_aux[1].charAt(j++) != '\"') ;
+                    url_index = j++;
+                    while (split_aux[1].charAt(j++) != '\"') ;
+                    url_end_index = --j;
+                }
+                catch (StringIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                    continue;
+                }
+
+                url = split_aux[1].substring(url_index, url_end_index);
                 url_index = lower_case_text.indexOf(url);
-                url = text.substring(url_index, url_index+url.length());
+                url = text.substring(url_index, url_index + url.length());
                 break;
             }
         }
 
-        String before = null, after = null, full_hastag = null;
+        String before, after = null, full_hastag;
         if (url != null){
-            //tomo lo que esta antes de la url
-            before = text.split(url)[0];
-            after = text.split(url)[1];
-            full_hastag = "<" + before.split("<")[before.split("<").length-1] + url + after.split(">")[0] + ">";
-            new_split = text.split(full_hastag);
-            if (new_split.length > 0)
-                before = text.split(full_hastag)[0];
-            else
-                before = null;
-            if (new_split.length > 1)
-                after = text.split(full_hastag)[1];
-            else
-                after = null;
+            try {
+                //tomo lo que esta antes de la url
+                before = text.split(url)[0];
+                after = text.split(url)[1];
+                full_hastag = "<" + before.split("<")[before.split("<").length - 1] + url + after.split(">")[0] + ">";
+                new_split = text.split(full_hastag);
+                if (new_split.length > 0)
+                    before = text.split(full_hastag)[0];
+                else
+                    before = null;
+                if (new_split.length > 1)
+                    after = text.split(full_hastag)[1];
+                else
+                    after = null;
 
-            while (url.charAt(0) == '.'){
-                url = (String)url.subSequence(1, url.length());
+                while (url.charAt(0) == '.') {
+                    url = (String) url.subSequence(1, url.length());
+                }
+            }
+            catch (Exception e){
+                code[0] = text;
+                code[1] = null;
+                code[2] = null;
+                return code;
             }
         }
         else
             before = text;
 
-        String[] code = new String[3];
         code[0] = before;
         code[1] = url;
         code[2] = after;
@@ -341,8 +367,11 @@ public class ProblemFragment extends Fragment {
             layout.addView(imageView);
             imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
+            String url = Conexion.getInstance(context).getIMAGE_URL()+split_text[1];
+            url = url.replace(" ", "%20");
+
             Picasso.with(context)
-                    .load(Conexion.getInstance(context).getIMAGE_URL() + split_text[1])
+                    .load(url)
                     .into(imageView, new Callback() {
                         @Override
                         public void onSuccess() {

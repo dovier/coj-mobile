@@ -429,6 +429,9 @@ public class UserStandingFragment extends Fragment {
 
             }
 
+            if (userRanks.size() != 0)
+                error = false;
+
             if (userRanks.size() == 0 && adapter.getItemCount() == 0)
                 error = true;
 

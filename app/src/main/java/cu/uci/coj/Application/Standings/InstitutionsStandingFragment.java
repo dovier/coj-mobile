@@ -429,6 +429,10 @@ public class InstitutionsStandingFragment extends Fragment {
                 recyclerView.swapAdapter(adapter, false);
 
             }
+
+            if (institutionRanks.size() != 0)
+                error = false;
+
             progressDialog.dismiss();
             new ScreenOrientationLocker(fragment_reference.get()).unlock();
         }

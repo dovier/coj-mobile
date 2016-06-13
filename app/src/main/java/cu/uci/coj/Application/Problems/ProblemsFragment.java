@@ -396,7 +396,15 @@ public class ProblemsFragment extends Fragment{
         @Override
         protected void onPostExecute(List<ProblemItem> problemItems) {
 
-            adapter.setLogin(login);
+            adapter.setLogin(!consultDB && login);
+
+            LinearLayout topic = (LinearLayout) fragment_reference.get().findViewById(R.id.topic_fav_layout);
+
+            if (!consultDB && login)
+                topic.setVisibility(View.VISIBLE);
+            else
+                topic.setVisibility(View.GONE);
+
 
             final RecyclerView recyclerView = (RecyclerView) fragment_reference.get().findViewById(R.id.problem_item_list);
             //no es un filtro, la lista esta vacia y hubo error conexion a la base de datos entonces mostrar error de conexion

@@ -248,4 +248,6 @@
     <string name="no_more_countries">No more countries</string>
     <string name="no_more_institutions">No more institutions</string>
 
+    <string name="update_database">Update database</string>
+
 </resources>

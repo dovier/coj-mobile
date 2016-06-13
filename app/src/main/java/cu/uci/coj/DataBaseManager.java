@@ -116,6 +116,48 @@ public class DataBaseManager implements AsyncOperationListener {
 
     }
 
+    public synchronized void insertProblemItem(ProblemItem problemItem){
+
+        JSONObject item = problemItem.getJSONObject();
+        long id = problemItem.getLongId();
+
+        try {
+            if (item != null) {
+                openWritableDb();
+
+                DBProblemItem dbProblemItem = new DBProblemItem(id, item.toString());
+                DBProblemItemDao dbProblemItemDao = daoSession.getDBProblemItemDao();
+                dbProblemItemDao.insertOrReplace(dbProblemItem);
+                Log.d(TAG, "insertProblemItem: " + id);
+
+                daoSession.clear();
+            }
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public synchronized void insertProblem(long id, Problem problem){
+
+        String prob = problem.getJsonString();
+
+        try {
+            if (prob != null) {
+                openWritableDb();
+
+                DBProblem dbProblem = new DBProblem(id, prob);
+                DBProblemDao dbProblemDao = daoSession.getDBProblemDao();
+                dbProblemDao.insertOrReplace(dbProblem);
+                Log.d(TAG, "insertProblem: " + id);
+
+                daoSession.clear();
+            }
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        }
+    }
+
     public synchronized void insertProblem(ProblemItem problemItem, Problem problem){
 
         JSONObject item = problemItem.getJSONObject();
